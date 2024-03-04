@@ -1,0 +1,35 @@
+[project]
+name = "boldi"
+version = "0.1.0"
+description = "Boldi's Python libraries"
+authors = [
+    {name = "Boldizsár Palotás", email = "boldizsar.palotas@gmail.com"},
+]
+requires-python = ">=3.8"
+readme = "README.md"
+license = {text = "MIT"}
+
+dependencies = [
+    "boldi-ctx",
+    "boldi-cli",
+    "boldi-dev",
+    "boldi-run",
+]   
+
+[project.optional-dependencies]
+
+[build-system]
+requires = ["pdm-backend"]
+build-backend = "pdm.backend"
+
+[tool.pdm]
+distribution = true
+
+[tool.pdm.dev-dependencies]
+dev = [
+    "-e boldi-ctx @ file:///${PROJECT_ROOT}/pkg/ctx",
+    "-e boldi-cli @ file:///${PROJECT_ROOT}/pkg/cli",
+    "-e boldi-dev @ file:///${PROJECT_ROOT}/pkg/dev",
+    "-e boldi-run @ file:///${PROJECT_ROOT}/pkg/run",
+    "pdm",
+]
