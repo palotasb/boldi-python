@@ -22,10 +22,10 @@ build-backend = "pdm.backend"
 [tool.pdm.dev-dependencies]
 dev = [
     "-e boldi @ file:///${PROJECT_ROOT}/pkg/boldi",
-    "-e boldi-cli @ file:///${PROJECT_ROOT}/pkg/cli",
-    "-e boldi-ctx @ file:///${PROJECT_ROOT}/pkg/ctx",
-    "-e boldi-dev @ file:///${PROJECT_ROOT}/pkg/dev",
-    "-e boldi-plugins @ file:///${PROJECT_ROOT}/pkg/plugins",
-    "-e boldi-run @ file:///${PROJECT_ROOT}/pkg/run",
+    "-e boldi-cli @ file:///${PROJECT_ROOT}/pkg/boldi-cli",
+    "-e boldi-ctx @ file:///${PROJECT_ROOT}/pkg/boldi-ctx",
+    "-e boldi-dev @ file:///${PROJECT_ROOT}/pkg/boldi-dev",
+    "-e boldi-plugins @ file:///${PROJECT_ROOT}/pkg/boldi-plugins",
+    "-e boldi-run @ file:///${PROJECT_ROOT}/pkg/boldi-run",
     "pdm",
 ]
