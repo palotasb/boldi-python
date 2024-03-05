@@ -43,7 +43,7 @@ class CliAction(ABC):
     @abstractmethod
     def do_action(self, *args, **kwargs):
         raise NotImplementedError
-    
+
 
 class HelpCliAction(CliAction):
     help = "show this help message and exit"
