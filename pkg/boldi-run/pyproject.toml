@@ -5,7 +5,7 @@ description = "boldi.run part of Boldi's Python libraries"
 authors = [
     {name = "Boldizsár Palotás", email = "boldizsar.palotas@gmail.com"},
 ]
-requires-python = ">=3.8"
+requires-python = ">=3.9"
 readme = "../../README.md"
 license = {text = "MIT"}
 
