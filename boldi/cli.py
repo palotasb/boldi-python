@@ -31,9 +31,6 @@ class Action:
     action_fn: Callable[..., None]
 
 
-hello = Action({}, lambda _: None, lambda: print("Hello"))
-
-
 class CliAction(ABC):
     ctx: CliCtx
     parser: ArgumentParser
