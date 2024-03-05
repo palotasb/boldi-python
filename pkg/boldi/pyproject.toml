@@ -1,7 +1,7 @@
 [project]
-name = "boldi-dev"
+name = "boldi"
 version = "0.1.0"
-description = "boldi.dev part of Boldi's Python libraries"
+description = "Boldi's Python libraries"
 authors = [
     {name = "Boldizsár Palotás", email = "boldizsar.palotas@gmail.com"},
 ]
@@ -10,13 +10,16 @@ readme = "../../README.md"
 license = {text = "MIT"}
 
 dependencies = [
-    "boldi-cli",
     "boldi-ctx",
+    "boldi-cli",
+    "boldi-plugins",
+    "boldi-run",
 ]
 
 [project.optional-dependencies]
-# extra1 = ["flask"]
-# extra2 = ["django"]
+dev = [
+    "boldi-dev",
+]
 
 [build-system]
 requires = ["pdm-backend"]
@@ -25,10 +28,8 @@ build-backend = "pdm.backend"
 [tool.pdm]
 
 [tool.pdm.dev-dependencies]
-# dev1 = ["pytest"]
-# dev2 = ["mkdocs"]
 
 [tool.pdm.build]
-includes = ["../../boldi", "../../boldi/dev"]
-excludes = ["../../boldi/*"]
+includes = []
+# excludes = ["../../boldi/*"]
 # source-includes = []
