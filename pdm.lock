@@ -30,6 +30,17 @@ files = [
 ]
 
 [[package]]
+name = "backports-entry-points-selectable"
+version = "1.3.0"
+requires_python = ">=3.8"
+summary = "Compatibility shim providing selectable entry points for older implementations"
+groups = ["dev"]
+files = [
+    {file = "backports.entry_points_selectable-1.3.0-py3-none-any.whl", hash = "sha256:66f5da003eb4b283c7b60581bc8bb0baf0d810eb3e3068da786d3821b4d5746a"},
+    {file = "backports.entry_points_selectable-1.3.0.tar.gz", hash = "sha256:17a8b44ae700fba548686dd274ddc91c060371565cd63806c20a1d33911746e6"},
+]
+
+[[package]]
 name = "blinker"
 version = "1.7.0"
 requires_python = ">=3.8"
@@ -43,7 +54,7 @@ files = [
 [[package]]
 name = "boldi"
 version = "0.1.0"
-requires_python = ">=3.8"
+requires_python = ">=3.9"
 editable = true
 path = "./pkg/boldi"
 summary = "Boldi's Python libraries"
@@ -58,7 +69,7 @@ dependencies = [
 [[package]]
 name = "boldi-cli"
 version = "0.1.0"
-requires_python = ">=3.8"
+requires_python = ">=3.9"
 editable = true
 path = "./pkg/boldi-cli"
 summary = "boldi.cli part of Boldi's Python libraries"
@@ -71,16 +82,19 @@ dependencies = [
 [[package]]
 name = "boldi-ctx"
 version = "0.1.0"
-requires_python = ">=3.8"
+requires_python = ">=3.9"
 editable = true
 path = "./pkg/boldi-ctx"
 summary = "boldi.ctx part of Boldi's Python libraries"
 groups = ["dev"]
+dependencies = [
+    "typing-extensions",
+]
 
 [[package]]
 name = "boldi-dev"
 version = "0.1.0"
-requires_python = ">=3.8"
+requires_python = ">=3.9"
 editable = true
 path = "./pkg/boldi-dev"
 summary = "boldi.dev part of Boldi's Python libraries"
@@ -96,19 +110,19 @@ dependencies = [
 [[package]]
 name = "boldi-plugins"
 version = "0.1.0"
-requires_python = ">=3.8"
+requires_python = ">=3.9"
 editable = true
 path = "./pkg/boldi-plugins"
 summary = "boldi.plugins part of Boldi's Python libraries"
 groups = ["dev"]
 dependencies = [
-    "boldi-ctx",
+    "backports-entry-points-selectable",
 ]
 
 [[package]]
 name = "boldi-run"
 version = "0.1.0"
-requires_python = ">=3.8"
+requires_python = ">=3.9"
 editable = true
 path = "./pkg/boldi-run"
 summary = "boldi.run part of Boldi's Python libraries"

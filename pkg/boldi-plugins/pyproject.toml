@@ -10,7 +10,7 @@ readme = "../../README.md"
 license = {text = "MIT"}
 
 dependencies = [
-    "boldi-ctx",
+    "backports.entry-points-selectable",
 ]
 
 [project.optional-dependencies]

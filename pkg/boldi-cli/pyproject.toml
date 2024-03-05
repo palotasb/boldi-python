@@ -16,6 +16,12 @@ dependencies = [
 
 [project.optional-dependencies]
 
+[project.scripts]
+boldi = "boldi.cli:main"
+
+[project.entry-points."boldi.cli.action"]
+help = "boldi.cli:HelpCliAction"
+
 [build-system]
 requires = ["pdm-backend"]
 build-backend = "pdm.backend"
@@ -25,6 +31,6 @@ build-backend = "pdm.backend"
 [tool.pdm.dev-dependencies]
 
 [tool.pdm.build]
-includes = ["../../boldi", "../../boldi/cli"]
+includes = ["../../boldi", "../../boldi/cli.py"]
 excludes = ["../../boldi/*"]
 # source-includes = []

@@ -29,3 +29,11 @@ dev = [
     "-e boldi-run @ file:///${PROJECT_ROOT}/pkg/boldi-run",
     "pdm",
 ]
+
+[tool.ruff]
+line-length = 120
+
+[tool.ruff.lint]
+extend-select = [
+    "I", # sort imports
+]
