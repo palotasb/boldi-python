@@ -12,7 +12,7 @@ class Plugin(NamedTuple, Generic[T]):
     obj: Type[T]
 
 
-def load(name: str, *, subclass: Type[T] = object, prefix=f"{boldi.__name__}.") -> Iterable[Plugin[T]]:
+def load(name: str, *, subclass: Type[T] = type, prefix=f"{boldi.__name__}.") -> Iterable[Plugin[T]]:
     entry_points = backports.entry_points_selectable.entry_points(group=f"{prefix}{name}")
     for entry_point in entry_points:
         obj = entry_point.load()

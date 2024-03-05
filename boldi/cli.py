@@ -59,13 +59,13 @@ def main(ctx: Optional[CliCtx] = None):
         parser = ArgumentParser(prog=boldi.__name__)
         subparsers = parser.add_subparsers(title="action", help="action to run")
         for plugin in boldi.plugins.load("cli.action", subclass=CliAction):
-            action_cls = plugin.obj
-            action = action_cls(ctx, parser)
-            subparser = subparsers.add_parser(plugin.name, help=action.help)
-            subparser.set_defaults(action=action.do_action)
+            cli_action_cls = plugin.obj
+            cli_action = cli_action_cls(ctx, parser)
+            subparser = subparsers.add_parser(plugin.name, help=cli_action.help)
+            subparser.set_defaults(action=cli_action.do_action)
 
         args = vars(parser.parse_args(ctx.argv[1:]))
-        action = args.pop("action", None)
+        action: Optional[Callable[..., None]] = args.pop("action", None)
         if action:
             action(**args)
         else:
