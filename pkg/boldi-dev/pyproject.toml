@@ -20,6 +20,9 @@ dependencies = [
 ]
 optional-dependencies = {}
 
+[project.entry-points."boldi.cli.action"]
+dev = "boldi.dev:DevCliAction"
+
 [build-system]
 requires = ["pdm-backend"]
 build-backend = "pdm.backend"

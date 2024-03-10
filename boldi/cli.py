@@ -34,12 +34,13 @@ class Action:
 class CliAction(ABC):
     ctx: CliCtx
     parser: ArgumentParser
-    help: Optional[str] = None
+    subparser: ArgumentParser
 
-    def __init__(self, ctx: CliCtx, parser: ArgumentParser):
+    def __init__(self, ctx: CliCtx, parser: ArgumentParser, subparser: ArgumentParser):
         self.ctx = ctx
         self.parser = parser
-
+        self.subparser = subparser
+    
     @abstractmethod
     def do_action(self, *args, **kwargs):
         raise NotImplementedError
@@ -60,8 +61,8 @@ def main(ctx: Optional[CliCtx] = None):
         subparsers = parser.add_subparsers(title="action", help="action to run")
         for plugin in boldi.plugins.load("cli.action", subclass=CliAction):
             cli_action_cls = plugin.obj
-            cli_action = cli_action_cls(ctx, parser)
-            subparser = subparsers.add_parser(plugin.name, help=cli_action.help)
+            subparser = subparsers.add_parser(plugin.name)
+            cli_action = cli_action_cls(ctx, parser, subparser)
             subparser.set_defaults(action=cli_action.do_action)
 
         args = vars(parser.parse_args(ctx.argv[1:]))
