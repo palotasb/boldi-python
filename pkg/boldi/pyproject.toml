@@ -13,7 +13,7 @@ dependencies = [
     "boldi-ctx",
     "boldi-cli",
     "boldi-plugins",
-    "boldi-run",
+    "boldi-proc",
 ]
 
 [project.optional-dependencies]

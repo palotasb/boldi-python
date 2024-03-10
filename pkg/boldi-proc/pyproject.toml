@@ -1,7 +1,7 @@
 [project]
-name = "boldi-run"
+name = "boldi-proc"
 version = "0.1.0"
-description = "boldi.run part of Boldi's Python libraries"
+description = "boldi.proc part of Boldi's Python libraries"
 authors = [
     {name = "Boldizsár Palotás", email = "boldizsar.palotas@gmail.com"},
 ]
@@ -28,6 +28,6 @@ build-backend = "pdm.backend"
 # dev2 = ["mkdocs"]
 
 [tool.pdm.build]
-includes = ["../../boldi", "../../boldi/run"]
+includes = ["../../boldi", "../../boldi/proc"]
 excludes = ["../../boldi/*"]
 # source-includes = []
