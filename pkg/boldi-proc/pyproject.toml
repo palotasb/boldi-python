@@ -3,19 +3,14 @@ name = "boldi-proc"
 version = "0.1.0"
 description = "boldi.proc part of Boldi's Python libraries"
 authors = [
-    {name = "Boldizsár Palotás", email = "boldizsar.palotas@gmail.com"},
+    { name = "Boldizsár Palotás", email = "boldizsar.palotas@gmail.com" },
 ]
 requires-python = ">=3.9"
 readme = "../../README.md"
-license = {text = "MIT"}
+license = { text = "MIT" }
 
-dependencies = [
-    "boldi-ctx",
-]
-
-[project.optional-dependencies]
-# extra1 = ["package1a", "package1b"]
-# extra2 = ["package2"]
+dependencies = ["boldi-ctx"]
+optional-dependencies = {}
 
 [build-system]
 requires = ["pdm-backend"]

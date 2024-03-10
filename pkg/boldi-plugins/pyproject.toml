@@ -12,8 +12,7 @@ license = {text = "MIT"}
 dependencies = [
     "backports.entry-points-selectable",
 ]
-
-[project.optional-dependencies]
+optional-dependencies = {}
 
 [build-system]
 requires = ["pdm-backend"]

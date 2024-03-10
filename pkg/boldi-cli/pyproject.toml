@@ -3,18 +3,14 @@ name = "boldi-cli"
 version = "0.1.0"
 description = "boldi.cli part of Boldi's Python libraries"
 authors = [
-    {name = "Boldizsár Palotás", email = "boldizsar.palotas@gmail.com"},
+    { name = "Boldizsár Palotás", email = "boldizsar.palotas@gmail.com" },
 ]
 requires-python = ">=3.9"
 readme = "../../README.md"
-license = {text = "MIT"}
+license = { text = "MIT" }
 
-dependencies = [
-    "boldi-ctx",
-    "rich",
-]
-
-[project.optional-dependencies]
+dependencies = ["boldi-ctx", "rich"]
+optional-dependencies = {}
 
 [project.scripts]
 boldi = "boldi.cli:main"

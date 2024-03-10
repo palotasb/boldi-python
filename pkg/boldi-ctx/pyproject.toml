@@ -3,19 +3,14 @@ name = "boldi-ctx"
 version = "0.1.0"
 description = "boldi.ctx part of Boldi's Python libraries"
 authors = [
-    {name = "Boldizsár Palotás", email = "boldizsar.palotas@gmail.com"},
+    { name = "Boldizsár Palotás", email = "boldizsar.palotas@gmail.com" },
 ]
 requires-python = ">=3.9"
 readme = "../../README.md"
-license = {text = "MIT"}
+license = { text = "MIT" }
 
-dependencies = [
-    "typing_extensions",
-]
-
-[project.optional-dependencies]
-# extra1 = ["flask"]
-# extra2 = ["django"]
+dependencies = ["typing_extensions"]
+optional-dependencies = {}
 
 [build-system]
 requires = ["pdm-backend"]
