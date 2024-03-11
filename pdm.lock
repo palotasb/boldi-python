@@ -5,7 +5,7 @@
 groups = ["default", "dev"]
 strategy = ["cross_platform", "inherit_metadata"]
 lock_version = "4.4.1"
-content_hash = "sha256:7786f495abe78cd348354992567e24b1ad1f11bc40e36ee8a173d16e5a13de17"
+content_hash = "sha256:721aa4148078f942d64c34c106004593eb4f85b6639f58bb8390f78cc22de777"
 
 [[package]]
 name = "alabaster"
@@ -642,20 +642,6 @@ dependencies = [
 files = [
     {file = "pdm-2.12.4-py3-none-any.whl", hash = "sha256:56949eeacbe6100f193f2ede6e380edc956d309f68384593c5a4feefdf98ce8b"},
     {file = "pdm-2.12.4.tar.gz", hash = "sha256:d04877362f95cf9ffc1d2c38b851f693706e4928840e48986ae576dad5741496"},
-]
-
-[[package]]
-name = "pdm-backend"
-version = "2.1.8"
-requires_python = ">=3.7"
-summary = "The build backend used by PDM that supports latest packaging standards"
-groups = ["dev"]
-dependencies = [
-    "importlib-metadata>=3.6; python_version < \"3.10\"",
-]
-files = [
-    {file = "pdm_backend-2.1.8-py3-none-any.whl", hash = "sha256:fc69799e40817daf9bb9ce8f93ff650d59e093bf86fa3a5264b26a9ef579563d"},
-    {file = "pdm_backend-2.1.8.tar.gz", hash = "sha256:2487dfbd13f69d80fb4e6a08006a3ee68272833970813047dc5fcfacdfdc0151"},
 ]
 
 [[package]]

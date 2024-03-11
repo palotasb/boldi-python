@@ -18,12 +18,12 @@ dependencies = [
 optional-dependencies = { dev = ["boldi-dev"] }
 
 [build-system]
-requires = ["pdm-backend"]
-build-backend = "pdm.backend"
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build]
+packages = ["boldi"]
 
 [tool.pdm]
 
 [tool.pdm.dev-dependencies]
-
-[tool.pdm.build]
-includes = []
