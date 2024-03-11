@@ -34,6 +34,7 @@ build-backend = "pdm.backend"
 # dev2 = ["mkdocs"]
 
 [tool.pdm.build]
+package-dir = "../.."
 includes = ["../../boldi", "../../boldi/dev"]
 excludes = ["../../boldi/*"]
 # source-includes = []

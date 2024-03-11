@@ -23,6 +23,7 @@ build-backend = "pdm.backend"
 [tool.pdm.dev-dependencies]
 
 [tool.pdm.build]
+package-dir = "../.."
 includes = ["../../boldi", "../../boldi/plugins.py"]
 excludes = ["../../boldi/*"]
 # source-includes = []
