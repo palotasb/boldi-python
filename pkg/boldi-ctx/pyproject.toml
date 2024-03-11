@@ -16,24 +16,9 @@ optional-dependencies = {}
 requires = ["pdm-backend"]
 build-backend = "pdm.backend"
 
-# [tool.hatch.build.targets.sdist]
-# sources = ["../.."]
-# include = ["boldi/ctx.py"]
-# packages = ["../../boldi"]
-
-# [tool.hatch.build.targets.wheel]
-# sources = ["../.."]
-# include = ["boldi/ctx.py"]
-# packages = ["boldi"]
-
 [tool.pdm]
 
 [tool.pdm.dev-dependencies]
-# dev1 = ["pytest"]
-# dev2 = ["mkdocs"]
 
 [tool.pdm.build]
-package-dir = "../.."
-includes = ["../../boldi", "../../boldi/ctx.py"]
-excludes = ["../../boldi/*"]
-# source-includes = []
+includes = ["boldi"]

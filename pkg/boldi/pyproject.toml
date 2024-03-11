@@ -26,7 +26,4 @@ build-backend = "pdm.backend"
 [tool.pdm.dev-dependencies]
 
 [tool.pdm.build]
-package-dir = "../.."
 includes = []
-# excludes = ["../../boldi/*"]
-# source-includes = []
