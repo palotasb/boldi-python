@@ -7,7 +7,7 @@ authors = [
 ]
 requires-python = ">=3.9"
 readme = "../../README.md"
-license = { text = "MIT" }
+license = { file = "../../LICENSE" }
 
 dependencies = ["boldi-ctx", "rich"]
 optional-dependencies = {}

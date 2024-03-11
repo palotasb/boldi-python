@@ -5,7 +5,7 @@ import sys
 from contextlib import AbstractContextManager, ExitStack
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import IO, Any, Callable, Iterable, List, Literal, Mapping, MutableMapping, TextIO, TypedDict, Union
+from typing import IO, Any, Callable, Iterable, List, Mapping, MutableMapping, TextIO, TypedDict, Union
 
 from typing_extensions import Self, Unpack
 
@@ -72,3 +72,6 @@ class Ctx(AbstractContextManager):
             kwargs.setdefault("stderr", self.stderr)
         args_list = split_args(*args)
         return subprocess.run(args_list, **kwargs)
+
+    def run_py(self, *args: Union[str, List[Any]], **kwargs: Unpack[RunArgs]) -> subprocess.CompletedProcess:
+        return self.run([sys.executable], *args, **kwargs)

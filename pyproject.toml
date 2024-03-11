@@ -3,11 +3,11 @@ name = "boldi-devmetapackage"
 version = "0.1.0"
 description = "Development Metapackage for Boldi's Python libraries"
 authors = [
-    {name = "Boldizsár Palotás", email = "boldizsar.palotas@gmail.com"},
+    { name = "Boldizsár Palotás", email = "boldizsar.palotas@gmail.com" },
 ]
 requires-python = ">=3.9"
 readme = "README.md"
-license = {text = "MIT"}
+license = { file = "LICENSE" }
 
 # Intentionally no dependencies as this is just a development metapackage.
 # this just includes the real packages (boldi, boldi-cli, etc.) as dev-dependencies,
@@ -23,7 +23,7 @@ build-backend = "pdm.backend"
 
 [tool.pdm.dev-dependencies]
 dev = [
-    # this monorepo:
+    # boldi:
     "-e boldi @ file:///${PROJECT_ROOT}/pkg/boldi",
     "-e boldi-cli @ file:///${PROJECT_ROOT}/pkg/boldi-cli",
     "-e boldi-ctx @ file:///${PROJECT_ROOT}/pkg/boldi-ctx",
@@ -32,6 +32,7 @@ dev = [
     # building and packaging:
     "pdm",
     "pdm-backend",
+    "build",
 ]
 
 [tool.ruff]

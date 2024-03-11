@@ -7,7 +7,7 @@ authors = [
 ]
 requires-python = ">=3.9"
 readme = "../../README.md"
-license = {text = "MIT"}
+license = { file = "../../LICENSE" }
 
 dependencies = [
     "backports.entry-points-selectable",
@@ -23,6 +23,6 @@ build-backend = "pdm.backend"
 [tool.pdm.dev-dependencies]
 
 [tool.pdm.build]
-includes = ["../../boldi", "../../boldi/cli"]
+includes = ["../../boldi", "../../boldi/plugins.py"]
 excludes = ["../../boldi/*"]
 # source-includes = []
