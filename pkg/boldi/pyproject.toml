@@ -14,7 +14,6 @@ dependencies = [
     "boldi-ctx",
     "boldi-cli",
     "boldi-plugins",
-    "boldi-proc",
 ]
 optional-dependencies = { dev = ["boldi-dev"] }
 

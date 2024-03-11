@@ -29,7 +29,6 @@ dev = [
     "-e boldi-ctx @ file:///${PROJECT_ROOT}/pkg/boldi-ctx",
     "-e boldi-dev @ file:///${PROJECT_ROOT}/pkg/boldi-dev",
     "-e boldi-plugins @ file:///${PROJECT_ROOT}/pkg/boldi-plugins",
-    "-e boldi-proc @ file:///${PROJECT_ROOT}/pkg/boldi-proc",
     # building and packaging:
     "pdm",
     "pdm-backend",

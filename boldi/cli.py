@@ -40,7 +40,7 @@ class CliAction(ABC):
         self.ctx = ctx
         self.parser = parser
         self.subparser = subparser
-    
+
     @abstractmethod
     def do_action(self, *args, **kwargs):
         raise NotImplementedError

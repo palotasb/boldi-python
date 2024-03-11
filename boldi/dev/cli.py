@@ -17,7 +17,7 @@ class DevCliAction(boldi.cli.CliAction):
 
     def do_action(self, dev_action: Callable[..., None], **kwargs):
         dev_action(**kwargs)
-    
+
     def do_help(self):
         self.subparser.print_help(self.ctx.stderr)
 
