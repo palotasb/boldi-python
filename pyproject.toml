@@ -32,6 +32,8 @@ dev = [
     "-e boldi-ctx @ {root:uri}/pkg/boldi-ctx",
     "-e boldi-dev @ {root:uri}/pkg/boldi-dev",
     "-e boldi-plugins @ {root:uri}/pkg/boldi-plugins",
+    # docs
+    "mkdocs-material",
     # building and packaging:
     "pdm",
     "hatchling",
