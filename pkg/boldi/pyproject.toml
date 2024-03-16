@@ -1,6 +1,6 @@
 [project]
 name = "boldi"
-version = "0.1.0"
+version = "0.1.1"
 description = "Boldi's Python libraries"
 authors = [
     { name = "Boldizsár Palotás", email = "boldizsar.palotas@gmail.com" },

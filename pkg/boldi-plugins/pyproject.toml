@@ -1,6 +1,6 @@
 [project]
 name = "boldi-plugins"
-version = "0.1.0"
+version = "0.1.1"
 description = "boldi.plugins part of Boldi's Python libraries"
 authors = [
     {name = "Boldizsár Palotás", email = "boldizsar.palotas@gmail.com"},
