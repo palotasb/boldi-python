@@ -1,6 +1,18 @@
 # Boldi's Python Libraries
 
-Welcome to the docs of my personal Python libraries.
+These are Boldi's personal Python libraries.
+
+## `boldi` package
+
+To install all of Boldi's Python libraries, run:
+
+```shell
+pip install boldi
+```
+
+...or add `"boldi"` to your Python dependencies.
+
+See also: [PyPI: `boldi`](https://pypi.org/project/boldi/).
 
 ## `boldi` namespace
 

@@ -1,25 +1,30 @@
-# Boldi Python monorepo
+# Boldi's Python Libraries
 
-## Contributing
+These are Boldi's personal Python libraries.
 
-### Prerequisites
+[Read the docs on `python.boldi.net`.](https://python.boldi.net/)
 
-```shell
-brew install python@3.12
-```
+## `boldi` package
 
-### Clear existing dev env
+To install all of Boldi's Python libraries, run:
 
 ```shell
-[ -n "${VIRTUAL_ENV:-}" ] && deactivate
-rm -rf .venv pdm.lock
+pip install boldi
 ```
 
-### Create dev env
+...or add `"boldi"` to your Python dependencies.
 
-```shell
-python3.12 -m venv .venv
-. .venv/bin/activate
-pip install pdm
-pdm install
-```
+See also: [PyPI: `boldi`](https://pypi.org/project/boldi/).
+
+## `boldi` namespace
+
+`boldi` is the root namespace shared by all modules.
+It is a [namespace package](https://realpython.com/python-namespace-package/),
+so while it can be imported, it doesn't directly define anything.
+
+To achieve something useful, install one of the subpackages and use the corresponding submodules.
+
+* [`boldi.ctx`](https://python.boldi.net/ctx) (`boldi-ctx` package)
+* [`boldi.plugins`](https://python.boldi.net/plugins) (`boldi-plugins` package)
+* [`boldi.cli`](https://python.boldi.net/cli) (`boldi-cli` package)
+* [`boldi.dev`](https://python.boldi.net/dev) (`boldi-dev` package)
