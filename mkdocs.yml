@@ -5,7 +5,6 @@ repo_name: palotasb/boldi-python
 edit_uri: edit/main/docs/
 nav:
   - Home: index.md
-  - boldi.md
   - ctx.md
   - plugins.md
   - cli.md
