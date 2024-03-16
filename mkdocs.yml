@@ -1,3 +1,68 @@
 site_name: Boldi's Python Libraries
+strict: true
+repo_url: https://github.com/palotasb/boldi-python
+repo_name: palotasb/boldi-python
+edit_uri: edit/main/docs/
+nav:
+  - Home: index.md
+  - boldi.md
+  - ctx.md
+  - plugins.md
+  - cli.md
+  - dev.md
+validation:
+  omitted_files: warn
+  absolute_links: warn
+  unrecognized_links: warn
 theme:
   name: material
+  font: false
+  icon:
+    logo: fontawesome/regular/face-smile
+  features:
+    - search.suggest
+    - content.action.edit
+    - content.action.view
+  palette:
+    - media: "(prefers-color-scheme)"
+      toggle:
+        icon: material/brightness-6
+        name: Using system color scheme, click to switch to light mode.
+    - media: "(prefers-color-scheme: light)"
+      scheme: default 
+      toggle:
+        icon: material/weather-sunny
+        name: Using light mode, click to switch to dark mode.
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      toggle:
+        icon: material/moon-waning-crescent
+        name: Using dark mode, click to switch to system color scheme.
+markdown_extensions:
+  - md_in_html
+  - toc:
+      permalink: true
+plugins:
+- privacy
+- search
+- mkdocstrings:
+    default_handler: python
+    enable_inventory: true
+    handlers:
+      python:
+        import:
+        - https://docs.python.org/3/objects.inv
+        options:
+          # members: true
+          docstring_section_style: list
+          filters: ["!^_[^_]"]
+          inherited_members: true
+          member_order: source
+          separate_signatures: true
+          show_if_no_docstring: true
+          show_labels: false
+          show_root_heading: true
+          show_signature_annotations: true
+          show_symbol_type_heading: true
+          show_symbol_type_toc: true
+          signature_crossrefs: true

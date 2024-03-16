@@ -1,3 +1,9 @@
+"""
+Boldi's Context module
+
+Foo *bar.*
+"""
+
 import os
 import shlex
 import subprocess
@@ -14,6 +20,9 @@ SubprocessFile = Union[IO, SubprocessInput]
 
 
 class RunArgs(TypedDict, total=False):
+    """
+    Arguments to [subprocess.run][].
+    """
     bufsize: int
     capture_output: bool
     check: bool
@@ -41,11 +50,17 @@ class RunArgs(TypedDict, total=False):
 
 
 def split_args(*arg_groups: Union[str, List[Any]]) -> List[str]:
+    """
+    Split `arg_groups` into a list of separate arguments.
+    """
     return [str(sub_arg) for args in arg_groups for sub_arg in (shlex.split(args) if isinstance(args, str) else args)]
 
 
 @dataclass
 class Ctx(AbstractContextManager):
+    """
+    Represents a context.
+    """
     stack: ExitStack = field(default_factory=ExitStack)
     stdin: TextIO = field(default_factory=lambda: sys.stdin)
     stdout: TextIO = field(default_factory=lambda: sys.stdout)

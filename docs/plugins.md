@@ -1,0 +1,3 @@
+# Plugins module
+
+::: boldi.plugins

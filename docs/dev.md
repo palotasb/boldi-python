@@ -1,0 +1,3 @@
+# Dev module
+
+::: boldi.dev

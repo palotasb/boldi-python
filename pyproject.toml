@@ -33,7 +33,9 @@ dev = [
     "-e boldi-dev @ {root:uri}/pkg/boldi-dev",
     "-e boldi-plugins @ {root:uri}/pkg/boldi-plugins",
     # docs
+    "mkdocs-autorefs",
     "mkdocs-material",
+    "mkdocstrings[python]",
     # building and packaging:
     "pdm",
     "hatchling",

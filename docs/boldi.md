@@ -1,0 +1,3 @@
+# `boldi` namespace
+
+::: boldi

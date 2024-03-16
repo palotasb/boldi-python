@@ -5,7 +5,7 @@
 groups = ["default", "dev"]
 strategy = ["cross_platform", "inherit_metadata"]
 lock_version = "4.4.1"
-content_hash = "sha256:0ddc1346a7e218fc764319854c8811e5c256f3c2c4ce3627a1876a995927148c"
+content_hash = "sha256:6cff8f517728e2cfabe4eba49837d486659f749236667e960bbba90fcf41d959"
 
 [[package]]
 name = "alabaster"
@@ -359,6 +359,20 @@ files = [
 ]
 
 [[package]]
+name = "griffe"
+version = "0.42.0"
+requires_python = ">=3.8"
+summary = "Signatures for entire Python programs. Extract the structure, the frame, the skeleton of your project, to generate API documentation or find breaking changes in your API."
+groups = ["dev"]
+dependencies = [
+    "colorama>=0.4",
+]
+files = [
+    {file = "griffe-0.42.0-py3-none-any.whl", hash = "sha256:384df6b802a60f70e65fdb7e83f5b27e2da869a12eac85b25b55250012dbc263"},
+    {file = "griffe-0.42.0.tar.gz", hash = "sha256:fb83ee602701ffdf99c9a6bf5f0a5a3bd877364b3bffb2c451dc8fbd9645b0cf"},
+]
+
+[[package]]
 name = "hatchling"
 version = "1.21.1"
 requires_python = ">=3.8"
@@ -441,7 +455,7 @@ files = [
 
 [[package]]
 name = "markdown"
-version = "3.6"
+version = "3.5.2"
 requires_python = ">=3.8"
 summary = "Python implementation of John Gruber's Markdown."
 groups = ["dev"]
@@ -449,8 +463,8 @@ dependencies = [
     "importlib-metadata>=4.4; python_version < \"3.10\"",
 ]
 files = [
-    {file = "Markdown-3.6-py3-none-any.whl", hash = "sha256:48f276f4d8cfb8ce6527c8f79e2ee29708508bf4d40aa410fbc3b4ee832c850f"},
-    {file = "Markdown-3.6.tar.gz", hash = "sha256:ed4f41f6daecbeeb96e576ce414c41d2d876daa9a16cb35fa8ed8c2ddfad0224"},
+    {file = "Markdown-3.5.2-py3-none-any.whl", hash = "sha256:d43323865d89fc0cb9b20c75fc8ad313af307cc087e84b657d9eec768eddeadd"},
+    {file = "Markdown-3.5.2.tar.gz", hash = "sha256:e1ac7b3dc550ee80e602e71c1d168002f062e49f1b11e26a36264dafd4df2ef8"},
 ]
 
 [[package]]
@@ -567,6 +581,22 @@ files = [
 ]
 
 [[package]]
+name = "mkdocs-autorefs"
+version = "1.0.1"
+requires_python = ">=3.8"
+summary = "Automatically link across pages in MkDocs."
+groups = ["dev"]
+dependencies = [
+    "Markdown>=3.3",
+    "markupsafe>=2.0.1",
+    "mkdocs>=1.1",
+]
+files = [
+    {file = "mkdocs_autorefs-1.0.1-py3-none-any.whl", hash = "sha256:aacdfae1ab197780fb7a2dac92ad8a3d8f7ca8049a9cbe56a4218cd52e8da570"},
+    {file = "mkdocs_autorefs-1.0.1.tar.gz", hash = "sha256:f684edf847eced40b570b57846b15f0bf57fb93ac2c510450775dcf16accb971"},
+]
+
+[[package]]
 name = "mkdocs-material"
 version = "9.5.13"
 requires_python = ">=3.8"
@@ -599,6 +629,61 @@ groups = ["dev"]
 files = [
     {file = "mkdocs_material_extensions-1.3.1-py3-none-any.whl", hash = "sha256:adff8b62700b25cb77b53358dad940f3ef973dd6db797907c49e3c2ef3ab4e31"},
     {file = "mkdocs_material_extensions-1.3.1.tar.gz", hash = "sha256:10c9511cea88f568257f960358a467d12b970e1f7b2c0e5fb2bb48cab1928443"},
+]
+
+[[package]]
+name = "mkdocstrings"
+version = "0.24.1"
+requires_python = ">=3.8"
+summary = "Automatic documentation from sources, for MkDocs."
+groups = ["dev"]
+dependencies = [
+    "Jinja2>=2.11.1",
+    "Markdown>=3.3",
+    "MarkupSafe>=1.1",
+    "click>=7.0",
+    "importlib-metadata>=4.6; python_version < \"3.10\"",
+    "mkdocs-autorefs>=0.3.1",
+    "mkdocs>=1.4",
+    "platformdirs>=2.2.0",
+    "pymdown-extensions>=6.3",
+    "typing-extensions>=4.1; python_version < \"3.10\"",
+]
+files = [
+    {file = "mkdocstrings-0.24.1-py3-none-any.whl", hash = "sha256:b4206f9a2ca8a648e222d5a0ca1d36ba7dee53c88732818de183b536f9042b5d"},
+    {file = "mkdocstrings-0.24.1.tar.gz", hash = "sha256:cc83f9a1c8724fc1be3c2fa071dd73d91ce902ef6a79710249ec8d0ee1064401"},
+]
+
+[[package]]
+name = "mkdocstrings-python"
+version = "1.9.0"
+requires_python = ">=3.8"
+summary = "A Python handler for mkdocstrings."
+groups = ["dev"]
+dependencies = [
+    "griffe>=0.37",
+    "markdown<3.6,>=3.3",
+    "mkdocstrings>=0.20",
+]
+files = [
+    {file = "mkdocstrings_python-1.9.0-py3-none-any.whl", hash = "sha256:fad27d7314b4ec9c0359a187b477fb94c65ef561fdae941dca1b717c59aae96f"},
+    {file = "mkdocstrings_python-1.9.0.tar.gz", hash = "sha256:6e1a442367cf75d30cf69774cbb1ad02aebec58bfff26087439df4955efecfde"},
+]
+
+[[package]]
+name = "mkdocstrings"
+version = "0.24.1"
+extras = ["python"]
+requires_python = ">=3.8"
+summary = "Automatic documentation from sources, for MkDocs."
+groups = ["dev"]
+dependencies = [
+    "mkdocstrings-python>=0.5.2",
+    "mkdocstrings==0.24.1",
+]
+files = [
+    {file = "mkdocstrings-0.24.1-py3-none-any.whl", hash = "sha256:b4206f9a2ca8a648e222d5a0ca1d36ba7dee53c88732818de183b536f9042b5d"},
+    {file = "mkdocstrings-0.24.1.tar.gz", hash = "sha256:cc83f9a1c8724fc1be3c2fa071dd73d91ce902ef6a79710249ec8d0ee1064401"},
 ]
 
 [[package]]
