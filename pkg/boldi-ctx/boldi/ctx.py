@@ -1,9 +1,3 @@
-"""
-Boldi's Context module
-
-Foo *bar.*
-"""
-
 import os
 import shlex
 import subprocess

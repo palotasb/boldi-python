@@ -23,6 +23,8 @@ theme:
     - search.suggest
     - content.action.edit
     - content.action.view
+    - navigation.indexes
+    - toc.follow
   palette:
     - media: "(prefers-color-scheme)"
       toggle:
@@ -40,6 +42,13 @@ theme:
         name: Using dark mode, click to switch to system color scheme.
 markdown_extensions:
   - md_in_html
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences
   - toc:
       permalink: true
 plugins:
