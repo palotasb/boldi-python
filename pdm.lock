@@ -70,7 +70,7 @@ files = [
 
 [[package]]
 name = "boldi"
-version = "0.1.2.dev3"
+version = "0.3.1"
 requires_python = ">=3.9"
 editable = true
 path = "./pkg/boldi"
@@ -84,7 +84,7 @@ dependencies = [
 
 [[package]]
 name = "boldi-cli"
-version = "0.1.2.dev6"
+version = "0.3.1"
 requires_python = ">=3.9"
 editable = true
 path = "./pkg/boldi-cli"
@@ -97,7 +97,7 @@ dependencies = [
 
 [[package]]
 name = "boldi-ctx"
-version = "0.1.2.dev6"
+version = "0.3.1"
 requires_python = ">=3.9"
 editable = true
 path = "./pkg/boldi-ctx"
@@ -109,7 +109,7 @@ dependencies = [
 
 [[package]]
 name = "boldi-dev"
-version = "0.1.2.dev3"
+version = "0.3.1"
 requires_python = ">=3.9"
 editable = true
 path = "./pkg/boldi-dev"
@@ -125,7 +125,7 @@ dependencies = [
 
 [[package]]
 name = "boldi-plugins"
-version = "0.1.2.dev6"
+version = "0.3.1"
 requires_python = ">=3.9"
 editable = true
 path = "./pkg/boldi-plugins"
@@ -137,7 +137,7 @@ dependencies = [
 
 [[package]]
 name = "boldi-proc"
-version = "0.1.2.dev6"
+version = "0.3.1"
 requires_python = ">=3.9"
 editable = true
 path = "./pkg/boldi-proc"
