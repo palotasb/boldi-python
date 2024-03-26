@@ -32,7 +32,9 @@ def example(ctx):
     subprocess.run(..., pwd=ctx.cwd, env=ctx.env)
 ```
 
-A default `Ctx()` instance will hold the actual values or proxies to them.
+A default `Ctx()` will hold the original mutable global variables.
+This is safe to use if constructed in the `main()` function,
+or when no explicit `ctx` parameter has been provided to a function.
 
 Custom values can be set inside unit tests or in any other context
 where manipulating the original global variables is not intended.
