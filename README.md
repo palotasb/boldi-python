@@ -24,7 +24,8 @@ so while it can be imported, it doesn't directly define anything.
 
 To achieve something useful, install one of the subpackages and use the corresponding submodules.
 
-* [`boldi.ctx`](https://python.boldi.net/ctx) (`boldi-ctx` package)
-* [`boldi.plugins`](https://python.boldi.net/plugins) (`boldi-plugins` package)
-* [`boldi.cli`](https://python.boldi.net/cli) (`boldi-cli` package)
-* [`boldi.dev`](https://python.boldi.net/dev) (`boldi-dev` package)
+* [`boldi.proc`](https://python.boldi.net/proc/) (`boldi-proc` package)
+* [`boldi.ctx`](https://python.boldi.net/ctx/) (`boldi-ctx` package)
+* [`boldi.plugins`](https://python.boldi.net/plugins/) (`boldi-plugins` package)
+* [`boldi.cli`](https://python.boldi.net/cli/) (`boldi-cli` package)
+* [`boldi.dev`](https://python.boldi.net/dev/) (`boldi-dev` package)
