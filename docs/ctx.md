@@ -7,7 +7,7 @@ and allow replacing it with a single explicit parameter: [`ctx: Ctx`][boldi.ctx.
 
 Boldi's Context module is distributed as the
 [`boldi-ctx` Python package](https://pypi.org/project/boldi-ctx/),
-thus to use it, run:
+thus to install it, run:
 
 ```shell
 pip install boldi-ctx
@@ -81,5 +81,7 @@ def example(ctx: Ctx | None = None):
 
 Custom ctx values can be set inside unit tests or in any other context
 where changing the original global variables is not intended.
+
+## API
 
 ::: boldi.ctx
