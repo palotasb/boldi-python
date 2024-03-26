@@ -52,7 +52,7 @@ def split_args(*arg_groups: Union[str, List[Any]]) -> List[str]:
         arg_groups: Groups of command line arguments, provided as positional arguments.
             Each "arg group" is either a string or a sub-list of arbitrary objects.
             Strings are split using [`shlex.split`][] into further arguments.
-            Sub-list items are converted to [`str`][], but split further.
+            Sub-list items are converted to [`str`][], but not split further.
 
     Returns:
         A flat list of command line arguments.
