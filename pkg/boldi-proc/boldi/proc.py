@@ -6,16 +6,16 @@ from typing import IO, Any, Callable, Iterable, List, Mapping, TypedDict, Union
 
 from typing_extensions import Unpack
 
-#: Type definition for the predefined values for file descriptors in the [`subprocess`][] module.
 SubprocessInput = int
+"""Type definition for the predefined values for file descriptors in the [`subprocess`][] module."""
 
-#: Type definition for the file descriptor arguments for [`RunArgs`][boldi.proc.RunArgs].
 SubprocessFile = Union[IO, int]
+"""Type definition for the file descriptor arguments for [`RunArgs`][boldi.proc.RunArgs]."""
 
 
 class RunArgs(TypedDict, total=False):
     """
-    Arguments to [`subprocess.run`][].
+    Arguments to [`subprocess.run`][] or [`subprocess.Popen`][].
     """
 
     bufsize: int

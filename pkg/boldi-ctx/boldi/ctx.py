@@ -20,18 +20,33 @@ class Ctx(AbstractContextManager):
     """
 
     stack: ExitStack = field(default_factory=ExitStack)
+    """An [`ExitStack`][contextlib.ExitStack] provided for convenience."""
+
     stdin: TextIO = field(default_factory=lambda: sys.stdin)
+    """Replacement for [`sys.stdin`][]."""
+
     stdout: TextIO = field(default_factory=lambda: sys.stdout)
+    """Replacement for [`sys.stdout`][]."""
+
     stderr: TextIO = field(default_factory=lambda: sys.stderr)
+    """Replacement for [`sys.stderr`][]."""
+
     argv: list[str] = field(default_factory=lambda: sys.argv)
+    """Replacement for [`sys.argv`][]."""
+
     env: MutableMapping[str, str] = field(default_factory=lambda: os.environ)
+    """Replacement for [`os.environ`][]."""
+
     cwd: Path = field(default_factory=Path.cwd)
+    """Replacement for [`pathlib.Path.cwd`][]."""
 
     def __enter__(self) -> Self:
+        """Enter the context of `self.stack`."""
         self.stack.__enter__()
         return self
 
     def __exit__(self, *exc_info) -> bool:
+        """Exit the context of `self.stack`."""
         return self.stack.__exit__(*exc_info)
 
     def _set_run_kwargs(self, **kwargs: Unpack[RunArgs]):
