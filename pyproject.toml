@@ -49,3 +49,7 @@ line-length = 120
 extend-select = [
     "I", # sort imports
 ]
+
+[tool.pyright]
+venvPath = "."
+venv = ".venv"
