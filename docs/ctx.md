@@ -1,8 +1,31 @@
 # Context module
 
-## Overview
+The purpose of the Context module is to allow removing mutable global variables from Python code,
+and allow replacing it with a single explicit parameter: [`ctx: Ctx`][boldi.ctx.Ctx].
 
-The purpose of the Context module is to allow removing mutable global variables from Python code.
+## Install
+
+Boldi's Context module is distributed as the
+[`boldi-ctx` Python package](https://pypi.org/project/boldi-ctx/),
+thus to use it, run:
+
+```shell
+pip install boldi-ctx
+```
+
+...or add `"boldi-ctx"` as a dependency to your project.
+
+## Import
+
+Import the module like so:
+
+```py
+import boldi.ctx
+# or:
+from boldi.ctx import Ctx
+```
+
+## Usage
 
 The [`Ctx` class][boldi.ctx.Ctx] encapsulates mutable globals defined in the Python standard library,
 and often used in regular Python code.
@@ -27,35 +50,36 @@ import subprocess
 
 from boldi.ctx import Ctx
 
-def example(ctx):
+def printing_example(ctx):
     print(..., file=ctx.stderr)
-    subprocess.run(..., pwd=ctx.cwd, env=ctx.env)
+
+def subprocess_example(ctx, args):
+    # these two are equivalent:
+    subprocess.run(
+        args,
+        check=True,
+        text=True,
+        stdin=ctx.stdin, stdout=ctx.stdout, stderr=ctx.stderr,
+        pwd=ctx.cwd,
+        env=ctx.env
+    )
+    ctx.run(args)
 ```
 
 A default `Ctx()` will hold the original mutable global variables.
 This is safe to use if constructed in the `main()` function,
 or when no explicit `ctx` parameter has been provided to a function.
 
-Custom values can be set inside unit tests or in any other context
-where manipulating the original global variables is not intended.
-
-## Installation and usage
-
-The Context module is distributed under the `boldi-ctx` Python package name,
-thus to use it, run:
-
-```shell
-pip install boldi-ctx
-```
-
-...or add `"boldi-ctx"` as a dependency to your project.
-
-Import it like so:
-
 ```py
-import boldi.ctx
-# or:
 from boldi.ctx import Ctx
+
+# for convenience, allows omitting the ctx parameter
+def example(ctx: Ctx | None = None):
+    ctx = ctx or Ctx()
+    ...
 ```
+
+Custom ctx values can be set inside unit tests or in any other context
+where changing the original global variables is not intended.
 
 ::: boldi.ctx

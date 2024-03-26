@@ -16,7 +16,17 @@ from boldi.proc import RunArgs, run as _run, run_py as _run_py
 @dataclass
 class Ctx(AbstractContextManager):
     """
-    Represents a context.
+    Represents a context where the values in this object should apply.
+    
+    When a `Ctx` object is passed as an argument to a function,
+    or defined as a base class or a `self` attribute of an object,
+    then the values in the `Ctx` object should be used explicitly
+    instead of the original default values that they replace.
+
+    Examples:
+        If a `ctx: Ctx` or `self.ctx: Ctx` is present,
+        always explicitly `print(..., file=ctx.stdout)`
+        instead of a `print(...)` (that defaults to `sys.stdout`).
     """
 
     stack: ExitStack = field(default_factory=ExitStack)
