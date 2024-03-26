@@ -13,7 +13,6 @@ dynamic = ["version"]
 # this just includes the real packages (boldi, boldi-cli, etc.) as dev-dependencies,
 # and those packages can include real dependencies, including on each other.
 dependencies = []
-optional-dependencies = {}
 
 [build-system]
 requires = ["hatchling", "hatch-vcs"]
@@ -41,6 +40,7 @@ dev = [
     "mkdocstrings[python]",
     # building and packaging:
     "pdm",
+    "hatch",
     "hatchling",
     "hatch-vcs",
     "build",

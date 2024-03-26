@@ -30,7 +30,3 @@ version-file = "boldi/_version.py"
 [tool.hatch.version]
 source = "vcs"
 raw-options = { "root" = "../.." }
-
-[tool.pdm]
-
-[tool.pdm.dev-dependencies]

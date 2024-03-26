@@ -6,6 +6,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0 # all
+        fetch-tags: true
     - name: Set up Python
       uses: actions/setup-python@v5
       with:
@@ -19,6 +22,7 @@ jobs:
     - name: Build a binary wheel and a source tarball
       run: |
         . .venv/bin/activate
+        export SETUPTOOLS_SCM_PRETEND_VERSION="$(hatch version | python -c 'import sys, re; v=sys.stdin.read().strip(); print(re.sub(r"^([^+]*)\+?.*$", r"\1", v))')"
         boldi dev package
     - name: Store the distribution packages
       uses: actions/upload-artifact@v4
