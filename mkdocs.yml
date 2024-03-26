@@ -5,6 +5,7 @@ repo_name: palotasb/boldi-python
 edit_uri: edit/main/docs/
 nav:
   - Home: index.md
+  - proc.md
   - ctx.md
   - plugins.md
   - cli.md
@@ -60,6 +61,7 @@ plugins:
       python:
         import:
         - https://docs.python.org/3/objects.inv
+        - https://typing-extensions.readthedocs.io/en/latest/objects.inv
         options:
           # members: true
           docstring_section_style: list

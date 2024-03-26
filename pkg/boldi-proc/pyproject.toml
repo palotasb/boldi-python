@@ -1,6 +1,6 @@
 [project]
-name = "boldi-ctx"
-description = "boldi.ctx part of Boldi's Python libraries"
+name = "boldi-proc"
+description = "boldi.proc part of Boldi's Python libraries"
 authors = [
     { name = "Boldizsár Palotás", email = "boldizsar.palotas@gmail.com" },
 ]
@@ -9,13 +9,8 @@ readme = "../../README.md"
 license = { text = "MIT" }
 dynamic = ["version"]
 
-dependencies = [
-    # boldi libs:
-    "boldi-proc",
-]
-
-[project.optional-dependencies]
-dev = ["typing-extensions"]
+dependencies = ["typing_extensions"]
+optional-dependencies = {}
 
 [build-system]
 requires = ["hatchling", "hatch-vcs"]
@@ -25,7 +20,7 @@ build-backend = "hatchling.build"
 packages = ["boldi"]
 
 [tool.hatch.build.hooks.vcs]
-version-file = "boldi/_ctx_version.py"
+version-file = "boldi/_proc_version.py"
 
 [tool.hatch.version]
 source = "vcs"

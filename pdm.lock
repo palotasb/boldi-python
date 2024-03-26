@@ -5,7 +5,7 @@
 groups = ["default", "dev"]
 strategy = ["cross_platform", "inherit_metadata"]
 lock_version = "4.4.1"
-content_hash = "sha256:b7acaad73eee54b5e6843a1b282b24960212f634866ec69a606ff03f39c0fc72"
+content_hash = "sha256:70da72638ca337436edf154c3fdaa9f9922a3183e3b251997ae318e6de05b2c6"
 
 [[package]]
 name = "alabaster"
@@ -84,7 +84,7 @@ dependencies = [
 
 [[package]]
 name = "boldi-cli"
-version = "0.1.2.dev4"
+version = "0.1.2.dev6"
 requires_python = ">=3.9"
 editable = true
 path = "./pkg/boldi-cli"
@@ -97,14 +97,14 @@ dependencies = [
 
 [[package]]
 name = "boldi-ctx"
-version = "0.1.2.dev4"
+version = "0.1.2.dev6"
 requires_python = ">=3.9"
 editable = true
 path = "./pkg/boldi-ctx"
 summary = "boldi.ctx part of Boldi's Python libraries"
 groups = ["dev"]
 dependencies = [
-    "typing-extensions",
+    "boldi-proc",
 ]
 
 [[package]]
@@ -125,7 +125,7 @@ dependencies = [
 
 [[package]]
 name = "boldi-plugins"
-version = "0.1.2.dev4"
+version = "0.1.2.dev6"
 requires_python = ">=3.9"
 editable = true
 path = "./pkg/boldi-plugins"
@@ -133,6 +133,18 @@ summary = "boldi.plugins part of Boldi's Python libraries"
 groups = ["dev"]
 dependencies = [
     "backports-entry-points-selectable",
+]
+
+[[package]]
+name = "boldi-proc"
+version = "0.1.2.dev6"
+requires_python = ">=3.9"
+editable = true
+path = "./pkg/boldi-proc"
+summary = "boldi.proc part of Boldi's Python libraries"
+groups = ["dev"]
+dependencies = [
+    "typing-extensions",
 ]
 
 [[package]]

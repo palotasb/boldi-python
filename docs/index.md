@@ -22,6 +22,7 @@ so while it can be imported, it doesn't directly define anything.
 
 To achieve something useful, install one of the subpackages and use the corresponding submodules.
 
+* [`boldi.proc`](proc.md) (`boldi-proc` package)
 * [`boldi.ctx`](ctx.md) (`boldi-ctx` package)
 * [`boldi.plugins`](plugins.md) (`boldi-plugins` package)
 * [`boldi.cli`](cli.md) (`boldi-cli` package)

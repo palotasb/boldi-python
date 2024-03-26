@@ -1,53 +1,16 @@
+from __future__ import annotations
+
 import os
-import shlex
 import subprocess
 import sys
 from contextlib import AbstractContextManager, ExitStack
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import IO, Any, Callable, Iterable, List, Mapping, MutableMapping, TextIO, TypedDict, Union
+from typing import Any, List, MutableMapping, TextIO, Union
 
 from typing_extensions import Self, Unpack
 
-SubprocessInput = int
-SubprocessFile = Union[IO, SubprocessInput]
-
-
-class RunArgs(TypedDict, total=False):
-    """
-    Arguments to [subprocess.run][].
-    """
-    bufsize: int
-    capture_output: bool
-    check: bool
-    close_fds: bool
-    cwd: Path
-    encoding: str
-    env: Mapping[str, str]
-    errors: Any
-    extra_groups: Iterable[str | int]
-    group: str | int
-    input: IO
-    pipesize: int
-    preexec_fn: Callable[..., Any]
-    process_group: int
-    shell: bool
-    startupinfo: Any
-    stderr: SubprocessFile
-    stdin: SubprocessFile
-    stdout: SubprocessFile
-    text: bool
-    timeout: float
-    umask: int
-    universal_newlines: bool
-    user: str | int
-
-
-def split_args(*arg_groups: Union[str, List[Any]]) -> List[str]:
-    """
-    Split `arg_groups` into a list of separate arguments.
-    """
-    return [str(sub_arg) for args in arg_groups for sub_arg in (shlex.split(args) if isinstance(args, str) else args)]
+from boldi.proc import RunArgs, run as _run, run_py as _run_py
 
 
 @dataclass
@@ -55,6 +18,7 @@ class Ctx(AbstractContextManager):
     """
     Represents a context.
     """
+
     stack: ExitStack = field(default_factory=ExitStack)
     stdin: TextIO = field(default_factory=lambda: sys.stdin)
     stdout: TextIO = field(default_factory=lambda: sys.stdout)
@@ -70,17 +34,42 @@ class Ctx(AbstractContextManager):
     def __exit__(self, *exc_info) -> bool:
         return self.stack.__exit__(*exc_info)
 
-    def run(self, *args: Union[str, List[Any]], **kwargs: Unpack[RunArgs]) -> subprocess.CompletedProcess:
-        kwargs.setdefault("check", True)
-        kwargs.setdefault("text", True)
+    def _set_run_kwargs(self, **kwargs: Unpack[RunArgs]):
         kwargs.setdefault("cwd", self.cwd)
         kwargs.setdefault("env", self.env)
         if not kwargs.get("capture_output"):
             kwargs.setdefault("stdin", self.stdin)
             kwargs.setdefault("stdout", self.stdout)
             kwargs.setdefault("stderr", self.stderr)
-        args_list = split_args(*args)
-        return subprocess.run(args_list, **kwargs)
 
-    def run_py(self, *args: Union[str, List[Any]], **kwargs: Unpack[RunArgs]) -> subprocess.CompletedProcess:
-        return self.run([sys.executable], *args, **kwargs)
+    def run(self, *arg_groups: Union[str, List[Any]], **kwargs: Unpack[RunArgs]) -> subprocess.CompletedProcess:
+        """
+        Run a subprocess using the provided command line arguments and updated defaults.
+
+        Args:
+            arg_groups: Groups of command line arguments, provided as positional arguments.
+                As defined in [`boldi.proc.split_args`][].
+            kwargs: Arguments to [`subprocess.run`][].
+                Defaults to `check=True`, `text=True`, and values set in `self.{stdin,stdout,stderr,env,cwd}`,
+                unless otherwise set by the caller.
+
+        Returns:
+            Completed process object.
+        """
+        self._set_run_kwargs(**kwargs)
+        return _run(*arg_groups, **kwargs)
+
+    def run_py(self, *arg_groups: Union[str, List[Any]], **kwargs: Unpack[RunArgs]) -> subprocess.CompletedProcess:
+        """
+        Run a subprocess using the current Python interpreter, the provided command line arguments and updated defaults.
+
+        Args:
+            arg_groups: Groups of command line arguments, provided as positional arguments.
+                As defined in [`boldi.proc.split_args`][].
+            kwargs: Arguments to [`subprocess.run`][]. As defined in [`run`][boldi.ctx.Ctx.run].
+
+        Returns:
+            Completed process object.
+        """
+        self._set_run_kwargs(**kwargs)
+        return _run_py(*arg_groups, **kwargs)

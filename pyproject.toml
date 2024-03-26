@@ -34,6 +34,7 @@ dev = [
     "-e boldi-ctx @ {root:uri}/pkg/boldi-ctx",
     "-e boldi-dev @ {root:uri}/pkg/boldi-dev",
     "-e boldi-plugins @ {root:uri}/pkg/boldi-plugins",
+    "-e boldi-proc @ {root:uri}/pkg/boldi-proc",
     # docs
     "mkdocs-autorefs",
     "mkdocs-material",
@@ -53,6 +54,11 @@ line-length = 120
 extend-select = [
     "I", # sort imports
 ]
+
+[tool.ruff.lint.isort]
+combine-as-imports = true
+known-first-party = ["boldi", "boldi.*"]
+
 
 [tool.pyright]
 venvPath = "."
