@@ -1,6 +1,5 @@
 [project]
 name = "boldi-ctx"
-version = "0.1.1"
 description = "boldi.ctx part of Boldi's Python libraries"
 authors = [
     { name = "Boldizsár Palotás", email = "boldizsar.palotas@gmail.com" },
@@ -8,16 +7,24 @@ authors = [
 requires-python = ">=3.9"
 readme = "../../README.md"
 license = { text = "MIT" }
+dynamic = ["version"]
 
 dependencies = ["typing_extensions"]
 optional-dependencies = {}
 
 [build-system]
-requires = ["hatchling"]
+requires = ["hatchling", "hatch-vcs"]
 build-backend = "hatchling.build"
 
 [tool.hatch.build]
 packages = ["boldi"]
+
+[tool.hatch.build.hooks.vcs]
+version-file = "boldi/_ctx_version.py"
+
+[tool.hatch.version]
+source = "vcs"
+raw-options = { "root" = "../.." }
 
 [tool.pdm]
 

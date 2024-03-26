@@ -1,6 +1,5 @@
 [project]
 name = "boldi-devmetapackage"
-version = "0.1.1"
 description = "Development Metapackage for Boldi's Python libraries"
 authors = [
     { name = "Boldizsár Palotás", email = "boldizsar.palotas@gmail.com" },
@@ -8,6 +7,7 @@ authors = [
 requires-python = ">=3.9"
 readme = "README.md"
 license = { file = "LICENSE" }
+dynamic = ["version"]
 
 # Intentionally no dependencies as this is just a development metapackage.
 # this just includes the real packages (boldi, boldi-cli, etc.) as dev-dependencies,
@@ -16,11 +16,14 @@ dependencies = []
 optional-dependencies = {}
 
 [build-system]
-requires = ["hatchling"]
+requires = ["hatchling", "hatch-vcs"]
 build-backend = "hatchling.build"
 
+[tool.hatch.version]
+source = "vcs"
+
 [tool.hatch.build]
-packages = ["boldi"]
+packages = ["."]
 
 [tool.pdm]
 
@@ -39,6 +42,7 @@ dev = [
     # building and packaging:
     "pdm",
     "hatchling",
+    "hatch-vcs",
     "build",
 ]
 

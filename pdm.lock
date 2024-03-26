@@ -5,7 +5,7 @@
 groups = ["default", "dev"]
 strategy = ["cross_platform", "inherit_metadata"]
 lock_version = "4.4.1"
-content_hash = "sha256:6cff8f517728e2cfabe4eba49837d486659f749236667e960bbba90fcf41d959"
+content_hash = "sha256:1bc0faac955efbc9634e8a24b1c1cf57859e3224615e82e307815cbc9dc7c1cc"
 
 [[package]]
 name = "alabaster"
@@ -70,7 +70,7 @@ files = [
 
 [[package]]
 name = "boldi"
-version = "0.1.1"
+version = "0.1.2.dev3"
 requires_python = ">=3.9"
 editable = true
 path = "./pkg/boldi"
@@ -84,7 +84,7 @@ dependencies = [
 
 [[package]]
 name = "boldi-cli"
-version = "0.1.1"
+version = "0.1.2.dev3"
 requires_python = ">=3.9"
 editable = true
 path = "./pkg/boldi-cli"
@@ -97,7 +97,7 @@ dependencies = [
 
 [[package]]
 name = "boldi-ctx"
-version = "0.1.1"
+version = "0.1.2.dev3"
 requires_python = ">=3.9"
 editable = true
 path = "./pkg/boldi-ctx"
@@ -109,7 +109,7 @@ dependencies = [
 
 [[package]]
 name = "boldi-dev"
-version = "0.1.1"
+version = "0.1.2.dev3"
 requires_python = ">=3.9"
 editable = true
 path = "./pkg/boldi-dev"
@@ -125,7 +125,7 @@ dependencies = [
 
 [[package]]
 name = "boldi-plugins"
-version = "0.1.1"
+version = "0.1.2.dev3"
 requires_python = ">=3.9"
 editable = true
 path = "./pkg/boldi-plugins"
@@ -399,6 +399,21 @@ groups = ["dev"]
 files = [
     {file = "h11-0.14.0-py3-none-any.whl", hash = "sha256:e3fe4ac4b851c468cc8363d500db52c2ead036020723024a109d37346efaa761"},
     {file = "h11-0.14.0.tar.gz", hash = "sha256:8f19fbbe99e72420ff35c00b27a34cb9937e902a8b810e2c88300c6f0a3b699d"},
+]
+
+[[package]]
+name = "hatch-vcs"
+version = "0.4.0"
+requires_python = ">=3.8"
+summary = "Hatch plugin for versioning with your preferred VCS"
+groups = ["dev"]
+dependencies = [
+    "hatchling>=1.1.0",
+    "setuptools-scm>=6.4.0",
+]
+files = [
+    {file = "hatch_vcs-0.4.0-py3-none-any.whl", hash = "sha256:b8a2b6bee54cf6f9fc93762db73890017ae59c9081d1038a41f16235ceaf8b2c"},
+    {file = "hatch_vcs-0.4.0.tar.gz", hash = "sha256:093810748fe01db0d451fabcf2c1ac2688caefd232d4ede967090b1c1b07d9f7"},
 ]
 
 [[package]]
@@ -1206,6 +1221,34 @@ files = [
     {file = "ruff-0.3.4-py3-none-win_amd64.whl", hash = "sha256:de0d5069b165e5a32b3c6ffbb81c350b1e3d3483347196ffdf86dc0ef9e37dd6"},
     {file = "ruff-0.3.4-py3-none-win_arm64.whl", hash = "sha256:6810563cc08ad0096b57c717bd78aeac888a1bfd38654d9113cb3dc4d3f74232"},
     {file = "ruff-0.3.4.tar.gz", hash = "sha256:f0f4484c6541a99862b693e13a151435a279b271cff20e37101116a21e2a1ad1"},
+]
+
+[[package]]
+name = "setuptools"
+version = "69.2.0"
+requires_python = ">=3.8"
+summary = "Easily download, build, install, upgrade, and uninstall Python packages"
+groups = ["dev"]
+files = [
+    {file = "setuptools-69.2.0-py3-none-any.whl", hash = "sha256:c21c49fb1042386df081cb5d86759792ab89efca84cf114889191cd09aacc80c"},
+    {file = "setuptools-69.2.0.tar.gz", hash = "sha256:0ff4183f8f42cd8fa3acea16c45205521a4ef28f73c6391d8a25e92893134f2e"},
+]
+
+[[package]]
+name = "setuptools-scm"
+version = "8.0.4"
+requires_python = ">=3.8"
+summary = "the blessed package to manage your versions by scm tags"
+groups = ["dev"]
+dependencies = [
+    "packaging>=20",
+    "setuptools",
+    "tomli>=1; python_version < \"3.11\"",
+    "typing-extensions",
+]
+files = [
+    {file = "setuptools-scm-8.0.4.tar.gz", hash = "sha256:b5f43ff6800669595193fd09891564ee9d1d7dcb196cab4b2506d53a2e1c95c7"},
+    {file = "setuptools_scm-8.0.4-py3-none-any.whl", hash = "sha256:b47844cd2a84b83b3187a5782c71128c28b4c94cad8bfb871da2784a5cb54c4f"},
 ]
 
 [[package]]
