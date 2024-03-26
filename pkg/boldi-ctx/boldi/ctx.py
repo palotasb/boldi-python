@@ -17,7 +17,7 @@ from boldi.proc import RunArgs, run as _run, run_py as _run_py
 class Ctx(AbstractContextManager):
     """
     Represents a context where the values in this object should apply.
-    
+
     When a `Ctx` object is passed as an argument to a function,
     or defined as a base class or a `self` attribute of an object,
     then the values in the `Ctx` object should be used explicitly
