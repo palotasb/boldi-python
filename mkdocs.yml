@@ -40,6 +40,8 @@ theme:
       toggle:
         icon: material/moon-waning-crescent
         name: Using dark mode, click to switch to system color scheme.
+extra_css:
+  - stylesheets/boldi.css
 markdown_extensions:
   - md_in_html
   - mdx_truly_sane_lists # support markdown lists indented by two spaces
