@@ -60,7 +60,7 @@ def subprocess_example(ctx, args):
         check=True,
         text=True,
         stdin=ctx.stdin, stdout=ctx.stdout, stderr=ctx.stderr,
-        pwd=ctx.cwd,
+        cwd=ctx.cwd,
         env=ctx.env
     )
     ctx.run(args)
