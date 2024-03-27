@@ -39,6 +39,7 @@ dev = [
     "mkdocs-autorefs",
     "mkdocs-material",
     "mkdocstrings[python]",
+    "mdx-truly-sane-lists",
     # building and packaging:
     "pdm",
     "hatch",

@@ -5,7 +5,7 @@
 groups = ["default", "dev"]
 strategy = ["cross_platform", "inherit_metadata"]
 lock_version = "4.4.1"
-content_hash = "sha256:70da72638ca337436edf154c3fdaa9f9922a3183e3b251997ae318e6de05b2c6"
+content_hash = "sha256:0845d059324edf41c7959488367fecba78e9b9dc90c3f159127eb94977bff69b"
 
 [[package]]
 name = "alabaster"
@@ -59,7 +59,7 @@ files = [
 
 [[package]]
 name = "boldi"
-version = "0.3.2.dev7"
+version = "0.3.2.dev11"
 requires_python = ">=3.9"
 editable = true
 path = "./pkg/boldi"
@@ -73,7 +73,7 @@ dependencies = [
 
 [[package]]
 name = "boldi-cli"
-version = "0.3.2.dev7"
+version = "0.3.2.dev11"
 requires_python = ">=3.9"
 editable = true
 path = "./pkg/boldi-cli"
@@ -86,7 +86,7 @@ dependencies = [
 
 [[package]]
 name = "boldi-ctx"
-version = "0.3.2.dev7"
+version = "0.3.2.dev11"
 requires_python = ">=3.9"
 editable = true
 path = "./pkg/boldi-ctx"
@@ -98,7 +98,7 @@ dependencies = [
 
 [[package]]
 name = "boldi-dev"
-version = "0.3.2.dev7"
+version = "0.3.2.dev11"
 requires_python = ">=3.9"
 editable = true
 path = "./pkg/boldi-dev"
@@ -114,7 +114,7 @@ dependencies = [
 
 [[package]]
 name = "boldi-plugins"
-version = "0.3.2.dev7"
+version = "0.3.2.dev11"
 requires_python = ">=3.9"
 editable = true
 path = "./pkg/boldi-plugins"
@@ -126,7 +126,7 @@ dependencies = [
 
 [[package]]
 name = "boldi-proc"
-version = "0.3.2.dev7"
+version = "0.3.2.dev11"
 requires_python = ">=3.9"
 editable = true
 path = "./pkg/boldi-proc"
@@ -843,6 +843,19 @@ groups = ["dev"]
 files = [
     {file = "mdurl-0.1.2-py3-none-any.whl", hash = "sha256:84008a41e51615a49fc9966191ff91509e3c40b939176e643fd50a5c2196b8f8"},
     {file = "mdurl-0.1.2.tar.gz", hash = "sha256:bb413d29f5eea38f31dd4754dd7377d4465116fb207585f97bf925588687c1ba"},
+]
+
+[[package]]
+name = "mdx-truly-sane-lists"
+version = "1.3"
+summary = "Extension for Python-Markdown that makes lists truly sane. Custom indents for nested lists and fix for messy linebreaks."
+groups = ["dev"]
+dependencies = [
+    "Markdown>=2.6",
+]
+files = [
+    {file = "mdx_truly_sane_lists-1.3-py3-none-any.whl", hash = "sha256:b9546a4c40ff8f1ab692f77cee4b6bfe8ddf9cccf23f0a24e71f3716fe290a37"},
+    {file = "mdx_truly_sane_lists-1.3.tar.gz", hash = "sha256:b661022df7520a1e113af7c355c62216b384c867e4f59fb8ee7ad511e6e77f45"},
 ]
 
 [[package]]
