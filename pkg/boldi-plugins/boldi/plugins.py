@@ -10,11 +10,11 @@ class Plugin(NamedTuple, Generic[T]):
     cls: Type[T]
 
 
-def load(group: str, *, subclass: Type[T] = type) -> Iterable[Plugin[T]]:
+def load(group: str, *, cls: Type[T] = type) -> Iterable[Plugin[T]]:
     entry_points = importlib_metadata.entry_points(group=group)
     for entry_point in entry_points:
-        cls = entry_point.load()
-        if isinstance(cls, type) and issubclass(cls, subclass):
-            yield Plugin(entry_point.name, cls)
+        plugin = entry_point.load()
+        if isinstance(plugin, type) and issubclass(plugin, cls):
+            yield Plugin(entry_point.name, plugin)
         else:
-            raise TypeError(f"expected {entry_point} to be subclass of {subclass} but got {type(cls)}")
+            raise TypeError(f"expected {entry_point} to be subclass of {cls} but got {type(cls)}")
