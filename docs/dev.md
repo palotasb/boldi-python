@@ -23,6 +23,8 @@ so to use it, run the following command:
 boldi dev --help
 ```
 
+The `boldi dev` command is only available if the `boldi-dev` package is installed.
+
 ### `boldi dev`
 
 This commands shows the help message for the other `boldi dev` subcommands.

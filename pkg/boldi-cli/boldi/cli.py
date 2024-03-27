@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 from argparse import ArgumentParser
 from contextlib import contextmanager
 from dataclasses import dataclass, field
-from typing import Any, Callable, Optional
+from typing import Callable, Optional
 
 from rich.console import Console
 
@@ -12,29 +12,35 @@ from boldi.ctx import Ctx
 
 
 class _CliCtxDefaultConsole(Console):
+    """Implementation detail used to set a default value for [boldi.cli.CliCtx.console][]."""
     pass
 
 
 @dataclass
 class CliCtx(Ctx):
+    """Extends [`Ctx`][boldi.ctx.Ctx] with a console feature for rich CLI output."""
+
     console: Console = field(default_factory=_CliCtxDefaultConsole)
+    """A rich console that outputs to `self.stderr` by default."""
 
     def __post_init__(self):
         if isinstance(self.console, _CliCtxDefaultConsole):
             self.console = Console(file=self.stderr, highlight=False)
 
 
-@dataclass
-class Action:
-    subparser_kwargs: dict[str, Any]
-    argument_parser: Callable[[ArgumentParser], None]
-    action_fn: Callable[..., None]
-
-
 class CliAction(ABC):
+    """
+    Base class for implementing a `boldi` CLI subcommand.
+    """
+    
     ctx: CliCtx
+    """Context provided for convenience."""
+
     parser: ArgumentParser
+    """The root [`argparse.ArgumentParser`] for the `boldi` CLI."""
+
     subparser: ArgumentParser
+    """The subcommand [`argparse.ArgumentParser`] for the `boldi` CLI subcommand implemented by this class."""
 
     def __init__(self, ctx: CliCtx, parser: ArgumentParser, subparser: ArgumentParser):
         self.ctx = ctx
@@ -43,16 +49,20 @@ class CliAction(ABC):
 
     @abstractmethod
     def do_action(self, *args, **kwargs):
+        """Implement the feature provided by the CLI subcommand."""
         raise NotImplementedError
 
 
 class HelpCliAction(CliAction):
+    """Implements the `boldi help` CLI subcommand."""
 
     def do_action(self):
+        """Prints a help message and exits."""
         self.parser.print_help()
 
 
 def main(ctx: Optional[CliCtx] = None):
+    """Main entry point that implements the `boldi` CLI."""
     ctx = ctx or CliCtx()
     with ctx:
         ctx.stack.enter_context(error_handler(ctx))
@@ -73,6 +83,7 @@ def main(ctx: Optional[CliCtx] = None):
 
 @contextmanager
 def error_handler(ctx: CliCtx):
+    """Context manager that catches all exceptions and converts them to console messages."""
     try:
         yield
     except Exception as exc:
