@@ -1,6 +1,8 @@
 # Development module
 
-TODO: overview.
+The Development module implements features useful for developing Boldi's Python libraries.
+It is only a dev dependency of the main `boldi` Python package, not a regular dependency,
+like the other packages.
 
 ## Install
 
