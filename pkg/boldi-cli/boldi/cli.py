@@ -47,7 +47,6 @@ class CliAction(ABC):
 
 
 class HelpCliAction(CliAction):
-    help = "show this help message and exit"
 
     def do_action(self):
         self.parser.print_help()
@@ -59,10 +58,9 @@ def main(ctx: Optional[CliCtx] = None):
         ctx.stack.enter_context(error_handler(ctx))
         parser = ArgumentParser(prog=boldi.__name__)
         subparsers = parser.add_subparsers(title="action", help="action to run")
-        for plugin in boldi.plugins.load("cli.action", subclass=CliAction):
-            cli_action_cls = plugin.obj
+        for plugin in boldi.plugins.load("boldi.cli.action", subclass=CliAction):
             subparser = subparsers.add_parser(plugin.name)
-            cli_action = cli_action_cls(ctx, parser, subparser)
+            cli_action = plugin.cls(ctx, parser, subparser)
             subparser.set_defaults(action=cli_action.do_action)
 
         args = vars(parser.parse_args(ctx.argv[1:]))

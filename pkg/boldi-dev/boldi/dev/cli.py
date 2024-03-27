@@ -23,5 +23,4 @@ class DevCliAction(boldi.cli.CliAction):
         subparser_docs.set_defaults(dev_action=boldi.dev.docs.docs)
 
     def do_action(self, dev_action: Callable[..., None], **kwargs):
-        """foo"""
         dev_action(self.ctx, **kwargs)

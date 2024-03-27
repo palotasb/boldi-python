@@ -9,9 +9,7 @@ readme = "../../README.md"
 license = { text = "MIT" }
 dynamic = ["version"]
 
-dependencies = [
-    "backports.entry-points-selectable",
-]
+dependencies = []
 optional-dependencies = {}
 
 [build-system]

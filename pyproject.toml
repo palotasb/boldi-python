@@ -59,6 +59,9 @@ extend-select = [
 combine-as-imports = true
 known-first-party = ["boldi", "boldi.*"]
 
+[tool.mypy]
+packages = ["boldi", "boldi.cli", "boldi.ctx", "boldi.plugins", "boldi.proc"]
+mypy_path = "pkg/boldi:pkg/boldi-cli:pkg/boldi-ctx:pkg/boldi-plugins:pkg/boldi-proc"
 
 [tool.pyright]
 venvPath = "."

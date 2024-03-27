@@ -1,20 +1,20 @@
+import importlib.metadata
 from typing import Generic, Iterable, NamedTuple, Type, TypeVar
-
-import backports.entry_points_selectable
 
 T = TypeVar("T")
 
 
 class Plugin(NamedTuple, Generic[T]):
     name: str
-    obj: Type[T]
+    cls: Type[T]
 
 
-def load(name: str, *, subclass: Type[T] = type, prefix="boldi.") -> Iterable[Plugin[T]]:
-    entry_points = backports.entry_points_selectable.entry_points(group=f"{prefix}{name}")
+def load(group: str, *, subclass: Type[T] = type) -> Iterable[Plugin[T]]:
+    entry_points = importlib.metadata.entry_points()
     for entry_point in entry_points:
-        obj = entry_point.load()
-        if issubclass(obj, subclass):
-            yield Plugin(entry_point.name, obj)
-        else:
-            raise TypeError(f"expected {entry_point} to be subclass of {subclass} but got {type(obj)}")
+        if entry_point.group == group:
+            cls = entry_point.load()
+            if isinstance(cls, type) and issubclass(cls, subclass):
+                yield Plugin(entry_point.name, cls)
+            else:
+                raise TypeError(f"expected {entry_point} to be subclass of {subclass} but got {type(cls)}")
