@@ -59,7 +59,7 @@ files = [
 
 [[package]]
 name = "boldi"
-version = "0.3.2.dev6"
+version = "0.3.2.dev7"
 requires_python = ">=3.9"
 editable = true
 path = "./pkg/boldi"
@@ -73,7 +73,7 @@ dependencies = [
 
 [[package]]
 name = "boldi-cli"
-version = "0.3.2.dev6"
+version = "0.3.2.dev7"
 requires_python = ">=3.9"
 editable = true
 path = "./pkg/boldi-cli"
@@ -86,7 +86,7 @@ dependencies = [
 
 [[package]]
 name = "boldi-ctx"
-version = "0.3.2.dev6"
+version = "0.3.2.dev7"
 requires_python = ">=3.9"
 editable = true
 path = "./pkg/boldi-ctx"
@@ -98,7 +98,7 @@ dependencies = [
 
 [[package]]
 name = "boldi-dev"
-version = "0.3.2.dev6"
+version = "0.3.2.dev7"
 requires_python = ">=3.9"
 editable = true
 path = "./pkg/boldi-dev"
@@ -114,16 +114,19 @@ dependencies = [
 
 [[package]]
 name = "boldi-plugins"
-version = "0.3.2.dev6"
+version = "0.3.2.dev7"
 requires_python = ">=3.9"
 editable = true
 path = "./pkg/boldi-plugins"
 summary = "boldi.plugins part of Boldi's Python libraries"
 groups = ["dev"]
+dependencies = [
+    "importlib-metadata>=3.6",
+]
 
 [[package]]
 name = "boldi-proc"
-version = "0.3.2.dev6"
+version = "0.3.2.dev7"
 requires_python = ">=3.9"
 editable = true
 path = "./pkg/boldi-proc"
@@ -649,7 +652,6 @@ version = "7.1.0"
 requires_python = ">=3.8"
 summary = "Read metadata from Python packages"
 groups = ["dev"]
-marker = "python_version < \"3.12\""
 dependencies = [
     "zipp>=0.5",
 ]
@@ -1878,7 +1880,6 @@ version = "3.18.1"
 requires_python = ">=3.8"
 summary = "Backport of pathlib-compatible object wrapper for zip files"
 groups = ["dev"]
-marker = "python_version < \"3.12\""
 files = [
     {file = "zipp-3.18.1-py3-none-any.whl", hash = "sha256:206f5a15f2af3dbaee80769fb7dc6f249695e940acca08dfb2a4769fe61e538b"},
     {file = "zipp-3.18.1.tar.gz", hash = "sha256:2884ed22e7d8961de1c9a05142eb69a247f120291bc0206a00a7642f09b5b715"},

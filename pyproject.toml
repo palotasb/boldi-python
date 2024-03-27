@@ -66,3 +66,4 @@ mypy_path = "pkg/boldi:pkg/boldi-cli:pkg/boldi-ctx:pkg/boldi-plugins:pkg/boldi-p
 [tool.pyright]
 venvPath = "."
 venv = ".venv"
+pythonVersion = "3.11"
