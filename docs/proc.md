@@ -1,6 +1,21 @@
 # Process module
 
-The Process module a friendlier interface to [`subprocess.run`][].
+The Process module provides a friendlier interface to [`subprocess.run`][].
+
+```py
+from boldi.proc import run, run_py
+from pathlib import Path
+
+run("sh -c", ["msg=$1; subj=$2; echo \"$msg, $subj!\""], "-s", ["Hello", "My Friend"])
+# Hello, My Friend!
+# CompletedProcess(args=['sh', '-euc', 'msg=$1; subj=$2; echo "$msg, $subj!"', '-s', 'Hello', 'My Friend'], returncode=0)
+
+run_py("-c", ["import sys; print(f'{sys.argv!r}')"], [Path(r"C:\Documents and Setting\Spacey Jane")])
+# ['-c', 'C:\\Documents and Setting\\Spacey Jane']
+# CompletedProcess(args=['/Users/example/boldi-python/.venv/bin/python', '-c', "import sys; print(f'{sys.argv!r}')", 'C:\\Documents and Setting\\Spacey Jane'], returncode=0)
+```
+
+For more details see [`run()`](#run) and [`run_py()`](#run_py).
 
 ## Install
 
@@ -32,12 +47,19 @@ Use the [`run()`][boldi.proc.run] function to call a subprocess like a function.
 
 The program and the command line arguments can be passed as any number of positional arguments.
 
-* If a positional argument is an [`str`][] (string), it will be split using [`shlex.split`][].
-* If a positional argument is a [`list`][] of objects, those objects will be converted to `str`,
-  but then passed as one separate argument per list item (no further splitting).
+```py
+from boldi.proc import run
 
-This allows conveniently passing multiple arguments as a single string,
-while allowing "escaping" command line arguments by embedding them in a list.
+run("sh -c", ["msg=$1; subj=$2; echo \"$msg, $subj!\""], "-s", ["Hello", "My Friend"])
+# Hello, My Friend!
+# CompletedProcess(args=['sh', '-c', 'msg=$1; subj=$2; echo "$msg, $subj!"', '-s', 'Hello', 'My Friend'], returncode=0)
+```
+
+* String-type positional arguments are split using [`shlex.split`][] into further arguments.
+* Items inside [`list`][]-type positional arguments are converted to [`str`][], but not split into further arguments.
+  
+This allows conveniently passing multiple arguments as a single string.
+Enclosing values in `[` square brackets `]` can be thought of as a way of quoting arguments to prevent splitting.
 
 Any keyword argument is passed on to [`subprocess.run`][] after defaults are applied.
 
@@ -45,7 +67,17 @@ Any keyword argument is passed on to [`subprocess.run`][] after defaults are app
 
 Use the [`run_py()`][boldi.proc.run_py] function to call a Python script or module subprocess like a function.
 
-Positional and keyword arguments are the same, except [`sys.executable`][] is automatically added as the first argument.
+```py
+from boldi.proc import run_py
+from pathlib import Path
+
+run_py("-c", ["import sys; print(f'{sys.argv!r}')"], [Path(r"C:\Documents and Setting\Spacey Jane")])
+# ['-c', 'C:\\Documents and Setting\\Spacey Jane']
+# CompletedProcess(args=['/Users/example/boldi-python/.venv/bin/python', '-c', "import sys; print(f'{sys.argv!r}')", 'C:\\Documents and Setting\\Spacey Jane'], returncode=0)
+```
+
+Positional and keyword arguments are the same as with [`run()`](#run),
+except [`sys.executable`][] is automatically added as the first argument.
 
 ## API
 

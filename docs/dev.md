@@ -14,17 +14,26 @@ pip install boldi-dev
 
 ...or add `"boldi-dev"` as a dependency to your project.
 
-## Import
+## Run
 
-Import the module like so:
+Boldi's Development module defines extensions to the [`boldi` CLI](cli.md),
+so to use it, run the following command:
 
-```py
-import boldi.dev
+```shell
+boldi dev --help
 ```
 
-## Usage
+### `boldi dev`
 
-TODO: usage.
+This commands shows the help message for the other `boldi dev` subcommands.
+
+### `boldi dev docs`
+
+Generated the docs for Boldi's Python libraries.
+
+### `boldi dev package`
+
+Builds the Python packages for Boldi's Python libraries.
 
 ## API
 

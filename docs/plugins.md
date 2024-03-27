@@ -1,6 +1,7 @@
 # Plugins module
 
-TODO: overview.
+Boldi's Plugins module support extending any Python libraries with feature provided through
+[Python package entry points](https://setuptools.pypa.io/en/latest/userguide/entry_point.html).
 
 ## Install
 
@@ -20,11 +21,16 @@ Import the module like so:
 
 ```py
 import boldi.plugins
+# or:
+from boldi.plugins import load
 ```
 
 ## Usage
 
-TODO: usage.
+Use the [`boldi.plugins.load`][] function to load all entry points (plugin classes) that both:
+
+* match the given entry point `group`, and
+* have the required type (`cls`).
 
 ## API
 

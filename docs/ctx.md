@@ -82,6 +82,12 @@ def example(ctx: Ctx | None = None):
 Custom ctx values can be set inside unit tests or in any other context
 where changing the original global variables is not intended.
 
+### `run()` and `run_py()`
+
+The [`Ctx.run()`][boldi.ctx.Ctx.run] and [`Ctx.run_py()`][boldi.ctx.Ctx.run_py]
+methods are provided for convenience to call the [`boldi.proc.run`][] and [`boldi.proc.run_py`][]
+functions with the keyword arguments using default values from the `Ctx` object.
+
 ## API
 
 ::: boldi.ctx
