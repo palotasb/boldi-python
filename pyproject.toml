@@ -15,7 +15,7 @@ dynamic = ["version"]
 dependencies = []
 
 [build-system]
-requires = ["hatchling", "hatch-vcs"]
+requires = ["hatchling", "hatch-vcs", "packaging"]
 build-backend = "hatchling.build"
 
 [tool.hatch.version]
@@ -46,6 +46,9 @@ dev = [
     "hatchling",
     "hatch-vcs",
     "build",
+    "setuptools_scm",
+    "packaging"
+    # Test
 ]
 
 [tool.ruff]

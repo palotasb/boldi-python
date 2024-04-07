@@ -13,6 +13,7 @@ from boldi.ctx import Ctx
 
 class _CliCtxDefaultConsole(Console):
     """Implementation detail used to set a default value for [boldi.cli.CliCtx.console][]."""
+
     pass
 
 
@@ -32,7 +33,7 @@ class CliAction(ABC):
     """
     Base class for implementing a `boldi` CLI subcommand.
     """
-    
+
     ctx: CliCtx
     """Context provided for convenience."""
 
