@@ -16,7 +16,11 @@ dependencies = [
     # public:
     "ruff",
     "mypy",
-    "sphinx",
+    # docs:
+    "mkdocs-autorefs",
+    "mkdocs-material",
+    "mkdocstrings[python]",
+    "mdx-truly-sane-lists",
 ]
 optional-dependencies = {}
 

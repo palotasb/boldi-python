@@ -35,11 +35,6 @@ dev = [
     "-e boldi-dev @ {root:uri}/pkg/boldi-dev",
     "-e boldi-plugins @ {root:uri}/pkg/boldi-plugins",
     "-e boldi-proc @ {root:uri}/pkg/boldi-proc",
-    # docs
-    "mkdocs-autorefs",
-    "mkdocs-material",
-    "mkdocstrings[python]",
-    "mdx-truly-sane-lists",
     # building and packaging:
     "pdm",
     "hatch",
@@ -48,7 +43,6 @@ dev = [
     "build",
     "setuptools_scm",
     "packaging"
-    # Test
 ]
 
 [tool.ruff]
