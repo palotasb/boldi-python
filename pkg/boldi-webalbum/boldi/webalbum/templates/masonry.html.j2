@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Masonry test</title>
+
+{% set TARGET_SIZE = 210 %}
+{% set TARGET_AREA = TARGET_SIZE*TARGET_SIZE %}
+
+<style type="text/css">*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+body {
+    padding: 1em;
+    background-color: white;
+
+    color: black;
+    font-family: monospace;
+}
+.container {
+    display: flex;
+
+    margin: 1em 0;
+    border: 1px solid gray;
+    background-color: lavender;
+    padding: 1em;
+
+    flex-flow: row wrap;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1em;
+}
+.container .outer {
+    background-color: thistle;
+    flex-shrink: 0;
+    flex-basis: auto;
+}
+.container .inner {
+    background-color: palegreen;
+    padding: 0.5em;
+}
+</style>
+<script type="text/javascript">
+function REPAINT() {
+    document.querySelector(".container").style["gap"] = "2em";
+}
+</script>
+</head>
+<body>
+Target size = {{TARGET_SIZE}} <br>
+Target area = {{TARGET_AREA}} <br>
+<a href="javascript:REPAINT()">Re-layout!</a>
+<div class="container">
+{% for i in range(1, 101) %}
+{% set width = ([150, 180, 200, 210, 220, 240, 280] | random) %}
+{% set height = ([150, 180, 200, 210, 220, 240, 280] | random) %}
+{% set area = width * height %}
+{% set aspect = (width / height) | round(2) %}
+<div class="outer" style="
+    min-height: {{TARGET_SIZE}}px;
+    max-height: {{TARGET_SIZE*1.5}}px;
+    aspect-ratio: {{aspect}};
+    flex-grow: {{aspect}};
+    ">
+    <div class="inner" style="
+        aspect-ratio: {{aspect}};
+        max-height: {{TARGET_SIZE*1.5}}px;
+        ">
+        Item {{ i }}: <br>
+        w = {{width}} <br>
+        h = {{height}} <br>
+        area = {{area}} <br>
+        aspect = {{aspect | round(2)}}
+    </div>
+</div>
+{% endfor %}
+</div>
+</body>
+</html>

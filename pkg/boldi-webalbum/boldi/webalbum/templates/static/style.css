@@ -1,0 +1,199 @@
+/*
+  Josh's Custom CSS Reset
+  https://www.joshwcomeau.com/css/custom-css-reset/
+*/
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+* {
+    margin: 0;
+}
+
+.smooth-scroll {
+    scroll-behavior: smooth;
+}
+
+body {
+    line-height: calc(1em + 0.75rem);
+    -webkit-font-smoothing: antialiased;
+    font-family: -apple-system, BlinkMacSystemFont, avenir next, avenir, segoe ui, helvetica neue, helvetica, Cantarell, Ubuntu, roboto, noto, arial, sans-serif; 
+    font-size: 16px;
+    color: white;
+    background-color: #111;
+    padding: 0 2ex;
+}
+
+header {
+    padding: 2ex 0;
+    margin-bottom: 8em;
+}
+
+#subfolders, #thumbnails, #images {
+    margin: 8em 0;
+}
+
+footer {
+    margin-top: 8em;
+}
+
+p {
+    margin: 0.5em 0;
+    max-width: 60em;
+}
+
+a {
+    color: #8af;
+    text-decoration: none;
+}
+
+kbd {
+    display: inline-block;
+    border: 2px outset #222;
+    border-radius: 5px;
+    background-color: #333;
+    padding: 0.05em 0.5ex;
+    box-shadow: 0px 0px 4px #0008;
+    font-size: 0.9em;
+    line-height: 1.2em;
+    color: #aaa;
+}
+
+img,
+picture,
+video,
+canvas,
+svg {
+    display: block;
+    object-fit: contain;
+    width: 100%;
+    height: 100%;
+}
+
+.flex-masonry {
+    display: flex;
+    flex-flow: row wrap;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 0.5em;
+    overflow: hidden;
+}
+
+.flex-masonry > .flex-masonry-outer {
+    flex-basis: auto;
+    flex-shrink: 0;
+    min-height: 100px;
+    max-height: 125px;
+}
+
+.flex-masonry > .flex-masonry-outer > .flex-masonry-inner {
+    position: relative;
+    overflow: hidden;
+    max-height: 125px;
+}
+
+@media (min-width: 500px) {
+    .flex-masonry > .flex-masonry-outer  {
+        min-height: 125px;
+        max-height: 150px;
+    }
+
+    .flex-masonry > .flex-masonry-outer > .flex-masonry-inner {
+        max-height: 155px;
+    }
+}
+
+@media (min-width: 1000px) {
+    .flex-masonry > .flex-masonry-outer  {
+        min-height: 200px;
+        max-height: 250px;
+    }
+
+    .flex-masonry > .flex-masonry-outer > .flex-masonry-inner {
+        max-height: 250px;
+    }
+}
+
+.flex-masonry .thumbnail-container {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+
+#subfolders figcaption {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    margin: 0;
+    width: 100%;
+    font-size: 1.125rem;
+    font-weight: normal;
+}
+
+#subfolders figcaption > a {
+    display: block;
+    width: 100%;
+    padding: 0.25em .5em;
+    color: white;
+    background-color: #000000a0;
+    text-shadow: 0 0 5px black, 1px 0px 1px black, 0px 1px 1px black, -1px 0px 1px black, 0px -1px 1px black;
+    text-decoration: none;
+}
+
+#images {
+    position: relative;
+}
+
+article.image {
+    max-width: 100ex;
+    margin: 0 auto;
+}
+
+article.image .image-container {
+    height: 100vh;
+    margin: 2em 0;
+}
+
+article.image picture {
+    position: absolute;
+    left: -2ex;
+    display: block;
+    width: 100vw;
+    height: 100vh;
+}
+
+article.image div.description {
+    margin: 2em 0 8em 0;
+}
+
+article.image .image-description {
+    margin-bottom: 2em;
+}
+
+.gray-text {
+    color: #aaa;
+}
+
+input,
+button,
+textarea,
+select {
+    font: inherit;
+}
+
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    overflow-wrap: break-word;
+}
+
+#root,
+#__next {
+    isolation: isolate;
+}

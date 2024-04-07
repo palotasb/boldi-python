@@ -30,11 +30,13 @@ packages = ["."]
 dev = [
     # boldi:
     "-e boldi @ {root:uri}/pkg/boldi",
+    "-e boldi-build @ {root:uri}/pkg/boldi-build",
     "-e boldi-cli @ {root:uri}/pkg/boldi-cli",
     "-e boldi-ctx @ {root:uri}/pkg/boldi-ctx",
     "-e boldi-dev @ {root:uri}/pkg/boldi-dev",
     "-e boldi-plugins @ {root:uri}/pkg/boldi-plugins",
     "-e boldi-proc @ {root:uri}/pkg/boldi-proc",
+    "-e boldi-webalbum @ {root:uri}/pkg/boldi-webalbum",
     # building and packaging:
     "pdm",
     "hatch",
@@ -58,8 +60,8 @@ combine-as-imports = true
 known-first-party = ["boldi", "boldi.*"]
 
 [tool.mypy]
-packages = ["boldi", "boldi.cli", "boldi.ctx", "boldi.plugins", "boldi.proc"]
-mypy_path = "pkg/boldi:pkg/boldi-cli:pkg/boldi-ctx:pkg/boldi-plugins:pkg/boldi-proc"
+packages = ["boldi", "boldi.build", "boldi.cli", "boldi.ctx", "boldi.plugins", "boldi.proc", "boldi.webalbum"]
+mypy_path = "pkg/boldi:pkg/boldi-build:pkg/boldi-cli:pkg/boldi-ctx:pkg/boldi-plugins:pkg/boldi-proc:pkg/boldi-webalbum"
 
 [tool.pyright]
 venvPath = "."

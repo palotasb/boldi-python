@@ -1,6 +1,6 @@
 [project]
-name = "boldi-dev"
-description = "boldi.dev part of Boldi's Python libraries"
+name = "boldi-build"
+description = "boldi.build part of Boldi's Python libraries"
 authors = [
     { name = "Boldizsár Palotás", email = "boldizsar.palotas@gmail.com" },
 ]
@@ -8,24 +8,6 @@ requires-python = ">=3.9"
 readme = "../../README.md"
 license = { text = "MIT" }
 dynamic = ["version"]
-
-dependencies = [
-    # boldi:
-    "boldi-cli",
-    "boldi-ctx",
-    # linting and type checking:
-    "ruff",
-    "mypy",
-    # docs:
-    "mkdocs-autorefs",
-    "mkdocs-material",
-    "mkdocstrings[python]",
-    "mdx-truly-sane-lists",
-]
-optional-dependencies = {}
-
-[project.entry-points."boldi.cli.action"]
-dev = "boldi.dev:DevCliAction"
 
 [build-system]
 requires = ["hatchling", "hatch-vcs"]
@@ -38,7 +20,7 @@ packages = ["boldi"]
 path = "hatch_hooks.py"
 
 [tool.hatch.build.hooks.vcs]
-version-file = "boldi/_dev_version.py"
+version-file = "boldi/_build_version.py"
 
 [tool.hatch.version]
 source = "vcs"

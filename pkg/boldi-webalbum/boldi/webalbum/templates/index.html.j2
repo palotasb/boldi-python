@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en" class="smooth-scroll">
+<head>
+    <meta charset="utf-8" />
+    <title>{{folder.title}}
+        {% if folder != album.target_root %}
+            – {{album.config.title}}
+        {% endif %}
+    </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="{{ (album.target_static / 'style.css') | relative_to(folder.path) }}" />
+    <script type="text/javascript" src="{{ (album.target_static / 'script.js') | relative_to(folder.path) }}"></script>
+</head>
+<body>
+    <header id="top">
+        <nav>
+            <a href="/">album.boldi.net</a>
+            {% for parent in folder.parents %}
+            → <a href="{{ parent.path | relative_to(folder.path) }}/index.html">{{parent.title}}</a>
+            {% endfor %}
+        </nav>
+        <h1><a href="./index.html">{{folder.title}}</a></h1>
+    </header>
+
+    <main id="main">
+        {% if folder.subfolders | length %}
+        <section id="subfolders" class="flex-masonry">
+        {% endif %}
+        {% set TARGET_SIZE = 150 %}
+        {% for subfolder in folder.subfolders.values() %}
+            %% set image = subfolder.cover_image
+            %% set width = image.width
+            %% set height = image.height
+            %% set aspect = (width / height) | round(2)
+            <div class="flex-masonry-outer" style=" aspect-ratio: {{aspect}}; flex-grow: {{aspect}};">
+                <figure class="flex-masonry-inner" style="aspect-ratio: {{aspect}};">
+                    <a class="thumbnail-container" href="{{subfolder.path | relative_to(folder.path)}}/index.html">
+                        <img
+                            class="thumbnail"
+                            style="aspect-ratio: {{aspect}};"
+                            alt="{{ subfolder.title }}"
+                            src="{{ image.path_800w | relative_to(folder.path) }}"
+                        />
+                    </a>
+                    <figcaption><a href="{{subfolder.path | relative_to(folder.path)}}/index.html">{{subfolder.title}}</a></figcaption>
+                </figure>
+            </div>
+        {% endfor %}
+        {% if folder.subfolders | length %}
+        </section>
+        {% endif %}
+
+        {% if folder.images | length %}
+        <section id="thumbnails" class="flex-masonry">
+        {% endif %}
+        {% for name, image in folder.images.items() %}
+            %% set width = image.width
+            %% set height = image.height
+            %% set aspect = (width / height) | round(2)
+            <div class="flex-masonry-outer" style=" aspect-ratio: {{aspect}}; flex-grow: {{aspect}};">
+                <div class="flex-masonry-inner" style="aspect-ratio: {{aspect}};">
+                    <a id="{{ image.path.stem }}.thumbnail" class="thumbnail-container" href="#{{ image.path.stem }}">
+                        <img
+                            class="thumbnail"
+                            style="aspect-ratio: {{aspect}};"
+                            alt="{{ image.title }}"
+                            src="{{ image.path_800w | relative_to(folder.path) }}"
+                        />
+                    </a>
+                </div>
+            </div>
+        {% endfor %}
+        {% if folder.images | length %}
+        </section>
+        {% endif %}
+
+
+        {% if folder.images | length %}
+        <aside id="usage">
+            <p style="max-width: 100%; text-align: center;">
+                <a href="#top"><kbd>E</kbd> <span>Top</span></a>
+                |
+                <a href="#thumbnails"><kbd>G</kbd> <span>Thumbnails</span></a>
+                |
+                <a href="#images"><kbd>P</kbd> <span>Pictures</span></a>
+                |
+                <a href="javascript:toggleFullScreen()"><kbd>F</kbd> <span>Full Screen</span></a>
+                |
+                <a href="javascript:scrollToNextScrollTarget(-1, null, true);"><kbd>←</kbd> <span>Previous</span></a>
+                |
+                <a href="javascript:scrollToNextScrollTarget(+1, null, true);"><kbd>→</kbd> <span>Next</span></a>
+            </p>
+        </aside>
+        {% endif %}
+        
+        {% if folder.images | length %}
+        <section id="images">
+        {% endif %}
+        {% for name, image in folder.images.items() %}
+            <article class="image" id="{{ image.path.stem }}">
+                <div class="image-container">
+                    <picture
+                        style="--orig-width: {{ image.width }}px; --orig-height: {{ image.height }}px"
+                        onclick="scrollToNextScrollTarget(+1, document.querySelector('#{{ image.path.stem }}'), true);"
+                        >
+                        <img
+                            srcset="{{ image.path_800w | relative_to(folder.path) }} 800w, {{ image.path_1500w | relative_to(folder.path) }} 1500w, {{ image.path_3000w | relative_to(folder.path) }} 3000w, {{image.path | relative_to(folder.path)}}"
+                            src="{{image.path | relative_to(folder.path)}}"
+                            alt="{{image.exif.IPTC.Artist}}" />
+                    </picture>
+                </div>
+                <div class="description">
+                <h2><a href="#{{ image.path.stem }}">{{image.title}}
+                    {% if image.title != image.source.path.stem %}
+                    <small>[{{image.path.stem}}]</small>
+                    {% endif %}
+                </a></h2>
+                <p class="image-description">
+                    {{image.description or undefined}}
+                </p>
+                <p class="gray-text">
+                    {{ image.created_datetime }}
+                </p>
+                <p class="gray-text">
+                    {{image.shutter_speed | human_round or "?"}}s,
+                    𝑓/{{image.aperture | human_round or "?"}},
+                    ISO {{image.iso | human_round or "?"}},
+                    <abbr title="Light Value, the amount of light in the scene">LV</abbr> {{image.light_value | human_round or "?"}},
+                    <abbr title="Exposure compensation">ΔEV</abbr> {{image.exposure_compensation | human_round or "0"}}.
+                </p>
+                <p class="gray-text">
+                    {{image.camera}} {{ "+" if image.camera and image.lens else "" }}
+                    {{image.lens}} 
+                    at 𝑓 = {{image.focal_length | human_round or "?"}}mm
+                    <small>({{image.focal_length_35mm | human_round or "?"}}mm at 35mm <abbr title="Equivalent Field of View">equiv. FOV</abbr>)</small>.
+                </p>
+                <p class="gray-text">
+                    <a href="#top"><kbd>E</kbd> ⇧ {{ folder.title }}</a>
+                    |
+                    <a href="javascript:toggleFullScreen()"><kbd>F</kbd> Full screen</a>
+                    {% if loop.previtem %}
+                    |
+                    <a href="#{{ loop.previtem[1].path.stem }}"><kbd>←</kbd> <span>Previous</span></a>
+                    {% endif %}
+                    |
+                    <a href="#{{ image.path.stem }}"><kbd>.</kbd> Current</a>
+                    {% if loop.nextitem %}
+                    |
+                    <a href="#{{ loop.nextitem[1].path.stem }}"><kbd>→</kbd> <span>Next</span></a>
+                    {% endif %}
+                </p>
+                </div>
+            </article>
+        {% endfor %}
+        {% if folder.images | length %}
+        </section>
+        {% endif %}
+    </main>
+  
+    <footer id="bottom">
+        <nav>
+            <a href="/">album.boldi.net</a>
+            {% for parent in folder.parents %}
+            → <a href="{{ parent.path | relative_to(folder.path) }}/index.html">{{parent.title}}</a>
+            {% endfor %}
+        </nav>
+        <h1><a href="./index.html">{{folder.title}}</a></h1>
+        <p id="copyright">Copyright &copy; {{album.config.copyright}}</p>
+    </footer>
+</body>
+</html>
