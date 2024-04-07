@@ -5,7 +5,7 @@
 groups = ["default", "dev"]
 strategy = ["cross_platform", "inherit_metadata"]
 lock_version = "4.4.1"
-content_hash = "sha256:82e3cf9bfe9f8d219635c2079287f17688386d7554df66878d68447cf203b90a"
+content_hash = "sha256:e1245a543dcf31cd9e86dac67427d33ba18209bfa30b2a60549d67b9dcfc63e7"
 
 [[package]]
 name = "annotated-types"
@@ -78,9 +78,9 @@ path = "./pkg/boldi"
 summary = "Boldi's Python libraries"
 groups = ["dev"]
 dependencies = [
-    "boldi-cli==0.4.1.dev1+gcb5697e.d20240407",
-    "boldi-ctx==0.4.1.dev1+gcb5697e.d20240407",
-    "boldi-plugins==0.4.1.dev1+gcb5697e.d20240407",
+    "boldi-cli==0.5.1.dev1+gaf006aa.d20240407",
+    "boldi-ctx==0.5.1.dev1+gaf006aa.d20240407",
+    "boldi-plugins==0.5.1.dev1+gaf006aa.d20240407",
 ]
 
 [[package]]
@@ -92,7 +92,7 @@ path = "./pkg/boldi-backup"
 summary = "boldi.backup part of Boldi's Python libraries"
 groups = ["dev"]
 dependencies = [
-    "boldi-ctx==0.4.1.dev1+gcb5697e.d20240407",
+    "boldi-ctx==0.5.1.dev1+gaf006aa.d20240407",
     "tomli",
 ]
 
@@ -107,27 +107,27 @@ groups = ["dev"]
 
 [[package]]
 name = "boldi-cli"
-version = "0.4.1.dev1"
+version = "0.5.1.dev1"
 requires_python = ">=3.9"
 editable = true
 path = "./pkg/boldi-cli"
 summary = "boldi.cli part of Boldi's Python libraries"
 groups = ["dev"]
 dependencies = [
-    "boldi-ctx==0.4.1.dev1+gcb5697e.d20240407",
+    "boldi-ctx==0.5.1.dev1+gaf006aa.d20240407",
     "rich",
 ]
 
 [[package]]
 name = "boldi-ctx"
-version = "0.4.1.dev1"
+version = "0.5.1.dev1"
 requires_python = ">=3.9"
 editable = true
 path = "./pkg/boldi-ctx"
 summary = "boldi.ctx part of Boldi's Python libraries"
 groups = ["dev"]
 dependencies = [
-    "boldi-proc==0.4.1.dev1+gcb5697e.d20240407",
+    "boldi-proc==0.5.1.dev1+gaf006aa.d20240407",
 ]
 
 [[package]]
@@ -139,8 +139,8 @@ path = "./pkg/boldi-dev"
 summary = "boldi.dev part of Boldi's Python libraries"
 groups = ["dev"]
 dependencies = [
-    "boldi-cli==0.4.1.dev1+gcb5697e.d20240407",
-    "boldi-ctx==0.4.1.dev1+gcb5697e.d20240407",
+    "boldi-cli==0.5.1.dev1+gaf006aa.d20240407",
+    "boldi-ctx==0.5.1.dev1+gaf006aa.d20240407",
     "mdx-truly-sane-lists",
     "mkdocs-autorefs",
     "mkdocs-material",
@@ -151,7 +151,7 @@ dependencies = [
 
 [[package]]
 name = "boldi-plugins"
-version = "0.4.1.dev1"
+version = "0.5.1.dev1"
 requires_python = ">=3.9"
 editable = true
 path = "./pkg/boldi-plugins"
@@ -163,7 +163,7 @@ dependencies = [
 
 [[package]]
 name = "boldi-proc"
-version = "0.4.1.dev1"
+version = "0.5.1.dev1"
 requires_python = ">=3.9"
 editable = true
 path = "./pkg/boldi-proc"
@@ -1469,6 +1469,18 @@ groups = ["dev"]
 files = [
     {file = "PyExifTool-0.5.6-py3-none-any.whl", hash = "sha256:ac7d7836d2bf373f20aa558528f6b2222c4c0d896ed28c951a3ff8e6cec05a87"},
     {file = "PyExifTool-0.5.6.tar.gz", hash = "sha256:22a972c1c212d1ad5f61916fded5057333dcc48fb8e42eed12d2ff9665b367ae"},
+]
+
+[[package]]
+name = "pygithooks"
+version = "0.5.1.dev1"
+requires_python = ">=3.9"
+editable = true
+path = "./pkg/pygithooks"
+summary = "PyGitHooks - Simple Git Hooks manager for Python projects"
+groups = ["dev"]
+dependencies = [
+    "rich",
 ]
 
 [[package]]

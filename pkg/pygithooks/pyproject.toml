@@ -1,0 +1,35 @@
+[project]
+name = "PyGitHooks"
+description = "PyGitHooks - Simple Git Hooks manager for Python projects"
+authors = [
+    { name = "Boldizsár Palotás", email = "boldizsar.palotas@gmail.com" },
+]
+requires-python = ">=3.9"
+readme = "../../README.md"
+license = { text = "MIT" }
+dynamic = ["version"]
+
+dependencies = [
+    # public:
+    "rich",
+]
+
+[project.scripts]
+pygithooks = "pygithooks:main"
+
+[build-system]
+requires = ["hatchling", "hatch-vcs"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build]
+packages = ["pygithooks"]
+
+[tool.hatch.metadata.hooks.custom]
+path = "hatch_hooks.py"
+
+[tool.hatch.build.hooks.vcs]
+version-file = "pygithooks/_version.py"
+
+[tool.hatch.version]
+source = "vcs"
+raw-options = { "root" = "../.." }
