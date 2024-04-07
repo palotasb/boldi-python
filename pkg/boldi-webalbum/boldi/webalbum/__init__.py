@@ -29,9 +29,6 @@ from boldi.build import Builder, BuildSystem, FileHandler, Handler, Stamp, Targe
 
 # Packaging improvements:
 # TODO split into independent packages
-# * boldi.run
-# * boldi.ctx
-# * boldi.build
 # * boldi.album
 # * boldi.web
 

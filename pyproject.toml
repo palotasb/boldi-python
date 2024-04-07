@@ -30,6 +30,7 @@ packages = ["."]
 dev = [
     # boldi:
     "-e boldi @ {root:uri}/pkg/boldi",
+    "-e boldi-backup @ {root:uri}/pkg/boldi-backup",
     "-e boldi-build @ {root:uri}/pkg/boldi-build",
     "-e boldi-cli @ {root:uri}/pkg/boldi-cli",
     "-e boldi-ctx @ {root:uri}/pkg/boldi-ctx",
