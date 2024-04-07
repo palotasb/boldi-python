@@ -1,4 +1,0 @@
-from pygithooks._pygithooks import main
-
-if __name__ == "__main__":
-    main()
