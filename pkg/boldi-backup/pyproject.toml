@@ -9,7 +9,12 @@ readme = "../../README.md"
 license = { text = "MIT" }
 dynamic = ["version"]
 
-dependencies = ["tomli"]
+dependencies = [
+    # boldi:
+    "boldi-ctx",
+    # public:
+    "tomli",
+]
 
 [build-system]
 requires = ["hatchling", "hatch-vcs"]

@@ -71,33 +71,34 @@ files = [
 
 [[package]]
 name = "boldi"
-version = "0.3.2.dev20"
+version = "0.4.1.dev1"
 requires_python = ">=3.9"
 editable = true
 path = "./pkg/boldi"
 summary = "Boldi's Python libraries"
 groups = ["dev"]
 dependencies = [
-    "boldi-cli==0.4.1.dev0+g1884b5d.d20240407",
-    "boldi-ctx==0.4.1.dev0+g1884b5d.d20240407",
-    "boldi-plugins==0.4.1.dev0+g1884b5d.d20240407",
+    "boldi-cli==0.4.1.dev1+gcb5697e.d20240407",
+    "boldi-ctx==0.4.1.dev1+gcb5697e.d20240407",
+    "boldi-plugins==0.4.1.dev1+gcb5697e.d20240407",
 ]
 
 [[package]]
 name = "boldi-backup"
-version = "0.4.1.dev0"
+version = "0.4.1.dev1"
 requires_python = ">=3.9"
 editable = true
 path = "./pkg/boldi-backup"
 summary = "boldi.backup part of Boldi's Python libraries"
 groups = ["dev"]
 dependencies = [
+    "boldi-ctx==0.4.1.dev1+gcb5697e.d20240407",
     "tomli",
 ]
 
 [[package]]
 name = "boldi-build"
-version = "0.3.2.dev20"
+version = "0.4.1.dev1"
 requires_python = ">=3.9"
 editable = true
 path = "./pkg/boldi-build"
@@ -106,40 +107,40 @@ groups = ["dev"]
 
 [[package]]
 name = "boldi-cli"
-version = "0.4.1.dev0"
+version = "0.4.1.dev1"
 requires_python = ">=3.9"
 editable = true
 path = "./pkg/boldi-cli"
 summary = "boldi.cli part of Boldi's Python libraries"
 groups = ["dev"]
 dependencies = [
-    "boldi-ctx==0.4.1.dev0+g1884b5d.d20240407",
+    "boldi-ctx==0.4.1.dev1+gcb5697e.d20240407",
     "rich",
 ]
 
 [[package]]
 name = "boldi-ctx"
-version = "0.4.1.dev0"
+version = "0.4.1.dev1"
 requires_python = ">=3.9"
 editable = true
 path = "./pkg/boldi-ctx"
 summary = "boldi.ctx part of Boldi's Python libraries"
 groups = ["dev"]
 dependencies = [
-    "boldi-proc==0.4.1.dev0+g1884b5d.d20240407",
+    "boldi-proc==0.4.1.dev1+gcb5697e.d20240407",
 ]
 
 [[package]]
 name = "boldi-dev"
-version = "0.3.2.dev20"
+version = "0.4.1.dev1"
 requires_python = ">=3.9"
 editable = true
 path = "./pkg/boldi-dev"
 summary = "boldi.dev part of Boldi's Python libraries"
 groups = ["dev"]
 dependencies = [
-    "boldi-cli==0.4.1.dev0+g1884b5d.d20240407",
-    "boldi-ctx==0.4.1.dev0+g1884b5d.d20240407",
+    "boldi-cli==0.4.1.dev1+gcb5697e.d20240407",
+    "boldi-ctx==0.4.1.dev1+gcb5697e.d20240407",
     "mdx-truly-sane-lists",
     "mkdocs-autorefs",
     "mkdocs-material",
@@ -150,7 +151,7 @@ dependencies = [
 
 [[package]]
 name = "boldi-plugins"
-version = "0.4.1.dev0"
+version = "0.4.1.dev1"
 requires_python = ">=3.9"
 editable = true
 path = "./pkg/boldi-plugins"
@@ -162,7 +163,7 @@ dependencies = [
 
 [[package]]
 name = "boldi-proc"
-version = "0.4.1.dev0"
+version = "0.4.1.dev1"
 requires_python = ">=3.9"
 editable = true
 path = "./pkg/boldi-proc"
@@ -174,7 +175,7 @@ dependencies = [
 
 [[package]]
 name = "boldi-webalbum"
-version = "0.3.2.dev20"
+version = "0.4.1.dev1"
 requires_python = ">=3.9"
 editable = true
 path = "./pkg/boldi-webalbum"

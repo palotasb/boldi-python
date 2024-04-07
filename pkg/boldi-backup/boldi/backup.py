@@ -3,53 +3,12 @@ import functools
 import os
 import os.path
 import re
-import shlex
-import subprocess
-import sys
 from dataclasses import dataclass
-from io import IOBase
 from pathlib import Path
 
 import tomli
 
-print_err = functools.partial(print, file=sys.stderr)
-
-
-if sys.version_info < (3, 9):
-    print_err("at least Python 3.9 is required")
-    exit(1)
-
-
-def command(*args) -> list[str]:
-    return [str(sub_arg) for arg in args for sub_arg in (shlex.split(arg) if isinstance(arg, str) else arg)]
-
-
-@dataclass
-class Ctx:
-    stdin: IOBase
-    stdout: IOBase
-    stderr: IOBase
-    argv: list[str]
-
-    @staticmethod
-    def from_env() -> "Ctx":
-        return Ctx(
-            stdin=sys.stdin,
-            stdout=sys.stdout,
-            stderr=sys.stderr,
-            argv=sys.argv,
-        )
-
-    def run(self, *args, **kwargs):
-        kwargs.setdefault("check", True)
-        kwargs.setdefault("text", True)
-        kwargs.setdefault("stdin", self.stdin)
-        kwargs.setdefault("stdout", self.stdout)
-        kwargs.setdefault("stderr", self.stderr)
-        run_command = command(*args)
-        # print(f"Running [{run_command[0]}, {kwargs}]", file=self.stderr)
-        print(*[shlex.quote(arg) for arg in run_command], file=self.stderr)
-        return subprocess.run(run_command, **kwargs)
+from boldi.ctx import Ctx
 
 
 @dataclass
@@ -178,6 +137,7 @@ def action_umount(borg: Borg):
 
 
 def main(ctx: Ctx):
+    ctx = ctx or Ctx()
     parser = argparse.ArgumentParser(prog=Path(ctx.argv[0]).name, description=__doc__)
     parser.set_defaults(action=functools.partial(action_help, parser=parser))
 
@@ -216,4 +176,4 @@ def main(ctx: Ctx):
 
 
 if __name__ == "__main__":
-    main(Ctx.from_env())
+    main(Ctx())
