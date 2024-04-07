@@ -38,10 +38,10 @@ class CliAction(ABC):
     """Context provided for convenience."""
 
     parser: ArgumentParser
-    """The root [`argparse.ArgumentParser`] for the `boldi` CLI."""
+    """The root [`argparse.ArgumentParser`][] for the `boldi` CLI."""
 
     subparser: ArgumentParser
-    """The subcommand [`argparse.ArgumentParser`] for the `boldi` CLI subcommand implemented by this class."""
+    """The subcommand [`argparse.ArgumentParser`][] for the `boldi` CLI subcommand implemented by this class."""
 
     def __init__(self, ctx: CliCtx, parser: ArgumentParser, subparser: ArgumentParser):
         self.ctx = ctx
