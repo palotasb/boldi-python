@@ -1,6 +1,6 @@
 [project]
-name = "PyGitHook"
-description = "PyGitHook - Simple Git Hooks manager for Python projects"
+name = "boldi-githooks"
+description = "boldi-githooks - Simple Git Hooks manager for Python projects"
 authors = [
     { name = "Boldizsár Palotás", email = "boldizsar.palotas@gmail.com" },
 ]
@@ -15,20 +15,20 @@ dependencies = [
 ]
 
 [project.scripts]
-pygithook = "pygithook:main"
+pygithooks = "boldi.githooks:main"
 
 [build-system]
 requires = ["hatchling", "hatch-vcs"]
 build-backend = "hatchling.build"
 
 [tool.hatch.build]
-packages = ["pygithook"]
+packages = ["boldi"]
 
 [tool.hatch.metadata.hooks.custom]
 path = "hatch_hooks.py"
 
 [tool.hatch.build.hooks.vcs]
-version-file = "pygithook/_version.py"
+version-file = "boldi/_githooks_version.py"
 
 [tool.hatch.version]
 source = "vcs"

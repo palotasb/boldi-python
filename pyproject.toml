@@ -35,10 +35,10 @@ dev = [
     "-e boldi-cli @ {root:uri}/pkg/boldi-cli",
     "-e boldi-ctx @ {root:uri}/pkg/boldi-ctx",
     "-e boldi-dev @ {root:uri}/pkg/boldi-dev",
+    "-e boldi-githooks @ {root:uri}/pkg/boldi-githooks",
     "-e boldi-plugins @ {root:uri}/pkg/boldi-plugins",
     "-e boldi-proc @ {root:uri}/pkg/boldi-proc",
     "-e boldi-webalbum @ {root:uri}/pkg/boldi-webalbum",
-    "-e PyGitHook @ {root:uri}/pkg/pygithook",
     # building and packaging:
     "pdm",
     "hatch",
@@ -59,7 +59,7 @@ extend-select = [
 
 [tool.ruff.lint.isort]
 combine-as-imports = true
-known-first-party = ["boldi", "boldi.*", "pygithook", "pygithook.*"]
+known-first-party = ["boldi", "boldi.*"]
 
 [tool.mypy]
 packages = [
@@ -68,12 +68,12 @@ packages = [
     "boldi.build",
     "boldi.cli",
     "boldi.ctx",
+    "boldi.githooks",
     "boldi.plugins",
     "boldi.proc",
     "boldi.webalbum",
-    "pygithook",
 ]
-mypy_path = "pkg/boldi:pkg/boldi-backup:pkg/boldi-build:pkg/boldi-cli:pkg/boldi-ctx:pkg/boldi-plugins:pkg/boldi-proc:pkg/boldi-webalbum:pkg/pygithook"
+mypy_path = "pkg/boldi:pkg/boldi-backup:pkg/boldi-build:pkg/boldi-cli:pkg/boldi-ctx:pkg/boldi-githooks:pkg/boldi-plugins:pkg/boldi-proc:pkg/boldi-webalbum"
 
 [tool.pyright]
 venvPath = "."
