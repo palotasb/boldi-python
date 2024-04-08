@@ -2,7 +2,7 @@ from typing import Generic, Iterable, NamedTuple, Type, TypeVar
 
 import importlib_metadata
 
-T = TypeVar("T")
+T = TypeVar("T", covariant=True)
 
 
 class Plugin(NamedTuple, Generic[T]):
@@ -10,7 +10,7 @@ class Plugin(NamedTuple, Generic[T]):
     cls: Type[T]
 
 
-def load(group: str, *, cls: Type[T] = type) -> Iterable[Plugin[T]]:
+def load(group: str, *, cls: Type[T]) -> Iterable[Plugin[T]]:
     entry_points = importlib_metadata.entry_points(group=group)
     for entry_point in entry_points:
         plugin = entry_point.load()

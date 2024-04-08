@@ -28,7 +28,7 @@ class RunArgs(TypedDict, total=False):
     errors: Any
     extra_groups: Iterable[str | int]
     group: str | int
-    input: IO
+    input: str | None
     pipesize: int
     preexec_fn: Callable[..., Any]
     process_group: int

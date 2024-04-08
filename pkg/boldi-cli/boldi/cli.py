@@ -69,7 +69,7 @@ def main(ctx: Optional[CliCtx] = None):
         ctx.stack.enter_context(error_handler(ctx))
         parser = ArgumentParser(prog=boldi.__name__)
         subparsers = parser.add_subparsers(title="action", help="action to run")
-        for plugin in boldi.plugins.load("boldi.cli.action", cls=CliAction):
+        for plugin in boldi.plugins.load("boldi.cli.action", cls=CliAction):  # type: ignore[type-abstract]
             subparser = subparsers.add_parser(plugin.name)
             cli_action = plugin.cls(ctx, parser, subparser)
             subparser.set_defaults(action=cli_action.do_action)

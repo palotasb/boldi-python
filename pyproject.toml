@@ -74,6 +74,7 @@ packages = [
     "boldi.webalbum",
 ]
 mypy_path = "pkg/boldi:pkg/boldi-backup:pkg/boldi-build:pkg/boldi-cli:pkg/boldi-ctx:pkg/boldi-githooks:pkg/boldi-plugins:pkg/boldi-proc:pkg/boldi-webalbum"
+check_untyped_defs = true
 
 [tool.pyright]
 venvPath = "."

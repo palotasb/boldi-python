@@ -2,7 +2,7 @@ import contextlib
 import json
 import logging
 from collections import defaultdict
-from collections.abc import Coroutine
+from collections.abc import Callable, Coroutine
 from dataclasses import dataclass, field
 from functools import partial
 from pathlib import Path
@@ -51,8 +51,8 @@ class BuildDB:
 
 @dataclass
 class Builder:
-    build: Coroutine[Target, None, None]
-    add_source: Coroutine[Target, None, None]
+    build: Callable[[Target], Coroutine[None, None, None]]
+    add_source: Callable[[Target], Coroutine[None, None, None]]
 
 
 class Handler:
@@ -63,10 +63,22 @@ class Handler:
         return ""
 
     def stamps_match(self, a: Stamp, b: Stamp) -> bool:
-        return a and b and a == b
+        return bool(a and b and a == b)
 
     async def rebuild_impl(self, target: Target, builder: Builder):
         raise NotImplementedError(f"{self} cannot build {target!r}")
+
+
+def stamp_file(target: Target) -> Stamp:
+    with contextlib.suppress(OSError):
+        path = Path(target)
+        if path.is_file():
+            s = path.stat()
+            # skipped: st_nlink, st_atime_ns because they don't indicate the file's changed
+            # skipped: st_ino, st_dev because they can change as removable media is remounted
+            return f"{s.st_mode} 0 0 {s.st_uid} {s.st_gid} {s.st_size} {s.st_mtime_ns} {s.st_ctime_ns}"
+
+    return ""
 
 
 class FileHandler(Handler):
@@ -74,18 +86,7 @@ class FileHandler(Handler):
         return True
 
     def stamp(self, target: Target) -> Stamp:
-        with contextlib.suppress(OSError):
-            path = Path(target)
-            if path.is_file():
-                s = path.stat()
-                # skipped: st_nlink, st_atime_ns because they don't indicate the file's changed
-                # skipped: st_ino, st_dev because they can change as removable media is remounted
-                return f"{s.st_mode} 0 0 {s.st_uid} {s.st_gid} {s.st_size} {s.st_mtime_ns} {s.st_ctime_ns}"
-
-        return ""
-
-    def stamps_match(self, a: str, b: str) -> bool:
-        return a and b and a == b
+        return stamp_file(target)
 
 
 @dataclass

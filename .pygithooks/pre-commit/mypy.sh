@@ -1,2 +1,2 @@
 #!/bin/sh -eux
-: mypy -- SKIPPED
+mypy

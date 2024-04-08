@@ -11,16 +11,16 @@ import shutil
 from dataclasses import dataclass, field
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Optional
+from typing import Any, Iterable, Optional
 
 import jinja2
 import pydantic
 import tomllib
-from exiftool import ExifToolHelper
+from exiftool import ExifToolHelper  # type: ignore[import-untyped]
 from PIL import Image
 from unidecode import unidecode
 
-from boldi.build import Builder, BuildSystem, FileHandler, Handler, Stamp, Target
+from boldi.build import Builder, BuildSystem, FileHandler, Handler, Stamp, Target, stamp_file
 
 # Asyncio improvements:
 # https://pythonspeed.com/articles/two-thread-pools/
@@ -69,17 +69,21 @@ class AlbumConfig(pydantic.BaseModel):
 exiftool = ExifToolHelper().__enter__()
 
 
-def get_exif_tags(image_path: Path) -> dict[str, Any]:
+def get_exif_tags(image_path: Path) -> dict[str, str | dict[str, str]]:
     raw_exif_tags = exiftool.get_tags(str(image_path), RELEVANT_EXIF_TAGS)[0]
     assert isinstance(raw_exif_tags, dict)
-    exif_tags = collections.defaultdict(dict)
+    exif_tags: collections.defaultdict[str, str | dict[str, str]] = collections.defaultdict(dict)
     for key, value in raw_exif_tags.items():
         assert isinstance(key, str)
         if ":" not in key:
+            assert isinstance(key, dict)
             exif_tags[key] = value
         else:
             category, tag = key.split(":", 1)
-            exif_tags[category][tag] = value
+            assert isinstance(value, str)
+            category_dict = exif_tags[category]
+            assert isinstance(category_dict, dict)
+            category_dict[tag] = value
     exif_tags["SourceFile"] = image_path.name
     for category, category_tags in exif_tags.items():
         if isinstance(category_tags, dict):
@@ -92,6 +96,8 @@ def relative_to(path: Path, other: Path) -> Path:
     for i, relative_to_parents in enumerate([other] + list(other.parents)):
         if path.is_relative_to(relative_to_parents):
             return Path(*([Path("..")] * i)) / path.relative_to(relative_to_parents)
+    else:
+        raise ValueError
 
 
 def to_safe_ascii(s: str) -> str:
@@ -254,7 +260,7 @@ class TargetFolder:
     source: SourceFolder
     parent: Optional["TargetFolder"]
     album_config: AlbumConfig
-    path: Path = None
+    path: Path = None  # type: ignore[assignment]
     config: FolderConfig = field(init=False)
     parents: list["TargetFolder"] = field(init=False, default_factory=list)
     subfolders: dict[str, "TargetFolder"] = field(init=False, default_factory=dict)
@@ -262,7 +268,7 @@ class TargetFolder:
     total_image_count: int = field(init=False)
 
     def __post_init__(self):
-        self.path = self.path or self.parent.path / to_safe_ascii(self.source.path.name)
+        self.path = self.path or self.parent.path / to_safe_ascii(self.source.path.name)  # type: ignore[union-attr]
 
         self.config = FolderConfig()
         for folder_config in self.album_config.folders.keys():
@@ -274,9 +280,9 @@ class TargetFolder:
             self.parents.insert(0, parent)
             parent = parent.parent
 
-        subfolder_iter = self.source.subfolders.values()
+        subfolder_iter: Iterable[SourceFolder] = self.source.subfolders.values()
         if self.config.reversed:
-            subfolder_iter = reversed(subfolder_iter)
+            subfolder_iter = reversed(subfolder_iter)  # type: ignore[call-overload]
         for source_subfolder in subfolder_iter:
             subfolder = TargetFolder(source_subfolder, self, self.album_config)
             if subfolder.total_image_count != 0:
@@ -306,6 +312,7 @@ class TargetFolder:
             for subfolder in self.subfolders.values():
                 if (maybe_subfolder := subfolder.path_to_folder(path)) is not None:
                     return maybe_subfolder
+        return None
 
     def path_to_image(self, path: Path) -> Optional[TargetImage]:
         folder = self.path_to_folder(Path(*path.parts[:-1]))
@@ -331,13 +338,13 @@ class TargetFolderHandler(FileHandler):
         target_folder = self.target_folder(target)
 
         target_folder.path.mkdir(parents=True, exist_ok=True)
-        await builder.add_source(target_folder.source.path)
+        await builder.add_source(str(target_folder.source.path))
 
         for subfolder in target_folder.subfolders.values():
-            await builder.build(subfolder.path)
+            await builder.build(str(subfolder.path))
 
         for image in target_folder.images.values():
-            await builder.build(image.path)
+            await builder.build(str(image.path))
 
         index_html = target_folder.path / "index.html"
 
@@ -346,7 +353,7 @@ class TargetFolderHandler(FileHandler):
         with open(index_html, "w") as fp:
             stream.dump(fp)
         for template_file in (HERE / "templates").iterdir():
-            await builder.add_source(template_file)
+            await builder.add_source(str(template_file))
 
         await builder.add_source(__file__)
 
@@ -369,7 +376,7 @@ class TargetImageHandler(FileHandler):
     def stamp(self, target: Target) -> Stamp:
         image = self.target_image(target)
         return "; ".join(
-            FileHandler.stamp(self, path)
+            stamp_file(str(path))
             for path in [
                 image.path,
                 image.path_3000w,
@@ -387,43 +394,24 @@ class TargetImageHandler(FileHandler):
         with Image.open(image.path) as pil_image:
             w, h = 3000, round(3000 / pil_image.size[0] * pil_image.size[1])
             with pil_image.resize((w, h)) as resized_image:
-                resized_image.save(
-                    image.path_3000w,
-                    quality=95,
-                    dpi=(
-                        240,
-                        240,
-                    ),
-                )
+                resized_image.save(image.path_3000w, quality=95, dpi=(240, 240))
+
             w, h = 1500, round(1500 / pil_image.size[0] * pil_image.size[1])
             with pil_image.resize((w, h)) as resized_image:
-                resized_image.save(
-                    image.path_1500w,
-                    quality=95,
-                    dpi=(
-                        240,
-                        240,
-                    ),
-                )
+                resized_image.save(image.path_1500w, quality=95, dpi=(240, 240))
+
             w, h = 800, round(800 / pil_image.size[0] * pil_image.size[1])
             with pil_image.resize((w, h)) as resized_image:
-                resized_image.save(
-                    image.path_800w,
-                    quality=95,
-                    dpi=(
-                        240,
-                        240,
-                    ),
-                )
+                resized_image.save(image.path_800w, quality=95, dpi=(240, 240))
 
         with open(image.exif_path, "w") as fp:
             json.dump(get_exif_tags(image.source.path), fp, indent=2)
 
-        await builder.add_source(image.source.path)
-        await builder.add_source(image.path_3000w)
-        await builder.add_source(image.path_1500w)
-        await builder.add_source(image.path_800w)
-        await builder.add_source(image.exif_path)
+        await builder.add_source(str(image.source.path))
+        await builder.add_source(str(image.path_3000w))
+        await builder.add_source(str(image.path_1500w))
+        await builder.add_source(str(image.path_800w))
+        await builder.add_source(str(image.exif_path))
 
 
 @dataclass
@@ -441,12 +429,13 @@ class StaticHandler(Handler):
         return target == "//static"
 
     def stamp(self, target: Target) -> Stamp:
-        return "; ".join(FileHandler.stamp(self, file) for file in self.files.values())
+        return "; ".join(stamp_file(str(file)) for file in self.files.values())
 
     async def rebuild_impl(self, target: Target, builder: Builder):
+        assert target == "//static"
         self.album.target_static.mkdir(parents=True, exist_ok=True)
-        for source, target in self.files.items():
-            await builder.add_source(HERE / "templates" / source)
+        for source, target_file in self.files.items():
+            await builder.add_source(str(HERE / "templates" / source))
             template = self.album.env.get_template(source)
             stream = template.stream()
             with open(target, "w") as fp:
@@ -491,7 +480,7 @@ class Album(BuildSystem):
 
     async def render(self):
         await self.build("//static")
-        await self.build(self.target_root.path)
+        await self.build(str(self.target_root.path))
         await self.save_build_db()
 
 
