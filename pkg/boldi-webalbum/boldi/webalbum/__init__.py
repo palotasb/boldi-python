@@ -66,21 +66,20 @@ class AlbumConfig(pydantic.BaseModel):
         self.target = self.target.expanduser()
 
 
-exiftool = ExifToolHelper().__enter__()
+exiftool: ExifToolHelper = None
 
 
-def get_exif_tags(image_path: Path) -> dict[str, str | dict[str, str]]:
+def get_exif_tags(image_path: Path) -> dict[str, Any]:
     raw_exif_tags = exiftool.get_tags(str(image_path), RELEVANT_EXIF_TAGS)[0]
     assert isinstance(raw_exif_tags, dict)
-    exif_tags: collections.defaultdict[str, str | dict[str, str]] = collections.defaultdict(dict)
+    exif_tags: collections.defaultdict[str, Any] = collections.defaultdict(dict)
     for key, value in raw_exif_tags.items():
         assert isinstance(key, str)
         if ":" not in key:
-            assert isinstance(key, dict)
+            assert isinstance(key, dict) or key == "SourceFile", f"expected {key!r} to be a dict"
             exif_tags[key] = value
         else:
             category, tag = key.split(":", 1)
-            assert isinstance(value, str)
             category_dict = exif_tags[category]
             assert isinstance(category_dict, dict)
             category_dict[tag] = value
@@ -438,7 +437,7 @@ class StaticHandler(Handler):
             await builder.add_source(str(HERE / "templates" / source))
             template = self.album.env.get_template(source)
             stream = template.stream()
-            with open(target, "w") as fp:
+            with open(target_file, "w") as fp:
                 stream.dump(fp)
 
 
@@ -485,6 +484,9 @@ class Album(BuildSystem):
 
 
 async def main():
+    global exiftool
+    exiftool = ExifToolHelper().__enter__()
+
     logging.getLogger().setLevel(logging.INFO)
     logging.getLogger().addHandler(logging.StreamHandler())
     parser = argparse.ArgumentParser()
@@ -500,5 +502,4 @@ async def main():
     await album.init()
     await album.render()
 
-
-exiftool.__exit__(None, None, None)
+    exiftool.__exit__(None, None, None)
