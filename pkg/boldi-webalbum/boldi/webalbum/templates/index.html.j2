@@ -121,9 +121,12 @@
                 <p class="gray-text">
                     {{image.shutter_speed | human_round or "?"}}s,
                     𝑓/{{image.aperture | human_round or "?"}},
-                    ISO {{image.iso | human_round or "?"}},
-                    <abbr title="Light Value, the amount of light in the scene">LV</abbr> {{image.light_value | human_round or "?"}},
-                    <abbr title="Exposure compensation">ΔEV</abbr> {{image.exposure_compensation | human_round or "0"}}.
+                    ISO {{image.iso | human_round or "?"}}
+                    (<abbr title="Light Value, the amount of light in the scene">LV</abbr> {{image.light_value | human_round or "?"
+                    }}{% if image.exposure_compensation %},
+                        {{ "+" if (image.exposure_compensation or 0) > 0 else "" }}{{
+                            image.exposure_compensation | human_round or "0"}}
+                        <abbr title="Exposure compensation">EV</abbr>{% endif %})
                 </p>
                 <p class="gray-text">
                     {{image.camera}} {{ "+" if image.camera and image.lens else "" }}
