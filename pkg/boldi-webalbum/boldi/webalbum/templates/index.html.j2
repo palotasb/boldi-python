@@ -25,7 +25,6 @@
     <main id="main">
         {% if folder.subfolders | length %}
         <section id="subfolders" class="flex-masonry">
-        {% endif %}
         {% set TARGET_SIZE = 150 %}
         {% for subfolder in folder.subfolders.values() %}
             %% set image = subfolder.cover_image
@@ -46,18 +45,17 @@
                 </figure>
             </div>
         {% endfor %}
-        {% if folder.subfolders | length %}
+        <div style="height: 0; flex: 9000 1 auto;"></div>
         </section>
         {% endif %}
 
         {% if folder.images | length %}
         <section id="thumbnails" class="flex-masonry">
-        {% endif %}
         {% for name, image in folder.images.items() %}
             %% set width = image.width
             %% set height = image.height
             %% set aspect = (width / height) | round(2)
-            <div class="flex-masonry-outer" style=" aspect-ratio: {{aspect}}; flex-grow: {{aspect}};">
+            <div class="flex-masonry-outer" style="aspect-ratio: {{aspect}}; flex-grow: {{aspect}};">
                 <div class="flex-masonry-inner" style="aspect-ratio: {{aspect}};">
                     <a id="{{ image.path.stem }}.thumbnail" class="thumbnail-container" href="#{{ image.path.stem }}">
                         <img
@@ -70,7 +68,7 @@
                 </div>
             </div>
         {% endfor %}
-        {% if folder.images | length %}
+        <div style="height: 0; flex: 9000 1 auto;"></div>
         </section>
         {% endif %}
 
@@ -95,7 +93,6 @@
         
         {% if folder.images | length %}
         <section id="images">
-        {% endif %}
         {% for name, image in folder.images.items() %}
             <article class="image" id="{{ image.path.stem }}">
                 <div class="image-container">
@@ -152,7 +149,6 @@
                 </div>
             </article>
         {% endfor %}
-        {% if folder.images | length %}
         </section>
         {% endif %}
     </main>
