@@ -83,13 +83,26 @@ document.addEventListener("scrollend", (event) => {
     scrollingTo = null;
 });
 
+let lastWindowScrollY = window.scrollY;
+let resetScrollingToTimeoutId = null;
+function _resetScrollingTo() {
+    // emulate "scrollend" event on iOS
+    if (window.scrollY != lastWindowScrollY) {
+        lastWindowScrollY = window.scrollY;
+        setTimeout(_resetScrollingTo, 300)
+    } else {
+        scrollingTo = null;
+    }
+}
+
 function setScrollingTo(element) {
     scrollingTo = element;
-    setTimeout(function () { scrollingTo = null; }, 300);
+    clearTimeout(resetScrollingToTimeoutId);
+    resetScrollingToTimeoutId = setTimeout(_resetScrollingTo, 300);
 }
 
 function scrollToNextScrollTarget(delta, source, setHash) {
-    const baseTarget = source || scrollingTo || getCurrentScrollTarget();
+    const baseTarget = scrollingTo || source || getCurrentScrollTarget();
     if (!scrollingTo && !isElementPreciselyScrolledIntoView(baseTarget) && delta === 1) {
         delta = 0;
     }
