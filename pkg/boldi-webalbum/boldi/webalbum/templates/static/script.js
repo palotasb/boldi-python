@@ -78,32 +78,37 @@ function setUrlHash(hash) {
     }
 }
 
+let scrollingTo = null;
 document.addEventListener("scrollend", (event) => {
     scrollingTo = null;
 });
 
-scrollingTo = null;
-function scrollToNextScrollTarget(next, source, setHash) {
-    const baseTarget = scrollingTo || source || getCurrentScrollTarget();
-    if (!scrollingTo && !isElementPreciselyScrolledIntoView(baseTarget) && next === 1) {
-        next = 0;
+function setScrollingTo(element) {
+    scrollingTo = element;
+    setTimeout(function () { scrollingTo = null; }, 300);
+}
+
+function scrollToNextScrollTarget(delta, source, setHash) {
+    const baseTarget = source || scrollingTo || getCurrentScrollTarget();
+    if (!scrollingTo && !isElementPreciselyScrolledIntoView(baseTarget) && delta === 1) {
+        delta = 0;
     }
     const candidates = getCandidateScrollTargets();
     for (let i = 0; i < candidates.length; i++) {
         if (candidates[i] === baseTarget) {
-            const newTarget = candidates[i + next];
+            const newTarget = candidates[i + delta];
             if (newTarget) {
                 if (setHash && newTarget.id) {
                     setUrlHash(newTarget.id)
                 }
-                scrollingTo = newTarget;
+                setScrollingTo(newTarget)
                 newTarget.scrollIntoView();
                 return;
             }
         }
     }
     // If we get stuck, try to get unstuck
-    window.scrollBy({"top": 10 * next});
+    window.scrollBy({"top": 10 * delta});
     scrollingTo = null;
 }
 
