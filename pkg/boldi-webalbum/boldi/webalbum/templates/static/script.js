@@ -169,7 +169,6 @@ function scrollToNextScrollTarget(delta, source, _) {
     const baseTarget = scrollingTo || source || getCurrentScrollTarget();
     if (!scrollingTo && !isElementPreciselyScrolledIntoView(baseTarget) && delta === 1) {
         delta = 0;
-        console.log("delta reset; scrollingTo = ", scrollingTo);
     }
     const candidates = getCandidateScrollTargets();
     for (let i = 0; i < candidates.length; i++) {
@@ -217,8 +216,12 @@ document.addEventListener("keydown", (event) => {
         scrollToNextScrollTarget(-1, null, true);
     } else if (event.key === ".") {
         scrollToNextScrollTarget(0, null, true);
-    } else if (event.key === "h" || event.key === "e") {
+    } else if (event.key === "h") {
         document.querySelector("header").scrollIntoView();
+    } else if (event.key === "e") {
+        current = getCurrentScrollTarget();
+        target = document.querySelector(`#${current.id}_thumbnail`) || document.querySelector("header");
+        target.scrollIntoView();
     } else if (event.key === "l") {
         document.querySelector("footer").scrollIntoView();
     } else if (event.key === "g") {

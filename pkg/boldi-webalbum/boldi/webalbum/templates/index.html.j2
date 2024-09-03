@@ -57,7 +57,7 @@
             %% set aspect = (width / height) | round(2)
             <div class="flex-masonry-outer" style="aspect-ratio: {{aspect}}; flex-grow: {{aspect}};">
                 <div class="flex-masonry-inner" style="aspect-ratio: {{aspect}};">
-                    <a id="{{ image.path.stem }}.thumbnail" class="thumbnail-container" href="#{{ image.path.stem }}">
+                    <a id="{{ image.path.stem }}_thumbnail" class="thumbnail-container" href="#{{ image.path.stem }}">
                         <img
                             class="thumbnail"
                             style="aspect-ratio: {{aspect}};"
@@ -135,7 +135,7 @@
                     <small>({{image.focal_length_35mm | human_round or "?"}}mm at 35mm <abbr title="Equivalent Field of View">equiv. FOV</abbr>)</small>.
                 </p>
                 <p class="gray-text">
-                    <a href="#top"><kbd>E</kbd> ⇧ {{ folder.title }}</a>
+                    <a href="#{{ image.path.stem }}_thumbnail"><kbd>E</kbd> ⇧ {{ folder.title }}</a>
                     |
                     <a href="javascript:toggleFullScreen()"><kbd>F</kbd> Full screen</a>
                     {% if loop.previtem %}
