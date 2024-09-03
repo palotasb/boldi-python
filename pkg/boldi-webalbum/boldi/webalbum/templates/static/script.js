@@ -20,11 +20,24 @@ function defaultScrollTarget() {
 }
 
 function getCandidateScrollTargets() {
-    return document.querySelectorAll("header, #subfolders, #thumbnails, article.image, footer");
+    candidates = document.querySelectorAll("header, #subfolders, #thumbnails a.thumbnail-container, article.image, footer");
+    lastTop = null;
+    let result = []
+    for (const candidate of candidates) {
+        const top = candidate.getBoundingClientRect().top;
+        if (top !== lastTop) {
+            result.push(candidate);
+        }
+        lastTop = top;
+    }
+    return result;
 }
 
 function getCurrentScrollTarget() {
-    return /*window.location.hash && document.querySelector(window.location.hash) |*/ getFirstVisibleScrollTarget();
+    return (
+        allowPushHistory && window.location.hash && document.querySelector(window.location.hash)
+        || getFirstVisibleScrollTarget()
+    );
 }
 
 function isElementVisible(element) {
@@ -59,9 +72,13 @@ function getFirstVisibleScrollTarget() {
     return defaultScrollTarget();
 }
 
-function getTargetUrlFirFirstVisibleScrollTarget() {
-    const id = getFirstVisibleScrollTarget().id;
-    return id && `#${id}` || window.location.origin + window.location.pathname + window.location.search;
+function getUrlForElement(element) {
+    const id = element.id;
+    return id !== "top" && id && `#${id}` || window.location.origin + window.location.pathname + window.location.search;
+}
+
+function getTargetUrlForFirstVisibleScrollTarget() {
+    return getUrlForElement(getFirstVisibleScrollTarget());
 }
 
 function scrollCurrentScrollTargetIntoView(scrollBehavior) {
@@ -70,26 +87,58 @@ function scrollCurrentScrollTargetIntoView(scrollBehavior) {
     currentScrollTarget.scrollIntoView({behavior: scrollBehavior})
 }
 
-function setUrlHash(hash) {
-    const targetUrl = `#${hash}` || window.location.origin + window.location.pathname + window.location.search;
-    // window.history.replaceState(null, null, targetUrl);
-    if (getCurrentScrollTarget() === scrollingTo) {
-        scrollingTo = null;
+let setUrlTimeoutId = null;
+let setUrlTargetUrl = null;
+
+function setUrl(targetUrl) {
+    if (!setUrlTimeoutId) {
+        window.history.replaceState(null, null, targetUrl);
+        setUrlTimeoutId = setTimeout(() => {
+            if (setUrlTargetUrl) {
+                window.history.replaceState(null, null, setUrlTargetUrl);
+            }
+            setUrlTargetUrl = null;
+            setUrlTimeoutId = null;
+        }, 100);
+        setUrlTargetUrl = null;
+    } else {
+        setUrlTargetUrl = targetUrl;
     }
 }
 
 let scrollingTo = null;
 document.addEventListener("scrollend", (event) => {
+    scrollHandler();
     scrollingTo = null;
+});
+
+let scrollHandlerThrottled = false;
+let scrollHandlerTimeoutId = null;
+function scrollHandler() {
+    setUrl(
+        scrollingTo && getUrlForElement(scrollingTo)
+        || getTargetUrlForFirstVisibleScrollTarget()
+    );
+}
+
+document.addEventListener("scroll", () => {
+    if (!scrollHandlerThrottled) {
+        scrollHandlerThrottled = true;
+        scrollHandlerTimeoutId = setTimeout(() => {
+            scrollHandler();
+            scrollHandlerThrottled = false;
+        }, 150);
+        scrollHandler();
+    }
 });
 
 let lastWindowScrollY = window.scrollY;
 let resetScrollingToTimeoutId = null;
-function _resetScrollingTo() {
+function resetScrollingToIfStoppedScrolling() {
     // emulate "scrollend" event on iOS
     if (window.scrollY != lastWindowScrollY) {
         lastWindowScrollY = window.scrollY;
-        setTimeout(_resetScrollingTo, 300)
+        setTimeout(resetScrollingToIfStoppedScrolling, 300)
     } else {
         scrollingTo = null;
     }
@@ -98,7 +147,7 @@ function _resetScrollingTo() {
 function setScrollingTo(element) {
     scrollingTo = element;
     clearTimeout(resetScrollingToTimeoutId);
-    resetScrollingToTimeoutId = setTimeout(_resetScrollingTo, 300);
+    resetScrollingToTimeoutId = setTimeout(resetScrollingToIfStoppedScrolling, 300);
 }
 
 function scrollToNextScrollTarget(delta, source, setHash) {
@@ -112,7 +161,7 @@ function scrollToNextScrollTarget(delta, source, setHash) {
             const newTarget = candidates[i + delta];
             if (newTarget) {
                 if (setHash && newTarget.id) {
-                    setUrlHash(newTarget.id)
+                    setUrl(getUrlForElement(newTarget))
                 }
                 setScrollingTo(newTarget)
                 newTarget.scrollIntoView();
