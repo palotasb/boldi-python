@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" class="smooth-scroll">
+<html lang="en">
 <head>
     <meta charset="utf-8" />
     <title>{{folder.title}}
@@ -84,9 +84,9 @@
                 |
                 <a href="javascript:toggleFullScreen()"><kbd>F</kbd> <span>Full Screen</span></a>
                 |
-                <a href="javascript:scrollToNextScrollTarget(-1, null, true);"><kbd>←</kbd> <span>Previous</span></a>
+                <a href="javascript:scrollToNextScrollTarget(-1, null);"><kbd>←</kbd> <span>Previous</span></a>
                 |
-                <a href="javascript:scrollToNextScrollTarget(+1, null, true);"><kbd>→</kbd> <span>Next</span></a>
+                <a href="javascript:scrollToNextScrollTarget(+1, null);"><kbd>→</kbd> <span>Next</span></a>
             </p>
         </aside>
         {% endif %}
@@ -98,7 +98,7 @@
                 <div class="image-container">
                     <picture
                         style="--orig-width: {{ image.width }}px; --orig-height: {{ image.height }}px"
-                        onclick="scrollToNextScrollTarget(+1, document.querySelector('#{{ image.path.stem }}'), true);"
+                        onclick="scrollToNextScrollTarget(+1, document.querySelector('#{{ image.path.stem }}'));"
                         >
                         <img
                             srcset="{{ image.path_800w | relative_to(folder.path) }} 800w, {{ image.path_1500w | relative_to(folder.path) }} 1500w, {{ image.path_3000w | relative_to(folder.path) }} 3000w, {{image.path | relative_to(folder.path)}}"

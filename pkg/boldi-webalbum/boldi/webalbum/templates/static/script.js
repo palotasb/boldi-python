@@ -1,5 +1,6 @@
-let fullscreenScrollTarget = null;
+const THROTTLE = 100/*ms*/;
 
+let fullscreenScrollTarget = null;
 function toggleFullScreen() {
     fullscreenScrollTarget = getCurrentScrollTarget();
     if (!document.fullscreenElement) {
@@ -11,7 +12,13 @@ function toggleFullScreen() {
 
 document.addEventListener("fullscreenchange", (event) => {
     fullscreenScrollTarget = fullscreenScrollTarget || getCurrentScrollTarget();
+    // works on FF and Safari
     fullscreenScrollTarget.scrollIntoView({behavior: "instant"});
+    setTimeout((target) => {
+        // works on Chrome
+        target.scrollIntoView({behavior: "instant"});
+        scrollingResizesViewport = false;
+    }, THROTTLE, fullscreenScrollTarget);
     fullscreenScrollTarget = null;
 });
 
@@ -33,12 +40,6 @@ function getCandidateScrollTargets() {
     return result;
 }
 
-function getCurrentScrollTarget() {
-    return (
-        allowPushHistory && window.location.hash && document.querySelector(window.location.hash)
-        || getFirstVisibleScrollTarget()
-    );
-}
 
 function isElementVisible(element) {
     const viewport = window.visualViewport;
@@ -54,7 +55,7 @@ function isElementPreciselyScrolledIntoView(element) {
     return (viewport.offsetTop -5 <= rect.top && rect.top <= viewport.offsetTop + 5);
 }
 
-function getFirstVisibleScrollTarget() {
+function getCurrentScrollTarget() {
     const candidates = getCandidateScrollTargets();
     firstElement = candidates[0];
     if (isElementVisible(firstElement)) {
@@ -78,7 +79,7 @@ function getUrlForElement(element) {
 }
 
 function getTargetUrlForFirstVisibleScrollTarget() {
-    return getUrlForElement(getFirstVisibleScrollTarget());
+    return getUrlForElement(getCurrentScrollTarget());
 }
 
 function scrollCurrentScrollTargetIntoView(scrollBehavior) {
@@ -91,7 +92,7 @@ let setUrlTimeoutId = null;
 let setUrlTargetUrl = null;
 
 function setUrl(targetUrl) {
-    if (!setUrlTimeoutId) {
+    if (!setUrlTimeoutId && !scrollingResizesViewport) {
         window.history.replaceState(null, null, targetUrl);
         setUrlTimeoutId = setTimeout(() => {
             if (setUrlTargetUrl) {
@@ -99,18 +100,20 @@ function setUrl(targetUrl) {
             }
             setUrlTargetUrl = null;
             setUrlTimeoutId = null;
-        }, 100);
+        }, 2*THROTTLE);
         setUrlTargetUrl = null;
     } else {
         setUrlTargetUrl = targetUrl;
     }
 }
 
+let scrolling = false;
 let scrollingTo = null;
-document.addEventListener("scrollend", (event) => {
+function scrollEnd() {
     scrollHandler();
-    scrollingTo = null;
-});
+    scrolling = false;
+    scrollingTo = null;    
+}
 
 let scrollHandlerThrottled = false;
 let scrollHandlerTimeoutId = null;
@@ -121,13 +124,25 @@ function scrollHandler() {
     );
 }
 
+let scrollingResizesViewport = false;
+function windowResizeHandler() {
+    if (scrolling) {
+        if (!scrollingResizesViewport) {
+            window.history.replaceState(null, null, window.location.origin + window.location.pathname + window.location.search);
+        }
+        scrollingResizesViewport = true;
+    }
+}
+window.addEventListener("resize", windowResizeHandler);
+
 document.addEventListener("scroll", () => {
+    scrolling = true;
     if (!scrollHandlerThrottled) {
         scrollHandlerThrottled = true;
         scrollHandlerTimeoutId = setTimeout(() => {
             scrollHandler();
             scrollHandlerThrottled = false;
-        }, 150);
+        }, THROTTLE);
         scrollHandler();
     }
 });
@@ -138,40 +153,41 @@ function resetScrollingToIfStoppedScrolling() {
     // emulate "scrollend" event on iOS
     if (window.scrollY != lastWindowScrollY) {
         lastWindowScrollY = window.scrollY;
-        setTimeout(resetScrollingToIfStoppedScrolling, 300)
+        setTimeout(resetScrollingToIfStoppedScrolling, THROTTLE)
     } else {
-        scrollingTo = null;
+        scrollEnd();
     }
 }
 
 function setScrollingTo(element) {
     scrollingTo = element;
     clearTimeout(resetScrollingToTimeoutId);
-    resetScrollingToTimeoutId = setTimeout(resetScrollingToIfStoppedScrolling, 300);
+    resetScrollingToTimeoutId = setTimeout(resetScrollingToIfStoppedScrolling, THROTTLE);
 }
 
-function scrollToNextScrollTarget(delta, source, setHash) {
+function scrollToNextScrollTarget(delta, source, _) {
     const baseTarget = scrollingTo || source || getCurrentScrollTarget();
     if (!scrollingTo && !isElementPreciselyScrolledIntoView(baseTarget) && delta === 1) {
         delta = 0;
+        console.log("delta reset; scrollingTo = ", scrollingTo);
     }
     const candidates = getCandidateScrollTargets();
     for (let i = 0; i < candidates.length; i++) {
         if (candidates[i] === baseTarget) {
             const newTarget = candidates[i + delta];
             if (newTarget) {
-                if (setHash && newTarget.id) {
-                    setUrl(getUrlForElement(newTarget))
-                }
-                setScrollingTo(newTarget)
-                newTarget.scrollIntoView();
+                setUrl(getUrlForElement(newTarget));
+                setScrollingTo(newTarget);
+                // TODO Fix jerkiness in chrome.
+                // Smooth scrolling should be disabled 
+                newTarget.scrollIntoView({behavior: "instant"});
                 return;
             }
         }
     }
     // If we get stuck, try to get unstuck
     window.scrollBy({"top": 10 * delta});
-    scrollingTo = null;
+    // scrollingTo = null;
 }
 
 document.addEventListener("keydown", (event) => {
