@@ -12,7 +12,7 @@ def main():
     args = parser.parse_args()
     env = jinja2.Environment(loader=jinja2.FileSystemLoader(HERE / "templates"))
     with open(args.output, "wt") as fp:
-        env.get_template("masonry.html.j2").stream().dump(fp)
+        env.get_template("masonry.html.j2").stream().dump(fp)  # type: ignore[arg-type] # https://github.com/pallets/jinja/issues/1983
 
 
 if __name__ == "__main__":

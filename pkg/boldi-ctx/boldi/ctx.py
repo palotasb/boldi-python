@@ -55,7 +55,7 @@ class Ctx(AbstractContextManager):
         self.stack.__enter__()
         return self
 
-    def __exit__(self, *exc_info) -> bool:
+    def __exit__(self, *exc_info) -> bool | None:
         """Exit the context of `self.stack`."""
         return self.stack.__exit__(*exc_info)
 

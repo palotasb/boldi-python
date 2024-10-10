@@ -13,15 +13,16 @@ jobs:
       uses: actions/setup-python@v5
       with:
         python-version: "3.12"
-    - name: Create venv, install pdm, install dependencies
+    - name: Create venv, install uv, install dependencies
       run: |
         python3 -m venv .venv
         . .venv/bin/activate
-        pip install pdm
-        pdm sync
+        pip install uv
+        uv sync --frozen
     - name: Build a binary wheel and a source tarball
       run: |
         . .venv/bin/activate
+        hatch version
         export SETUPTOOLS_SCM_PRETEND_VERSION="$(hatch version | python -c 'import sys, re; v=sys.stdin.read().strip(); print(re.sub(r"^([^+]*)\+?.*$", r"\1", v))')"
         boldi dev package
     - name: Store the distribution packages

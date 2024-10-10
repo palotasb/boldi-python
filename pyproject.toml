@@ -9,11 +9,6 @@ readme = "README.md"
 license = { file = "LICENSE" }
 dynamic = ["version"]
 
-# Intentionally no dependencies as this is just a development metapackage.
-# this just includes the real packages (boldi, boldi-cli, etc.) as dev-dependencies,
-# and those packages can include real dependencies, including on each other.
-dependencies = []
-
 [build-system]
 requires = ["hatchling", "hatch-vcs", "packaging"]
 build-backend = "hatchling.build"
@@ -24,23 +19,21 @@ source = "vcs"
 [tool.hatch.build]
 packages = ["."]
 
-[tool.pdm]
-
-[tool.pdm.dev-dependencies]
-dev = [
-    # boldi:
-    "-e boldi @ {root:uri}/pkg/boldi",
-    "-e boldi-backup @ {root:uri}/pkg/boldi-backup",
-    "-e boldi-build @ {root:uri}/pkg/boldi-build",
-    "-e boldi-cli @ {root:uri}/pkg/boldi-cli",
-    "-e boldi-ctx @ {root:uri}/pkg/boldi-ctx",
-    "-e boldi-dev @ {root:uri}/pkg/boldi-dev",
-    "-e boldi-githooks @ {root:uri}/pkg/boldi-githooks",
-    "-e boldi-plugins @ {root:uri}/pkg/boldi-plugins",
-    "-e boldi-proc @ {root:uri}/pkg/boldi-proc",
-    "-e boldi-webalbum @ {root:uri}/pkg/boldi-webalbum",
-    # building and packaging:
-    "pdm",
+[tool.uv]
+dev-dependencies = [
+    # boldi dependencies
+    "boldi",
+    "boldi-backup",
+    "boldi-build",
+    "boldi-cli",
+    "boldi-ctx",
+    "boldi-dev",
+    "boldi-githooks",
+    "boldi-plugins",
+    "boldi-proc",
+    "boldi-webalbum",
+    # build dependencies
+    "uv",
     "hatch",
     "hatchling",
     "hatch-vcs",
@@ -48,6 +41,22 @@ dev = [
     "setuptools_scm",
     "packaging",
 ]
+package = false
+
+[tool.uv.sources]
+boldi = { workspace = true }
+boldi-backup = { workspace = true }
+boldi-build = { workspace = true }
+boldi-cli = { workspace = true }
+boldi-ctx = { workspace = true }
+boldi-dev = { workspace = true }
+boldi-githooks = { workspace = true }
+boldi-plugins = { workspace = true }
+boldi-proc = { workspace = true }
+boldi-webalbum = { workspace = true }
+
+[tool.uv.workspace]
+members = ["pkg/*"]
 
 [tool.ruff]
 line-length = 120

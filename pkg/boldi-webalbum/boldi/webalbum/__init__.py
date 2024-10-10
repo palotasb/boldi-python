@@ -349,8 +349,8 @@ class TargetFolderHandler(FileHandler):
 
         index_template = self.album.env.get_template("index.html.j2")
         stream = index_template.stream({"folder": target_folder})
-        with open(index_html, "w") as fp:
-            stream.dump(fp)
+        with open(index_html, "wt") as fp:
+            stream.dump(fp)  # type: ignore[arg-type] # https://github.com/pallets/jinja/issues/1983
         for template_file in (HERE / "templates").iterdir():
             await builder.add_source(str(template_file))
 
@@ -438,7 +438,7 @@ class StaticHandler(Handler):
             template = self.album.env.get_template(source)
             stream = template.stream()
             with open(target_file, "w") as fp:
-                stream.dump(fp)
+                stream.dump(fp)  # type: ignore[arg-type] # https://github.com/pallets/jinja/issues/1983
 
 
 @dataclass
