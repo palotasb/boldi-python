@@ -15,11 +15,18 @@
     <header id="top">
         <nav>
             <a href="/">album.boldi.net</a>
-            {% for parent in folder.parents %}
-            → <a href="{{ parent.path | relative_to(folder.path) }}/index.html">{{parent.title}}</a>
+            {% for parent in folder.parents[:-1] %}
+            &rsaquo; <a href="{{ parent.path | relative_to(folder.path) }}/index.html">{{parent.title}}</a>
             {% endfor %}
         </nav>
-        <h1><a href="./index.html">{{folder.title}}</a></h1>
+        <h1>
+            {% set parent = folder.parents[-1] %}
+            {% if parent %}
+                <a href="{{ parent.path | relative_to(folder.path) }}/index.html">{{parent.title}}</a>
+                &rsaquo;
+            {% endif %}
+            <a href="./index.html">{{folder.title}}</a>
+        </h1>
     </header>
 
     <main id="main">
@@ -159,11 +166,18 @@
     <footer id="bottom">
         <nav>
             <a href="/">album.boldi.net</a>
-            {% for parent in folder.parents %}
+            {% for parent in folder.parents[:-1] %}
             → <a href="{{ parent.path | relative_to(folder.path) }}/index.html">{{parent.title}}</a>
             {% endfor %}
         </nav>
-        <h1><a href="./index.html">{{folder.title}}</a></h1>
+        <h1>
+            {% set parent = folder.parents[-1] %}
+            {% if parent %}
+                <a href="{{ parent.path | relative_to(folder.path) }}/index.html">{{parent.title}}</a>
+                &rsaquo;
+            {% endif %}
+            <a href="./index.html">{{folder.title}}</a>
+        </h1>
         <p id="copyright">Copyright &copy; {{album.config.copyright}}</p>
     </footer>
 </body>
