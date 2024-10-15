@@ -244,3 +244,36 @@ document.addEventListener("keydown", (event) => {
     }
     event.preventDefault();
 });
+
+function handleLinksInSPA() {
+    links = document.querySelectorAll('a[href]:not([href^="#"]):not([href^="javascript:"])');
+    for (const link of links) {
+        if (link.href.host !== window.location.href.host) {
+            continue;
+        }
+
+        link.addEventListener("click", (event) => {
+            const request = new Request(link.href);
+            window.fetch(request).then((response) => {
+                if (response.ok) {
+                    return response.text();
+                } else {
+                    window.location.href = link.href;
+                }
+            }).then((text) => {
+                const domParser = new DOMParser();
+                document.baseURI = link.href;
+                window.history.pushState(null, null, link.href);
+                const page = domParser.parseFromString(text, "text/html");
+                console.log(page);
+                document.head.replaceWith(page.head);
+                document.body.replaceWith(page.body);
+                handleLinksInSPA();
+                document.documentElement.scrollTo({top: 0});
+            });
+            event.preventDefault();
+        });
+    }
+}
+
+window.addEventListener("load", handleLinksInSPA);
