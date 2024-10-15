@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import argparse
 import collections
 import contextlib
@@ -11,7 +13,7 @@ import shutil
 from dataclasses import dataclass, field
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Iterable, Optional
+from typing import Any, Optional
 
 import jinja2
 import pydantic
@@ -46,7 +48,7 @@ logger.addHandler(logging.NullHandler())
 IMAGE_EXTENSIONS = (".JPG", ".JPEG", ".PNG", ".GIF")
 HERE = Path(__file__).parent.resolve()
 NON_URL_SAFE_RE = re.compile(r"[^\w\d\.\-\(\)_/]+", re.ASCII)
-RELEVANT_EXIF_TAGS = ("Composite:all", "EXIF:all", "File:all", "IPTC:all", "XMP:all")
+RELEVANT_EXIF_TAGS = ["Composite:all", "EXIF:all", "File:all", "IPTC:all", "XMP:all"]
 
 
 class FolderConfig(pydantic.BaseModel):
@@ -66,7 +68,7 @@ class AlbumConfig(pydantic.BaseModel):
         self.target = self.target.expanduser()
 
 
-exiftool: ExifToolHelper = None
+exiftool: ExifToolHelper = None  # type: ignore
 
 
 def get_exif_tags(image_path: Path) -> dict[str, Any]:
@@ -133,7 +135,7 @@ class SourceImage:
 @dataclass
 class SourceFolder:
     path: Path
-    subfolders: dict[str, "SourceFolder"] = field(init=False, default_factory=dict)
+    subfolders: dict[str, SourceFolder] = field(init=False, default_factory=dict)
     images: dict[str, SourceImage] = field(init=False, default_factory=dict)
 
     def __post_init__(self):
@@ -150,7 +152,7 @@ class SourceFolder:
 @dataclass
 class TargetImage:
     source: SourceImage
-    parent: "TargetFolder"
+    parent: TargetFolder
     path: Path = field(init=False)
     path_3000w: Path = field(init=False)
     path_1500w: Path = field(init=False)
@@ -257,14 +259,16 @@ class TargetImage:
 @dataclass
 class TargetFolder:
     source: SourceFolder
-    parent: Optional["TargetFolder"]
+    parent: TargetFolder | None
     album_config: AlbumConfig
+    prev_folder: TargetFolder | None
     path: Path = None  # type: ignore[assignment]
     config: FolderConfig = field(init=False)
-    parents: list["TargetFolder"] = field(init=False, default_factory=list)
-    subfolders: dict[str, "TargetFolder"] = field(init=False, default_factory=dict)
+    parents: list[TargetFolder] = field(init=False, default_factory=list)
+    subfolders: dict[str, TargetFolder] = field(init=False, default_factory=dict)
+    next_folder: TargetFolder | None = field(init=False, default=None)
     images: dict[str, TargetImage] = field(init=False, default_factory=dict)
-    total_image_count: int = field(init=False)
+    total_image_count: int = field(init=False, default=0)
 
     def __post_init__(self):
         self.path = self.path or self.parent.path / to_safe_ascii(self.source.path.name)  # type: ignore[union-attr]
@@ -279,16 +283,23 @@ class TargetFolder:
             self.parents.insert(0, parent)
             parent = parent.parent
 
-        subfolder_iter: Iterable[SourceFolder] = self.source.subfolders.values()
-        if self.config.reversed:
-            subfolder_iter = reversed(subfolder_iter)  # type: ignore[call-overload]
-        for source_subfolder in subfolder_iter:
-            subfolder = TargetFolder(source_subfolder, self, self.album_config)
-            if subfolder.total_image_count != 0:
+        self.next_folder = self.parent
+        prev_subfolder = self.prev_folder
+        for source_subfolder in self.source.subfolders.values():
+            subfolder = TargetFolder(source_subfolder, self, self.album_config, prev_folder=prev_subfolder)
+            if subfolder.total_image_count != 0:  # ignore empty folders
+                if prev_subfolder:
+                    prev_subfolder.next_folder = subfolder
                 self.subfolders[subfolder.path.name] = subfolder
+                prev_subfolder = subfolder
+
+        if self.config.reversed:
+            self.subfolders = dict(reversed(self.subfolders.items()))
+
         for source_image in self.source.images.values():
             image = TargetImage(source_image, self)
             self.images[image.path.name] = image
+
         subfolders_image_count = sum(s.total_image_count for s in self.subfolders.values())
         self.total_image_count = len(self.images) + subfolders_image_count
 
@@ -320,7 +331,7 @@ class TargetFolder:
 
 @dataclass
 class TargetFolderHandler(FileHandler):
-    album: "Album"
+    album: Album
 
     def maybe_target_folder(self, target: Target) -> Optional[TargetFolder]:
         return self.album.target_root.path_to_folder(Path(target))
@@ -359,7 +370,7 @@ class TargetFolderHandler(FileHandler):
 
 @dataclass
 class TargetImageHandler(FileHandler):
-    album: "Album"
+    album: Album
 
     def maybe_target_image(self, target: Target) -> Optional[TargetImage]:
         return self.album.target_root.path_to_image(Path(target))
@@ -376,13 +387,7 @@ class TargetImageHandler(FileHandler):
         image = self.target_image(target)
         return "; ".join(
             stamp_file(str(path))
-            for path in [
-                image.path,
-                image.path_3000w,
-                image.path_1500w,
-                image.path_800w,
-                image.exif_path,
-            ]
+            for path in [image.path, image.path_3000w, image.path_1500w, image.path_800w, image.exif_path]
         )
 
     async def rebuild_impl(self, target: Target, builder: Builder):
@@ -415,7 +420,7 @@ class TargetImageHandler(FileHandler):
 
 @dataclass
 class StaticHandler(Handler):
-    album: "Album"
+    album: Album
     files: dict[str, Path] = field(init=False)
 
     def __post_init__(self):
@@ -449,7 +454,7 @@ class Album(BuildSystem):
     env: jinja2.Environment = field(init=False)
 
     def __post_init__(self):
-        self.target_root = TargetFolder(SourceFolder(self.config.source), None, self.config, self.config.target)
+        self.target_root = TargetFolder(SourceFolder(self.config.source), None, self.config, None, self.config.target)
         self.target_static = self.target_root.path / "static"
 
         self.env = jinja2.Environment(

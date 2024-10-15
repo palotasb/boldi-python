@@ -23,12 +23,11 @@ body {
     font-size: 16px;
     color: white;
     background-color: #111;
-    padding: 0 2ex;
 }
 
 header {
-    padding: 2ex 0;
     margin-bottom: 8em;
+    padding: 2ex;
 }
 
 #subfolders, #thumbnails, #images {
@@ -36,7 +35,7 @@ header {
 }
 
 footer {
-    margin-top: 8em;
+    margin-top: calc(75vh - 8em);
 }
 
 p {
@@ -68,8 +67,8 @@ canvas,
 svg {
     display: block;
     object-fit: contain;
-    width: 100%;
-    height: 100%;
+    max-width: 100%;
+    max-height: 100%;
 }
 
 .flex-masonry {
@@ -122,7 +121,12 @@ svg {
     height: 100%;
 }
 
-#subfolders figcaption {
+figure {
+    position: relative;
+    overflow: hidden;
+}
+
+figure > figcaption {
     position: absolute;
     left: 0;
     bottom: 0;
@@ -132,7 +136,7 @@ svg {
     font-weight: normal;
 }
 
-#subfolders figcaption > a {
+figure > figcaption > a, a figure > figcaption {
     display: block;
     width: 100%;
     padding: 0.25em .5em;
@@ -142,30 +146,24 @@ svg {
     text-decoration: none;
 }
 
-#images {
-    position: relative;
-}
-
 article.image {
-    max-width: 100ex;
     margin: 0 auto;
 }
 
 article.image .image-container {
     height: 100vh;
-    margin: 2em 0;
 }
 
 article.image picture {
     position: absolute;
-    left: -2ex;
     display: block;
     width: 100vw;
     height: 100vh;
 }
 
 article.image div.description {
-    margin: 2em 0 8em 0;
+    margin: 2em auto 8em auto;
+    max-width: 100ex;
 }
 
 article.image .image-description {
@@ -196,4 +194,8 @@ h6 {
 #root,
 #__next {
     isolation: isolate;
+}
+
+.pad-h {
+    padding: 0 2ex;
 }

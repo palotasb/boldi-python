@@ -12,7 +12,7 @@
     <script type="text/javascript" src="{{ (album.target_static / 'script.js') | relative_to(folder.path) }}"></script>
 </head>
 <body>
-    <header id="top">
+    <header id="top" class="pad-h">
         <nav>
             <a href="/">album.boldi.net</a>
             {% for parent in folder.parents[:-1] %}
@@ -37,10 +37,11 @@
             %% set image = subfolder.cover_image
             %% set width = image.width
             %% set height = image.height
-            %% set aspect = (width / height) | round(2)
-            <div class="flex-masonry-outer" style=" aspect-ratio: {{aspect}}; flex-grow: {{aspect}};">
+            %% set aspect = "%d / %d" % (width, height)
+            %% set flex_grow = (width / height) | round(2)
+            <div class="flex-masonry-outer" style="aspect-ratio: {{aspect}}; flex-grow: {{flex_grow}};">
                 <figure class="flex-masonry-inner" style="aspect-ratio: {{aspect}};">
-                    <a class="thumbnail-container" href="{{subfolder.path | relative_to(folder.path)}}/index.html">
+                    <a id="{{ image.path.stem }}_folder_thumbnail" class="thumbnail-container" href="{{subfolder.path | relative_to(folder.path)}}/index.html">
                         <img
                             class="thumbnail"
                             style="aspect-ratio: {{aspect}};"
@@ -61,8 +62,9 @@
         {% for name, image in folder.images.items() %}
             %% set width = image.width
             %% set height = image.height
-            %% set aspect = (width / height) | round(2)
-            <div class="flex-masonry-outer" style="aspect-ratio: {{aspect}}; flex-grow: {{aspect}};">
+            %% set aspect = "%d / %d" % (width, height)
+            %% set flex_grow = (width / height) | round(2)
+            <div class="flex-masonry-outer" style="aspect-ratio: {{aspect}}; flex-grow: {{flex_grow}};">
                 <div class="flex-masonry-inner" style="aspect-ratio: {{aspect}};">
                     <a id="{{ image.path.stem }}_thumbnail" class="thumbnail-container" href="#{{ image.path.stem }}">
                         <img
@@ -103,14 +105,12 @@
         {% for name, image in folder.images.items() %}
             <article class="image" id="{{ image.path.stem }}">
                 <div class="image-container">
-                    <picture
-                        style="--orig-width: {{ image.width }}px; --orig-height: {{ image.height }}px"
-                        onclick="scrollToNextScrollTarget(+1, document.querySelector('#{{ image.path.stem }}'));"
-                        >
+                    <picture style="display: flex;" onclick="scrollToNextScrollTarget(+1, document.querySelector('#{{ image.path.stem }}'));">
                         <img
+                            style="width: 100%; align-self: center;"
                             srcset="{{ image.path_800w | relative_to(folder.path) }} 800w, {{ image.path_1500w | relative_to(folder.path) }} 1500w, {{ image.path_3000w | relative_to(folder.path) }} 3000w, {{image.path | relative_to(folder.path)}}"
                             src="{{image.path | relative_to(folder.path)}}"
-                            alt="{{image.exif.IPTC.Artist}}" />
+                            alt="{{image.title}}" />
                     </picture>
                 </div>
                 <div class="description">
@@ -163,22 +163,74 @@
         {% endif %}
     </main>
   
-    <footer id="bottom">
-        <nav>
-            <a href="/">album.boldi.net</a>
-            {% for parent in folder.parents[:-1] %}
-            → <a href="{{ parent.path | relative_to(folder.path) }}/index.html">{{parent.title}}</a>
-            {% endfor %}
-        </nav>
-        <h1>
-            {% set parent = folder.parents[-1] %}
-            {% if parent %}
-                <a href="{{ parent.path | relative_to(folder.path) }}/index.html">{{parent.title}}</a>
-                &rsaquo;
-            {% endif %}
-            <a href="./index.html">{{folder.title}}</a>
-        </h1>
-        <p id="copyright">Copyright &copy; {{album.config.copyright}}</p>
+    <footer id="bottom" style="
+        display: grid;
+        width: 100vw; height: 100vh;
+        grid-template-rows: 1fr 2fr 1fr;
+        grid-template-columns: 3fr 2fr 3fr;
+        gap: 0.5em;
+    ">
+        {% set related_folders = [(folder.prev_folder, "2 / 1 / 3 / 2"), (folder.next_folder, "2 / 3 / 3 / 4"), (folder.parent, "1 / 2 / 2 / 3")] %}
+        {% for related_folder, grid_area in related_folders %}
+        {% if related_folder  %}
+        %% set image = related_folder.cover_image
+        %% set width = image.width
+        %% set height = image.height
+        %% set aspect = "%d / %d" % (width, height)
+        <div style="
+                grid-area: {{ grid_area }};
+                contain: strict;
+                text-align: center;
+                width: 100%;
+                height: 100%;
+                align-self: center;
+                justify-self: center;
+                overflow: hidden;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            "
+        >
+            <a style="display: block; aspect-ratio: {{ aspect }}; max-height: 100%; max-width: 100%;" href="{{ related_folder.path | relative_to(folder.path) }}/index.html">
+                <figure style="position: relative;">
+                    <img
+                        srcset="{{ related_folder.cover_image.path_800w | relative_to(folder.path) }} 800w, {{ related_folder.cover_image.path_1500w | relative_to(folder.path) }} 1500w, {{ related_folder.cover_image.path_3000w | relative_to(folder.path) }} 3000w, {{related_folder.cover_image.path | relative_to(folder.path)}}"
+                        src="{{ related_folder.cover_image.path | relative_to(folder.path)}}"
+                        alt="{{ related_folder.title }}" />
+                    <figcaption>{{ related_folder.title }}</figcaption>
+                </figure>
+            </a>
+        </div>
+        {% endif %}
+        {% endfor %}
+        <div style="grid-area: 2 / 2 / 3 / 3; text-align: center;">
+            <a style="display: block; aspect-ratio: {{ aspect }}; max-height: 100%; max-width: 100%;" href="#top">
+                <figure style="position: relative;">
+                    <img
+                        srcset="{{ folder.cover_image.path_800w | relative_to(folder.path) }} 800w, {{ folder.cover_image.path_1500w | relative_to(folder.path) }} 1500w, {{ folder.cover_image.path_3000w | relative_to(folder.path) }} 3000w, {{folder.cover_image.path | relative_to(folder.path)}}"
+                        src="{{ folder.cover_image.path | relative_to(folder.path)}}"
+                        alt="{{ folder.title }}" />
+                    <figcaption>{{ folder.title }}</figcaption>
+                </figure>
+            </a>
+        </div>
+        <div class="pad-h" style="grid-area: 3 / 1 / 3 / 4; align-self: end;">
+            <nav>
+                <a href="/">album.boldi.net</a>
+                {% for parent in folder.parents[:-1] %}
+                &rsaquo; <a href="{{ parent.path | relative_to(folder.path) }}/index.html">{{parent.title}}</a>
+                {% endfor %}
+            </nav>
+            <h1>
+                {% set parent = folder.parents[-1] %}
+                {% if parent %}
+                    <a href="{{ parent.path | relative_to(folder.path) }}/index.html">{{parent.title}}</a>
+                    &rsaquo;
+                {% endif %}
+                <a href="./index.html">{{folder.title}}</a>
+            </h1>
+            <p id="copyright">Copyright &copy; {{album.config.copyright}}</p>
+        </div>
     </footer>
 </body>
 </html>

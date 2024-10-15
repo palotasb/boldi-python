@@ -27,7 +27,7 @@ function defaultScrollTarget() {
 }
 
 function getCandidateScrollTargets() {
-    candidates = document.querySelectorAll("header, #subfolders, #thumbnails a.thumbnail-container, article.image, footer");
+    candidates = document.querySelectorAll("header, #subfolders a[id], #thumbnails a[id], article.image, #epilogue, footer");
     lastTop = null;
     let result = []
     for (const candidate of candidates) {
@@ -171,7 +171,8 @@ function scrollToNextScrollTarget(delta, source, _) {
         delta = 0;
     }
     const candidates = getCandidateScrollTargets();
-    for (let i = 0; i < candidates.length; i++) {
+    let i = 0;
+    for (i = 0; i < candidates.length; i++) {
         if (candidates[i] === baseTarget) {
             const newTarget = candidates[i + delta];
             if (newTarget) {
@@ -184,9 +185,10 @@ function scrollToNextScrollTarget(delta, source, _) {
             }
         }
     }
-    // If we get stuck, try to get unstuck
-    window.scrollBy({"top": 10 * delta});
-    // scrollingTo = null;
+    if (candidates[i - 1] !== baseTarget || delta !== 1) {
+        // If we get stuck, try to get unstuck
+        window.scrollBy({"top": 10 * delta});
+    }
 }
 
 document.addEventListener("keydown", (event) => {
@@ -220,7 +222,7 @@ document.addEventListener("keydown", (event) => {
         document.querySelector("header").scrollIntoView();
     } else if (event.key === "e") {
         current = getCurrentScrollTarget();
-        target = document.querySelector(`#${current.id}_thumbnail`) || document.querySelector("header");
+        target = document.querySelector(`#${current.id}_thumbnail`) || document.querySelector("#thumbnails, #subfolders");
         target.scrollIntoView();
     } else if (event.key === "l") {
         document.querySelector("footer").scrollIntoView();
