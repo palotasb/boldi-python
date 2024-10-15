@@ -61,8 +61,9 @@ function getCurrentScrollTarget() {
     if (isElementVisible(firstElement)) {
         return firstElement;
     }
+    oneButLastElement = candidates[candidates.length - 2];
     lastElement = candidates[candidates.length - 1];
-    if (isElementVisible(lastElement)) {
+    if (!isElementVisible(oneButLastElement) && isElementVisible(lastElement)) {
         return lastElement;
     }
     for (const candidate of candidates) {

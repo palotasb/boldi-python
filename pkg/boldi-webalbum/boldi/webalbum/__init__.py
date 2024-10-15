@@ -290,6 +290,8 @@ class TargetFolder:
             if subfolder.total_image_count != 0:  # ignore empty folders
                 if prev_subfolder:
                     prev_subfolder.next_folder = subfolder
+                    if prev_subfolder.subfolders:
+                        prev_subfolder.subfolders[list(prev_subfolder.subfolders.keys())[-1]].next_folder = subfolder
                 self.subfolders[subfolder.path.name] = subfolder
                 prev_subfolder = subfolder
 
