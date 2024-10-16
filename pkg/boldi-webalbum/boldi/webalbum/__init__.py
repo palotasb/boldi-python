@@ -283,17 +283,20 @@ class TargetFolder:
             self.parents.insert(0, parent)
             parent = parent.parent
 
-        self.next_folder = self.parent
         prev_subfolder = self.prev_folder
         for source_subfolder in self.source.subfolders.values():
             subfolder = TargetFolder(source_subfolder, self, self.album_config, prev_folder=prev_subfolder)
             if subfolder.total_image_count != 0:  # ignore empty folders
                 if prev_subfolder:
-                    prev_subfolder.next_folder = subfolder
+                    if not prev_subfolder.next_folder:
+                        prev_subfolder.next_folder = subfolder
                     if prev_subfolder.subfolders:
                         prev_subfolder.subfolders[list(prev_subfolder.subfolders.keys())[-1]].next_folder = subfolder
                 self.subfolders[subfolder.path.name] = subfolder
                 prev_subfolder = subfolder
+
+        if self.subfolders:
+            self.next_folder = next(iter(self.subfolders.values()))
 
         if self.config.reversed:
             self.subfolders = dict(reversed(self.subfolders.items()))

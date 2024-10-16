@@ -167,10 +167,10 @@
         display: grid;
         width: 100vw; height: 100vh;
         grid-template-rows: 1fr 2fr 1fr;
-        grid-template-columns: 3fr 2fr 3fr;
+        grid-template-columns: 4fr 3fr 5fr;
         gap: 0.5em;
     ">
-        {% set related_folders = [(folder.prev_folder, "2 / 1 / 3 / 2"), (folder.next_folder, "2 / 3 / 3 / 4"), (folder.parent, "1 / 2 / 2 / 3")] %}
+        {% set related_folders = [(folder.prev_folder, "2 / 1 / 3 / 2"), (folder.next_folder, "2 / 3 / 4 / 4"), (folder.parent, "1 / 2 / 2 / 3")] %}
         {% for related_folder, grid_area in related_folders %}
         {% if related_folder  %}
         %% set image = related_folder.cover_image
