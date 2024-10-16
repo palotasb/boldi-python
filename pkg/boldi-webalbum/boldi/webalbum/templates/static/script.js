@@ -76,7 +76,9 @@ function getCurrentScrollTarget() {
 
 function getUrlForElement(element) {
     const id = element.id;
-    return id !== "top" && id && `#${id}` || window.location.origin + window.location.pathname + window.location.search;
+    url = new URL(window.location.href);
+    url.hash = id !== "top" && id && `#${id}` || "";
+    return url.href;
 }
 
 function getTargetUrlForFirstVisibleScrollTarget() {
@@ -94,10 +96,10 @@ let setUrlTargetUrl = null;
 
 function setUrl(targetUrl) {
     if (!setUrlTimeoutId && !scrollingResizesViewport) {
-        window.history.replaceState(null, null, targetUrl);
+        window.history.replaceState({url: targetUrl}, null, targetUrl);
         setUrlTimeoutId = setTimeout(() => {
             if (setUrlTargetUrl) {
-                window.history.replaceState(null, null, setUrlTargetUrl);
+                window.history.replaceState({url: setUrlTargetUrl}, null, setUrlTargetUrl);
             }
             setUrlTargetUrl = null;
             setUrlTimeoutId = null;
@@ -129,7 +131,8 @@ let scrollingResizesViewport = false;
 function windowResizeHandler() {
     if (scrolling) {
         if (!scrollingResizesViewport) {
-            window.history.replaceState(null, null, window.location.origin + window.location.pathname + window.location.search);
+            url = window.location.origin + window.location.pathname + window.location.search
+            window.history.replaceState({url: url}, null, url);
         }
         scrollingResizesViewport = true;
     }
@@ -253,27 +256,54 @@ function handleLinksInSPA() {
         }
 
         link.addEventListener("click", (event) => {
-            const request = new Request(link.href);
-            window.fetch(request).then((response) => {
-                if (response.ok) {
-                    return response.text();
-                } else {
-                    window.location.href = link.href;
-                }
-            }).then((text) => {
-                const domParser = new DOMParser();
-                document.baseURI = link.href;
-                window.history.pushState(null, null, link.href);
-                const page = domParser.parseFromString(text, "text/html");
-                console.log(page);
-                document.head.replaceWith(page.head);
-                document.body.replaceWith(page.body);
-                handleLinksInSPA();
-                document.documentElement.scrollTo({top: 0});
-            });
+            loadLocationInSPA(link.href);
             event.preventDefault();
         });
     }
 }
 
+let spaStateUrl = window.location.href;
+
+function loadLocationInSPA(href) {
+    if (href == spaStateUrl) {
+        return;
+    }
+    const request = new Request(href);
+    window.fetch(request).then((response) => {
+        if (response.ok) {
+            return response.text();
+        } else if (window.location.href !== href) {
+            window.location.href = href;
+        }
+    }).then((text) => {
+        const domParser = new DOMParser();
+        spaStateUrl = href;
+        document.querySelectorAll("img").forEach((imgElement) => {
+            imgElement.src = "";
+            imgElement.srcset = "";
+        });
+        document.baseURI = href;
+        if (!(window.history.state && window.history.state.url && window.history.state.url === href)) {
+            console.log("pushState", href)
+            window.history.pushState({url: href}, null, href);
+        }
+        const page = domParser.parseFromString(text, "text/html");
+        document.head.replaceWith(page.head);
+        document.body.replaceWith(page.body);
+        handleLinksInSPA();
+
+        (document.querySelector(new URL(href).hash || "*") || document.documentElement).scrollIntoView();
+    });
+}
+
 window.addEventListener("load", handleLinksInSPA);
+window.addEventListener("load", (event) => {
+    spaStateUrl = window.location.href;
+    window.history.replaceState({url: spaStateUrl}, null, spaStateUrl);
+});
+window.addEventListener("popstate", (event) => {
+    console.log("popstate", spaStateUrl, "->", event.state && event.state.url);
+    if (event.state && event.state.url && event.state.url !== spaStateUrl) {
+        loadLocationInSPA(event.state.url);
+    }
+});
