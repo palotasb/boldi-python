@@ -15,9 +15,10 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-dev = [
-    "django-stubs",
-]
+dev = ["django-stubs"]
+
+[project.entry-points]
+"boldi.cli.action" = { webalbum-app = "boldi.webalbum.app.cli:WebalbumAppCliAction" }
 
 [build-system]
 requires = ["hatchling", "hatch-vcs"]
