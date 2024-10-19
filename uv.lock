@@ -64,7 +64,7 @@ wheels = [
 
 [[package]]
 name = "boldi"
-version = "0.6.3.dev20+ge3d24c1"
+version = "0.6.3.dev21+g23aa29c"
 source = { editable = "pkg/boldi" }
 dependencies = [
     { name = "boldi-cli" },
@@ -87,7 +87,7 @@ requires-dist = [
 
 [[package]]
 name = "boldi-backup"
-version = "0.6.3.dev20+ge3d24c1"
+version = "0.6.3.dev21+g23aa29c"
 source = { editable = "pkg/boldi-backup" }
 dependencies = [
     { name = "boldi-ctx" },
@@ -102,12 +102,12 @@ requires-dist = [
 
 [[package]]
 name = "boldi-build"
-version = "0.6.3.dev20+ge3d24c1"
+version = "0.6.3.dev21+g23aa29c"
 source = { editable = "pkg/boldi-build" }
 
 [[package]]
 name = "boldi-cli"
-version = "0.6.3.dev20+ge3d24c1"
+version = "0.6.3.dev21+g23aa29c"
 source = { editable = "pkg/boldi-cli" }
 dependencies = [
     { name = "boldi-ctx" },
@@ -122,7 +122,7 @@ requires-dist = [
 
 [[package]]
 name = "boldi-ctx"
-version = "0.6.3.dev20+ge3d24c1"
+version = "0.6.3.dev21+g23aa29c"
 source = { editable = "pkg/boldi-ctx" }
 dependencies = [
     { name = "boldi-proc" },
@@ -141,7 +141,7 @@ requires-dist = [
 
 [[package]]
 name = "boldi-dev"
-version = "0.6.3.dev20+ge3d24c1"
+version = "0.6.3.dev21+g23aa29c"
 source = { editable = "pkg/boldi-dev" }
 dependencies = [
     { name = "boldi-cli" },
@@ -168,19 +168,16 @@ requires-dist = [
 
 [[package]]
 name = "boldi-devmetapackage"
-version = "0.6.3.dev20+ge3d24c1.d20241019"
+version = "0.6.3.dev21+g23aa29c.d20241019"
 source = { virtual = "." }
-dependencies = [
-    { name = "typing-extensions" },
-]
 
 [package.dev-dependencies]
 dev = [
-    { name = "boldi" },
+    { name = "boldi", extra = ["dev"] },
     { name = "boldi-backup" },
     { name = "boldi-build" },
     { name = "boldi-cli" },
-    { name = "boldi-ctx" },
+    { name = "boldi-ctx", extra = ["dev"] },
     { name = "boldi-dev" },
     { name = "boldi-githooks" },
     { name = "boldi-plugins" },
@@ -196,15 +193,14 @@ dev = [
 ]
 
 [package.metadata]
-requires-dist = [{ name = "typing-extensions", specifier = ">=4.12.2" }]
 
 [package.metadata.requires-dev]
 dev = [
-    { name = "boldi", editable = "pkg/boldi" },
+    { name = "boldi", extras = ["dev"], editable = "pkg/boldi" },
     { name = "boldi-backup", editable = "pkg/boldi-backup" },
     { name = "boldi-build", editable = "pkg/boldi-build" },
     { name = "boldi-cli", editable = "pkg/boldi-cli" },
-    { name = "boldi-ctx", editable = "pkg/boldi-ctx" },
+    { name = "boldi-ctx", extras = ["dev"], editable = "pkg/boldi-ctx" },
     { name = "boldi-dev", editable = "pkg/boldi-dev" },
     { name = "boldi-githooks", editable = "pkg/boldi-githooks" },
     { name = "boldi-plugins", editable = "pkg/boldi-plugins" },
@@ -221,7 +217,7 @@ dev = [
 
 [[package]]
 name = "boldi-githooks"
-version = "0.6.3.dev20+ge3d24c1"
+version = "0.6.3.dev21+g23aa29c"
 source = { editable = "pkg/boldi-githooks" }
 dependencies = [
     { name = "rich" },
@@ -232,7 +228,7 @@ requires-dist = [{ name = "rich" }]
 
 [[package]]
 name = "boldi-plugins"
-version = "0.6.3.dev20+ge3d24c1"
+version = "0.6.3.dev21+g23aa29c"
 source = { editable = "pkg/boldi-plugins" }
 dependencies = [
     { name = "importlib-metadata" },
@@ -243,7 +239,7 @@ requires-dist = [{ name = "importlib-metadata", specifier = ">=3.6" }]
 
 [[package]]
 name = "boldi-proc"
-version = "0.6.3.dev20+ge3d24c1"
+version = "0.6.3.dev21+g23aa29c"
 source = { editable = "pkg/boldi-proc" }
 dependencies = [
     { name = "typing-extensions" },
@@ -254,7 +250,7 @@ requires-dist = [{ name = "typing-extensions" }]
 
 [[package]]
 name = "boldi-webalbum"
-version = "0.6.3.dev20+ge3d24c1"
+version = "0.6.3.dev21+g23aa29c"
 source = { editable = "pkg/boldi-webalbum" }
 dependencies = [
     { name = "jinja2" },

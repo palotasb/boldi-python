@@ -22,11 +22,11 @@ packages = ["."]
 [tool.uv]
 dev-dependencies = [
     # boldi dependencies
-    "boldi",
+    "boldi[dev]",
     "boldi-backup",
     "boldi-build",
     "boldi-cli",
-    "boldi-ctx",
+    "boldi-ctx[dev]",
     "boldi-dev",
     "boldi-githooks",
     "boldi-plugins",
