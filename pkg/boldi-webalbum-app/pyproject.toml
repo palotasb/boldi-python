@@ -14,6 +14,11 @@ dependencies = [
     "Django>=5.1",
 ]
 
+[project.optional-dependencies]
+dev = [
+    "django-stubs",
+]
+
 [build-system]
 requires = ["hatchling", "hatch-vcs"]
 build-backend = "hatchling.build"
