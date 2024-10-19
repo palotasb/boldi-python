@@ -53,7 +53,7 @@ with the following properties:
 * The entry point must refer to a class that inherits from [`boldi.cli.CliAction`].
 * The class must implement the subcommand:
   * The class's `__init__` method must implement the subcommand argument parser.
-  * The class's `do_action` method must implement the feature provided by the subcommand.
+  * The class must call `subparser.set_defaults(action=<some-function>)` to perform an action.
 
 ## API
 

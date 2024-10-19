@@ -1,8 +1,8 @@
-from abc import ABC, abstractmethod
 from argparse import ArgumentParser
+from collections.abc import Callable
 from contextlib import contextmanager
 from dataclasses import dataclass, field
-from typing import Callable, Optional
+from functools import partial
 
 from rich.console import Console
 
@@ -29,7 +29,8 @@ class CliCtx(Ctx):
             self.console = Console(file=self.stderr, highlight=False)
 
 
-class CliAction(ABC):
+@dataclass
+class CliAction:
     """
     Base class for implementing a `boldi` CLI subcommand.
     """
@@ -43,43 +44,26 @@ class CliAction(ABC):
     subparser: ArgumentParser
     """The subcommand [`argparse.ArgumentParser`][] for the `boldi` CLI subcommand implemented by this class."""
 
-    def __init__(self, ctx: CliCtx, parser: ArgumentParser, subparser: ArgumentParser):
-        self.ctx = ctx
-        self.parser = parser
-        self.subparser = subparser
 
-    @abstractmethod
-    def do_action(self, *args, **kwargs):
-        """Implement the feature provided by the CLI subcommand."""
-        raise NotImplementedError
-
-
-class HelpCliAction(CliAction):
-    """Implements the `boldi help` CLI subcommand."""
-
-    def do_action(self):
-        """Prints a help message and exits."""
-        self.parser.print_help()
-
-
-def main(ctx: Optional[CliCtx] = None):
+def main(ctx: CliCtx | None = None):
     """Main entry point that implements the `boldi` CLI."""
     ctx = ctx or CliCtx()
     with ctx:
         ctx.stack.enter_context(error_handler(ctx))
-        parser = ArgumentParser(prog=boldi.__name__)
+        parser = ArgumentParser(prog="boldi")
+        parser.set_defaults(action=partial(parser.print_help, ctx.stderr))
         subparsers = parser.add_subparsers(title="action", help="action to run")
         for plugin in boldi.plugins.load("boldi.cli.action", cls=CliAction):  # type: ignore[type-abstract]
             subparser = subparsers.add_parser(plugin.name)
-            cli_action = plugin.cls(ctx, parser, subparser)
-            subparser.set_defaults(action=cli_action.do_action)
+            subparser.set_defaults(action=partial(subparser.print_help, ctx.stderr))
+            plugin.cls(ctx, parser, subparser)
 
         args = vars(parser.parse_args(ctx.argv[1:]))
-        action: Optional[Callable[..., None]] = args.pop("action", None)
+        action: Callable[..., None] | None = args.pop("action", None)
         if action:
             action(**args)
         else:
-            parser.print_help()
+            parser.print_help(ctx.stderr)
 
 
 @contextmanager

@@ -15,9 +15,6 @@ optional-dependencies = {}
 [project.scripts]
 boldi = "boldi.cli:main"
 
-[project.entry-points."boldi.cli.action"]
-help = "boldi.cli:HelpCliAction"
-
 [build-system]
 requires = ["hatchling", "hatch-vcs"]
 build-backend = "hatchling.build"
