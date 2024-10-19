@@ -4,7 +4,7 @@ description = "Development Metapackage for Boldi's Python libraries"
 authors = [
     { name = "Boldizsár Palotás", email = "boldizsar.palotas@gmail.com" },
 ]
-requires-python = ">=3.9"
+requires-python = ">=3.12"
 readme = "README.md"
 license = { file = "LICENSE" }
 dynamic = ["version"]
@@ -32,6 +32,7 @@ dev-dependencies = [
     "boldi-plugins",
     "boldi-proc",
     "boldi-webalbum",
+    "boldi-webalbum-app[dev]",
     # build dependencies
     "uv",
     "hatch",
@@ -54,6 +55,7 @@ boldi-githooks = { workspace = true }
 boldi-plugins = { workspace = true }
 boldi-proc = { workspace = true }
 boldi-webalbum = { workspace = true }
+boldi-webalbum-app = { workspace = true }
 
 [tool.uv.workspace]
 members = ["pkg/*"]
@@ -81,8 +83,9 @@ packages = [
     "boldi.plugins",
     "boldi.proc",
     "boldi.webalbum",
+    "boldi.webalbum.app",
 ]
-mypy_path = "pkg/boldi:pkg/boldi-backup:pkg/boldi-build:pkg/boldi-cli:pkg/boldi-ctx:pkg/boldi-githooks:pkg/boldi-plugins:pkg/boldi-proc:pkg/boldi-webalbum"
+mypy_path = "pkg/boldi:pkg/boldi-backup:pkg/boldi-build:pkg/boldi-cli:pkg/boldi-ctx:pkg/boldi-githooks:pkg/boldi-plugins:pkg/boldi-proc:pkg/boldi-webalbum:pkg/boldi-webalbum-app"
 check_untyped_defs = true
 
 [tool.pyright]

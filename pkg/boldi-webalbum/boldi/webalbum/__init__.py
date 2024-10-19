@@ -8,8 +8,10 @@ import itertools
 import json
 import logging
 import math
+import pkgutil
 import re
 import shutil
+import tomllib
 from dataclasses import dataclass, field
 from datetime import datetime
 from pathlib import Path
@@ -17,12 +19,13 @@ from typing import Any, Optional
 
 import jinja2
 import pydantic
-import tomllib
 from exiftool import ExifToolHelper  # type: ignore[import-untyped]
 from PIL import Image
 from unidecode import unidecode
 
 from boldi.build import Builder, BuildSystem, FileHandler, Handler, Stamp, Target, stamp_file
+
+__path__ = pkgutil.extend_path(__path__, __name__)
 
 # Asyncio improvements:
 # https://pythonspeed.com/articles/two-thread-pools/

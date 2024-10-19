@@ -4,7 +4,7 @@ description = "boldi.webalbum part of Boldi's Python libraries"
 authors = [
     { name = "Boldizsár Palotás", email = "boldizsar.palotas@gmail.com" },
 ]
-requires-python = ">=3.9"
+requires-python = ">=3.12"
 readme = "../../README.md"
 license = { text = "MIT" }
 dynamic = ["version"]

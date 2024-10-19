@@ -1,21 +1,18 @@
 [project]
-name = "boldi-ctx"
-description = "boldi.ctx part of Boldi's Python libraries"
+name = "boldi-webalbum-app"
+description = "boldi.webalbum.app part of Boldi's Python libraries"
 authors = [
     { name = "Boldizsár Palotás", email = "boldizsar.palotas@gmail.com" },
 ]
-requires-python = ">=3.10"
+requires-python = ">=3.12"
 readme = "../../README.md"
 license = { text = "MIT" }
 dynamic = ["version"]
 
 dependencies = [
-    # boldi libs:
-    "boldi-proc",
+    # boldi:
+    "Django>=5.1",
 ]
-
-[project.optional-dependencies]
-dev = ["typing-extensions"]
 
 [build-system]
 requires = ["hatchling", "hatch-vcs"]
@@ -28,7 +25,7 @@ packages = ["boldi"]
 path = "hatch_hooks.py"
 
 [tool.hatch.build.hooks.vcs]
-version-file = "boldi/_ctx_version.py"
+version-file = "boldi/_webalbum_app_version.py"
 
 [tool.hatch.version]
 source = "vcs"
