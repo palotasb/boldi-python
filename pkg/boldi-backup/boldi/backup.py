@@ -1,14 +1,14 @@
 import argparse
-import functools
 import os
 import os.path
 import re
 from dataclasses import dataclass
+from functools import partial
 from pathlib import Path
 
 import tomli
 
-from boldi.ctx import Ctx
+from boldi.cli import CliCtx
 
 
 @dataclass
@@ -24,7 +24,7 @@ time_format = r"{now:%Y-%m-%d_%H-%M-%S}"
 
 @dataclass
 class Borg:
-    ctx: Ctx
+    ctx: CliCtx
     repo: Path
     mount: Path
     env: dict[str, str]
@@ -38,7 +38,7 @@ class Borg:
         self.ctx.run("borg", *args, env={**os.environ, **self.env}, **kwargs)
 
     @staticmethod
-    def from_config_file(ctx: Ctx, config_file: Path) -> "Borg":
+    def from_config_file(ctx: CliCtx, config_file: Path) -> "Borg":
         with config_file.open("rb") as fp:
             raw_config = tomli.load(fp)
 
@@ -90,15 +90,12 @@ class Borg:
         )
 
 
-def action_help(borg: Borg, parser: argparse.ArgumentParser):
-    parser.print_help(borg.ctx.stderr)
+def cli_backup_borg(ctx: CliCtx, config: Path, command: list[str]):
+    Borg.from_config_file(ctx, config).run_borg(*command)
 
 
-def action_borg(borg: Borg, command: list[str]):
-    borg.run_borg(*command)
-
-
-def action_backup(borg: Borg, only: list[str], borg_args: list[str]):
+def cli_backup_backup(ctx: CliCtx, config: Path, only: list[str], borg_args: list[str]):
+    borg = Borg.from_config_file(ctx, config)
     for item in only:
         assert (
             item in borg.backup_sources
@@ -128,31 +125,33 @@ def action_backup(borg: Borg, only: list[str], borg_args: list[str]):
             )
 
 
-def action_mount(borg: Borg):
+def cli_backup_mount(ctx: CliCtx, config: Path):
+    borg = Borg.from_config_file(ctx, config)
     borg.run_borg("mount ::", [borg.mount])
 
 
-def action_umount(borg: Borg):
+def cli_backup_umount(ctx: CliCtx, config: Path):
+    borg = Borg.from_config_file(ctx, config)
     borg.run_borg("umount", [borg.mount])
 
 
-def main(ctx: Ctx):
-    ctx = ctx or Ctx()
-    parser = argparse.ArgumentParser(prog=Path(ctx.argv[0]).name, description=__doc__)
-    parser.set_defaults(action=functools.partial(action_help, parser=parser))
+def cli_backup(ctx: CliCtx, subparser: argparse.ArgumentParser):
+    subparser.add_argument(
+        "--config",
+        "-c",
+        type=Path,
+        default=Path("~/.config/boldibackup.toml").expanduser(),
+        help="Boldi Borg backup config file",
+    )
 
-    parser.add_argument("--config", "-c", default="~/.config/boldibackup.toml", help="Backup config file")
-
-    subparsers = parser.add_subparsers(title="Command")
-
-    subparsers.add_parser("help", help="Show this help message and exit")
+    subparsers = subparser.add_subparsers(title="Command")
 
     subparser_borg = subparsers.add_parser("borg", help="Run a command with `borg`")
-    subparser_borg.set_defaults(action=action_borg)
+    subparser_borg.set_defaults(action=partial(cli_backup_borg, ctx))
     subparser_borg.add_argument("command", nargs="*", help="Borg command to execute")
 
-    subparser_backup = subparsers.add_parser("backup", help="Perform a backup")
-    subparser_backup.set_defaults(action=action_backup)
+    subparser_backup = subparsers.add_parser("backup", aliases=("do", "run"), help="Perform a backup")
+    subparser_backup.set_defaults(action=partial(cli_backup_backup, ctx))
     subparser_backup.add_argument(
         "--only",
         "-i",
@@ -163,17 +162,7 @@ def main(ctx: Ctx):
     subparser_backup.add_argument("borg_args", nargs="*", help="Additional `borg create` arguments")
 
     subparser_mount = subparsers.add_parser("mount", help="Run `borg mount`")
-    subparser_mount.set_defaults(action=action_mount)
+    subparser_mount.set_defaults(action=partial(cli_backup_mount, ctx))
 
     subparser_umount = subparsers.add_parser("umount", help="Run `borg umount`")
-    subparser_umount.set_defaults(action=action_umount)
-
-    parsed_args = vars(parser.parse_args(ctx.argv[1:]))
-    config_file = Path(parsed_args.pop("config")).expanduser()
-    borg = Borg.from_config_file(ctx, config_file)
-    action = parsed_args.pop("action")
-    action(borg, **parsed_args)
-
-
-if __name__ == "__main__":
-    main(Ctx())
+    subparser_umount.set_defaults(action=partial(cli_backup_umount, ctx))
