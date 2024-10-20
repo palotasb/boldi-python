@@ -6,12 +6,6 @@ from typing import IO, Any, Callable, Iterable, List, Mapping, TypedDict, Union
 
 from typing_extensions import Unpack
 
-SubprocessInput = int
-"""Type definition for the predefined values for file descriptors in the [`subprocess`][] module."""
-
-SubprocessFile = Union[IO, int]
-"""Type definition for the file descriptor arguments for [`RunArgs`][boldi.proc.RunArgs]."""
-
 
 class RunArgs(TypedDict, total=False):
     """
@@ -34,9 +28,9 @@ class RunArgs(TypedDict, total=False):
     process_group: int
     shell: bool
     startupinfo: Any
-    stderr: SubprocessFile
-    stdin: SubprocessFile
-    stdout: SubprocessFile
+    stderr: IO | int
+    stdin: IO | int
+    stdout: IO | int
     text: bool
     timeout: float
     umask: int
