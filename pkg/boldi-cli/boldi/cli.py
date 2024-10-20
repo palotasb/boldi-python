@@ -3,6 +3,7 @@ from collections.abc import Callable
 from contextlib import contextmanager
 from dataclasses import dataclass, field
 from functools import partial
+from inspect import signature
 
 from rich.console import Console
 
@@ -24,25 +25,12 @@ class CliCtx(Ctx):
     console: Console = field(default_factory=_CliCtxDefaultConsole)
     """A rich console that outputs to `self.stderr` by default."""
 
+    parser: ArgumentParser = field(default_factory=ArgumentParser)
+    """The root [`argparse.ArgumentParser`][] for the `boldi` CLI."""
+
     def __post_init__(self):
         if isinstance(self.console, _CliCtxDefaultConsole):
             self.console = Console(file=self.stderr, highlight=False)
-
-
-@dataclass
-class CliAction:
-    """
-    Base class for implementing a `boldi` CLI subcommand.
-    """
-
-    ctx: CliCtx
-    """Context provided for convenience."""
-
-    parser: ArgumentParser
-    """The root [`argparse.ArgumentParser`][] for the `boldi` CLI."""
-
-    subparser: ArgumentParser
-    """The subcommand [`argparse.ArgumentParser`][] for the `boldi` CLI subcommand implemented by this class."""
 
 
 def main(ctx: CliCtx | None = None):
@@ -53,17 +41,27 @@ def main(ctx: CliCtx | None = None):
         parser = ArgumentParser(prog="boldi")
         parser.set_defaults(action=partial(parser.print_help, ctx.stderr))
         subparsers = parser.add_subparsers(title="action", help="action to run")
-        for plugin in boldi.plugins.load("boldi.cli.action", cls=CliAction):  # type: ignore[type-abstract]
+        for plugin in boldi.plugins.load("boldi.cli.action"):  # type: ignore[type-abstract]
             subparser = subparsers.add_parser(plugin.name)
             subparser.set_defaults(action=partial(subparser.print_help, ctx.stderr))
-            plugin.cls(ctx, parser, subparser)
+            _call_with(plugin.impl, ctx=ctx, subparser=subparser)
 
         args = vars(parser.parse_args(ctx.argv[1:]))
         action: Callable[..., None] | None = args.pop("action", None)
-        if action:
-            action(**args)
+        if action and callable(action):
+            _call_with(action, **args)
         else:
             parser.print_help(ctx.stderr)
+
+
+def _call_with(function: Callable[..., None], **kwargs):
+    """Calls `function` with `kwargs`, ignoring excessive kwargs."""
+    sig = signature(function)
+    param_names = tuple(sig.parameters.keys())
+    truncated_kwargs = {k: v for k, v in kwargs.items() if k in param_names}
+    bound_args = sig.bind_partial(**truncated_kwargs)
+    bound_args.apply_defaults()
+    return function(*bound_args.args, **bound_args.kwargs)
 
 
 @contextmanager
