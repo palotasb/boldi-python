@@ -17,6 +17,9 @@ dependencies = [
 [project.scripts]
 pygithooks = "boldi.githooks:main"
 
+[project.entry-points."boldi.cli.action"]
+githooks = "boldi.githooks:cli_githooks"
+
 [build-system]
 requires = ["hatchling", "hatch-vcs"]
 build-backend = "hatchling.build"

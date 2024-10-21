@@ -1,3 +1,6 @@
-from boldi.githooks._pygithooks import main
+from boldi.githooks._pygithooks import cli_githooks, main
 
-__all__ = ["main"]
+__all__ = [
+    "cli_githooks",
+    "main",
+]
