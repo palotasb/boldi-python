@@ -3,7 +3,7 @@ from __future__ import annotations
 import os
 import subprocess
 import sys
-from contextlib import AbstractContextManager, ExitStack
+from contextlib import AbstractContextManager, ExitStack, chdir
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any, List, MutableMapping, TextIO, Union
@@ -58,6 +58,12 @@ class Ctx(AbstractContextManager):
     def __exit__(self, *exc_info) -> bool | None:
         """Exit the context of `self.stack`."""
         return self.stack.__exit__(*exc_info)
+
+    def chdir(self, path: Path):
+        """Change the current working directory to `path` and restore later via `self.stack`."""
+        self.stack.callback(setattr, self, "cwd", self.cwd)
+        self.stack.enter_context(chdir(path))
+        self.cwd = path
 
     def _set_run_kwargs(self, **kwargs: Unpack[RunArgs]):
         kwargs.setdefault("cwd", self.cwd)
