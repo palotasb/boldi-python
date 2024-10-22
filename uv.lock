@@ -86,7 +86,7 @@ requires-dist = [
 
 [[package]]
 name = "boldi-backup"
-version = "0.6.3.dev26+g0301f45"
+version = "0.7.2.dev2+g156915a.d20241020"
 source = { editable = "pkg/boldi-backup" }
 dependencies = [
     { name = "boldi-ctx" },
@@ -140,7 +140,7 @@ requires-dist = [
 
 [[package]]
 name = "boldi-dev"
-version = "0.6.3.dev27+gdef9425.d20241020"
+version = "0.7.2.dev2+g156915a.d20241020"
 source = { editable = "pkg/boldi-dev" }
 dependencies = [
     { name = "boldi-cli" },
@@ -218,18 +218,22 @@ dev = [
 
 [[package]]
 name = "boldi-githooks"
-version = "0.6.3.dev26+g0301f45"
+version = "0.7.2.dev8+g541c60a"
 source = { editable = "pkg/boldi-githooks" }
 dependencies = [
+    { name = "boldi-cli" },
     { name = "rich" },
 ]
 
 [package.metadata]
-requires-dist = [{ name = "rich" }]
+requires-dist = [
+    { name = "boldi-cli", editable = "pkg/boldi-cli" },
+    { name = "rich" },
+]
 
 [[package]]
 name = "boldi-plugins"
-version = "0.6.3.dev27+gdef9425.d20241020"
+version = "0.7.2.dev2+g156915a.d20241020"
 source = { editable = "pkg/boldi-plugins" }
 
 [[package]]
@@ -266,7 +270,7 @@ requires-dist = [
 
 [[package]]
 name = "boldi-webalbum-app"
-version = "0.6.3.dev27+gdef9425.d20241020"
+version = "0.7.2.dev2+g156915a.d20241020"
 source = { editable = "pkg/boldi-webalbum-app" }
 dependencies = [
     { name = "django" },
