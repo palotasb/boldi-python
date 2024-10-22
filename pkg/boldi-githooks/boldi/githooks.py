@@ -73,13 +73,13 @@ GIT_HOOKS: dict[str, GitHook] = {
         GitHook("pre-rebase"),
         GitHook("post-checkout"),
         GitHook("post-merge"),
-        GitHook("pre-push"),
-        GitHook("pre-receive"),
+        # GitHook("pre-push"),  # TODO pass stdin to scripts
+        # GitHook("pre-receive"),  # TODO pass stdin to scripts
         GitHook("update"),
-        # GitHook("proc-receive"), # would require implementing a line protocol
-        GitHook("post-receive"),
+        # GitHook("proc-receive"),  # TODO implement input/output line protocol
+        # GitHook("post-receive"),  # TODO pass stdin to scripts
         GitHook("post-update"),
-        GitHook("reference-transaction"),
+        # GitHook("reference-transaction"),  # TODO pass stdin to scripts
         GitHook("push-to-checkout"),
         GitHook("pre-auto-gc"),
         GitHook("post-rewrite"),
