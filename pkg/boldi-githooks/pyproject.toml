@@ -10,6 +10,8 @@ license = { text = "MIT" }
 dynamic = ["version"]
 
 dependencies = [
+    # boldi:
+    "boldi-cli",
     # public:
     "rich",
 ]
