@@ -1,5 +1,5 @@
 import os
-from argparse import REMAINDER, ArgumentParser
+from argparse import ArgumentParser
 
 
 def cli_webalbum_app(subparser: ArgumentParser):
@@ -8,7 +8,7 @@ def cli_webalbum_app(subparser: ArgumentParser):
 
     subparser_manage = webalbum_app_subparsers.add_parser("manage")
     subparser_manage.set_defaults(action=cli_webalbum_app_manage)
-    subparser_manage.add_argument("args", nargs=REMAINDER, default=[], help="django manage.py arguments")
+    subparser_manage.add_argument("args", nargs="*", default=[], help="django manage.py arguments")
 
 
 def cli_webalbum_app_manage(args):
