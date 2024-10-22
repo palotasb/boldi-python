@@ -108,18 +108,33 @@ class PyGitHooks:
 
     @staticmethod
     def create(ctx: CliCtx, git_repo: Path | None, git_dir: Path | None) -> PyGitHooks:
-        def first_parent_git_repo(path: Path) -> Path:
-            for path in chain([path], path.parents):
-                if (path / ".git").is_dir():
-                    return path
+        if not git_repo and "GIT_WORK_TREE" in ctx.env:
+            git_repo = Path(ctx.env["GIT_WORK_TREE"])
 
+        if not git_dir and "GIT_DIR" in ctx.env:
+            git_dir = Path(ctx.env["GIT_DIR"])
+
+        if not git_repo and not git_dir:
+            for parent in chain([ctx.cwd], ctx.cwd.parents):
+                if (parent / ".git").is_dir():
+                    git_repo = parent
+                    break
+
+        if not git_repo:
             raise CliUsageException(
-                f"not a git repo: {esc(path)}",
-                "[boldi]cd[/] into a git repo, or use [bold]--chdir[/] or [bold]--git-repo[/] to select one.",
+                "git repo not found",
+                "[bold]cd[/] into a git repo [dim]or[/] set git repo path via [bold]--git-repo/-g[/] [dim]or[/] set git repo path via [bold]GIT_WORK_TREE[/]",
             )
 
-        git_repo = git_repo if git_repo else first_parent_git_repo(ctx.cwd)
-        git_dir = git_dir if git_dir else git_repo / ".git"
+        if not git_dir and (_git_dir := git_repo / ".git").is_dir():
+            git_dir = _git_dir
+
+        if not git_dir:
+            raise CliUsageException(
+                ".git dir not found",
+                "[bold]cd[/] into a git repo [dim]or[/] set .git dir path via [bold]--git-dir/-G[/] [dim]or[/] set git dir path via [bold]GIT_DIR[/]",
+            )
+
         pygithooks_path = git_repo / ".pygithooks"
 
         return PyGitHooks(ctx, git_repo, git_dir, pygithooks_path)
@@ -206,7 +221,28 @@ class PyGitHooks:
                     hook=hook.name,
                 )
             )
-            hook_path.chmod(hook_path.stat().st_mode | stat.S_IEXEC)
+            hook_path.chmod(hook_path.stat().st_mode | stat.S_IXUSR)
+
+    def uninstall(self):
+        self.ctx.msg_info(_PGH, "uninstalling pygithooks from", esc(self.git_hooks_path))
+        for hook_path in self.installed_git_hook_paths():
+            hook_path.unlink(missing_ok=True)
+
+    def enable(self):
+        self.ctx.msg_info(_PGH, "enabling pygithooks in", esc(self.git_hooks_path))
+        for hook_path in self.installed_git_hook_paths():
+            hook_path.chmod(hook_path.stat().st_mode | stat.S_IXUSR)
+
+    def disable(self):
+        self.ctx.msg_info(_PGH, "disabling pygithooks in", esc(self.git_hooks_path))
+        for hook_path in self.installed_git_hook_paths():
+            hook_path.chmod(hook_path.stat().st_mode & ~(stat.S_IEXEC | stat.S_IXGRP | stat.S_IXUSR))
+
+    def installed_git_hook_paths(self) -> Iterable[Path]:
+        for hook in GIT_HOOKS.values():
+            hook_path = self.git_hooks_path / hook.name
+            if hook_path.is_file():
+                yield hook_path
 
     def git_hook_scripts(self, git_hook: GitHook) -> Iterable[GitHookScript]:
         top_level = Path(self.pygithooks_path / git_hook.name)
@@ -252,12 +288,17 @@ def cli_githooks(ctx: CliCtx, subparser: argparse.ArgumentParser):
     parser_run.add_argument("hook", choices=GIT_HOOKS.keys(), help="Hook name as defined by Git")
     parser_run.add_argument("args", nargs="*", help="standard git hook arguments")
 
-    parser_install = subparsers.add_parser(
-        "install",
-        description="Install pygithooks in Git project",
-        help="Install pygithooks in Git project",
-    )
+    parser_install = subparsers.add_parser("install", help="Install pygithooks in Git project")
     parser_install.set_defaults(action=partial(cli_githooks_install, ctx))
+
+    parser_uninstall = subparsers.add_parser("uninstall", help="Uninstall pygithooks from Git project")
+    parser_uninstall.set_defaults(action=partial(cli_githooks_uninstall, ctx))
+
+    parser_enable = subparsers.add_parser("enable", help="Enable installed pygithooks in Git project")
+    parser_enable.set_defaults(action=partial(cli_githooks_enable, ctx))
+
+    parser_disable = subparsers.add_parser("disable", help="Disable installed pygithooks in Git project")
+    parser_disable.set_defaults(action=partial(cli_githooks_disable, ctx))
 
 
 def cli_githooks_run(ctx: CliCtx, git_repo: Path | None, git_dir: Path | None, hook: str, args: list[str]):
@@ -266,6 +307,23 @@ def cli_githooks_run(ctx: CliCtx, git_repo: Path | None, git_dir: Path | None, h
 
 def cli_githooks_install(ctx: CliCtx, git_repo: Path | None, git_dir: Path | None):
     PyGitHooks.create(ctx, git_repo, git_dir).install()
+
+
+def cli_githooks_uninstall(ctx: CliCtx, git_repo: Path | None, git_dir: Path | None):
+    PyGitHooks.create(ctx, git_repo, git_dir).uninstall()
+
+
+def cli_githooks_enable(ctx: CliCtx, git_repo: Path | None, git_dir: Path | None):
+    PyGitHooks.create(ctx, git_repo, git_dir).enable()
+
+
+def cli_githooks_disable(ctx: CliCtx, git_repo: Path | None, git_dir: Path | None):
+    PyGitHooks.create(ctx, git_repo, git_dir).disable()
+
+
+def cli_githooks_info(ctx: CliCtx, git_repo: Path | None, git_dir: Path | None):
+    # TODO
+    pass
 
 
 def main(ctx: CliCtx | None = None):
