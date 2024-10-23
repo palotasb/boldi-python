@@ -29,7 +29,7 @@ exit 0
 """
 
 
-_PGH = "[dim bold]pygithooks[/dim bold]:"
+_PGH = "[dim bold]pygithooks[/]:"
 
 
 @dataclass
