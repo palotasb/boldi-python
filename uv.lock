@@ -63,7 +63,7 @@ wheels = [
 
 [[package]]
 name = "boldi"
-version = "0.6.3.dev22+g0185a69.d20241019"
+version = "0.6.3.dev26+g0301f45"
 source = { editable = "pkg/boldi" }
 dependencies = [
     { name = "boldi-cli" },
@@ -86,7 +86,7 @@ requires-dist = [
 
 [[package]]
 name = "boldi-backup"
-version = "0.6.3.dev22+g0185a69.d20241019"
+version = "0.7.2.dev2+g156915a.d20241020"
 source = { editable = "pkg/boldi-backup" }
 dependencies = [
     { name = "boldi-ctx" },
@@ -101,12 +101,12 @@ requires-dist = [
 
 [[package]]
 name = "boldi-build"
-version = "0.6.3.dev22+g0185a69.d20241019"
+version = "0.6.3.dev26+g0301f45"
 source = { editable = "pkg/boldi-build" }
 
 [[package]]
 name = "boldi-cli"
-version = "0.6.3.dev22+g0185a69.d20241019"
+version = "0.6.3.dev26+g0301f45"
 source = { editable = "pkg/boldi-cli" }
 dependencies = [
     { name = "boldi-ctx" },
@@ -121,7 +121,7 @@ requires-dist = [
 
 [[package]]
 name = "boldi-ctx"
-version = "0.6.3.dev22+g0185a69.d20241019"
+version = "0.6.3.dev26+g0301f45"
 source = { editable = "pkg/boldi-ctx" }
 dependencies = [
     { name = "boldi-proc" },
@@ -140,7 +140,7 @@ requires-dist = [
 
 [[package]]
 name = "boldi-dev"
-version = "0.6.3.dev22+g0185a69.d20241019"
+version = "0.7.2.dev2+g156915a.d20241020"
 source = { editable = "pkg/boldi-dev" }
 dependencies = [
     { name = "boldi-cli" },
@@ -167,7 +167,7 @@ requires-dist = [
 
 [[package]]
 name = "boldi-devmetapackage"
-version = "0.6.3.dev22+g0185a69.d20241019"
+version = "0.6.3.dev26+g0301f45.d20241020"
 source = { virtual = "." }
 
 [package.dev-dependencies]
@@ -218,29 +218,27 @@ dev = [
 
 [[package]]
 name = "boldi-githooks"
-version = "0.6.3.dev22+g0185a69.d20241019"
+version = "0.7.2.dev8+g541c60a"
 source = { editable = "pkg/boldi-githooks" }
 dependencies = [
+    { name = "boldi-cli" },
     { name = "rich" },
 ]
 
 [package.metadata]
-requires-dist = [{ name = "rich" }]
+requires-dist = [
+    { name = "boldi-cli", editable = "pkg/boldi-cli" },
+    { name = "rich" },
+]
 
 [[package]]
 name = "boldi-plugins"
-version = "0.6.3.dev22+g0185a69.d20241019"
+version = "0.7.2.dev2+g156915a.d20241020"
 source = { editable = "pkg/boldi-plugins" }
-dependencies = [
-    { name = "importlib-metadata" },
-]
-
-[package.metadata]
-requires-dist = [{ name = "importlib-metadata", specifier = ">=3.6" }]
 
 [[package]]
 name = "boldi-proc"
-version = "0.6.3.dev22+g0185a69.d20241019"
+version = "0.6.3.dev26+g0301f45"
 source = { editable = "pkg/boldi-proc" }
 dependencies = [
     { name = "typing-extensions" },
@@ -251,7 +249,7 @@ requires-dist = [{ name = "typing-extensions" }]
 
 [[package]]
 name = "boldi-webalbum"
-version = "0.6.3.dev22+g0185a69.d20241019"
+version = "0.6.3.dev26+g0301f45"
 source = { editable = "pkg/boldi-webalbum" }
 dependencies = [
     { name = "jinja2" },
@@ -272,7 +270,7 @@ requires-dist = [
 
 [[package]]
 name = "boldi-webalbum-app"
-version = "0.6.3.dev22+g0185a69.d20241019"
+version = "0.7.2.dev2+g156915a.d20241020"
 source = { editable = "pkg/boldi-webalbum-app" }
 dependencies = [
     { name = "django" },
@@ -627,18 +625,6 @@ source = { registry = "https://pypi.org/simple" }
 sdist = { url = "https://files.pythonhosted.org/packages/f1/70/7703c29685631f5a7590aa73f1f1d3fa9a380e654b86af429e0934a32f7d/idna-3.10.tar.gz", hash = "sha256:12f65c9b470abda6dc35cf8e63cc574b1c52b11df2c86030af0ac09b01b13ea9", size = 190490 }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/76/c6/c88e154df9c4e1a2a66ccf0005a88dfb2650c1dffb6f5ce603dfbd452ce3/idna-3.10-py3-none-any.whl", hash = "sha256:946d195a0d259cbba61165e88e65941f16e9b36ea6ddb97f00452bae8b1287d3", size = 70442 },
-]
-
-[[package]]
-name = "importlib-metadata"
-version = "8.5.0"
-source = { registry = "https://pypi.org/simple" }
-dependencies = [
-    { name = "zipp" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/cd/12/33e59336dca5be0c398a7482335911a33aa0e20776128f038019f1a95f1b/importlib_metadata-8.5.0.tar.gz", hash = "sha256:71522656f0abace1d072b9e5481a48f07c138e00f079c38c8f883823f9c26bd7", size = 55304 }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/a0/d9/a1e041c5e7caa9a05c925f4bdbdfb7f006d1f74996af53467bc394c97be7/importlib_metadata-8.5.0-py3-none-any.whl", hash = "sha256:45e54197d28b7a7f1559e60b95e7c567032b602131fbd588f1497f47880aa68b", size = 26514 },
 ]
 
 [[package]]
@@ -1558,15 +1544,6 @@ wheels = [
     { url = "https://files.pythonhosted.org/packages/97/69/cfb2d17ba8aabc73be2e2d03c8c319b1f32053a02c4b571852983aa24ff2/watchdog-5.0.3-py3-none-win32.whl", hash = "sha256:c66f80ee5b602a9c7ab66e3c9f36026590a0902db3aea414d59a2f55188c1f49", size = 79320 },
     { url = "https://files.pythonhosted.org/packages/91/b4/2b5b59358dadfa2c8676322f955b6c22cde4937602f40490e2f7403e548e/watchdog-5.0.3-py3-none-win_amd64.whl", hash = "sha256:f00b4cf737f568be9665563347a910f8bdc76f88c2970121c86243c8cfdf90e9", size = 79325 },
     { url = "https://files.pythonhosted.org/packages/38/b8/0aa69337651b3005f161f7f494e59188a1d8d94171666900d26d29d10f69/watchdog-5.0.3-py3-none-win_ia64.whl", hash = "sha256:49f4d36cb315c25ea0d946e018c01bb028048023b9e103d3d3943f58e109dd45", size = 79324 },
-]
-
-[[package]]
-name = "zipp"
-version = "3.20.2"
-source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/54/bf/5c0000c44ebc80123ecbdddba1f5dcd94a5ada602a9c225d84b5aaa55e86/zipp-3.20.2.tar.gz", hash = "sha256:bc9eb26f4506fda01b81bcde0ca78103b6e62f991b381fec825435c836edbc29", size = 24199 }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/62/8b/5ba542fa83c90e09eac972fc9baca7a88e7e7ca4b221a89251954019308b/zipp-3.20.2-py3-none-any.whl", hash = "sha256:a817ac80d6cf4b23bf7f2828b7cabf326f15a001bea8b1f9b49631780ba28350", size = 9200 },
 ]
 
 [[package]]

@@ -27,10 +27,8 @@ from boldi.plugins import load
 
 ## Usage
 
-Use the [`boldi.plugins.load`][] function to load all entry points (plugin classes) that both:
-
-* match the given entry point `group`, and
-* have the required type (`cls`).
+Use the [`boldi.plugins.load`][] function to load all entry points (plugin classes)
+that match the specified group.
 
 ## API
 

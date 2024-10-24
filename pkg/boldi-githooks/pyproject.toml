@@ -10,12 +10,17 @@ license = { text = "MIT" }
 dynamic = ["version"]
 
 dependencies = [
+    # boldi:
+    "boldi-cli",
     # public:
     "rich",
 ]
 
 [project.scripts]
 pygithooks = "boldi.githooks:main"
+
+[project.entry-points."boldi.cli.action"]
+githooks = "boldi.githooks:cli_githooks"
 
 [build-system]
 requires = ["hatchling", "hatch-vcs"]
