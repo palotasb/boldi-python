@@ -143,7 +143,7 @@ class PyGitHooks:
         try:
             python_bin_path = Path(sys.executable).parent.resolve().as_posix()
             cmd: list[str | Path] = []
-            if git_hook_script.path.stat().st_mode & (stat.S_IXUSR | stat.S_IXGRP | stat.S_IXOTH) != 0:
+            if os.access(git_hook_script.path, os.F_OK | os.X_OK):
                 cmd = [git_hook_script.path]
             elif git_hook_script.path.suffix == ".sh":
                 cmd = ["sh", git_hook_script.path]
@@ -253,14 +253,11 @@ class PyGitHooks:
                 if path.is_file()
             ]
 
-    def run_git(self, *args, **kwargs) -> CompletedProcess:
-        return self.ctx.run("git", *args, **kwargs)
-
     @cached_property
     def git_hooks_path(self) -> Path:
         return Path(
-            self.run_git(
-                "config --get --default",
+            self.ctx.run(
+                "git config --get --default",
                 [self.git_dir / "hooks"],
                 "core.hooksPath",
                 capture_output=True,
@@ -331,7 +328,6 @@ def cli_githooks_info(ctx: CliCtx, git_repo: Path | None, git_dir: Path | None):
     ctx.msg(".git:", esc(pgh.git_dir))
     ctx.msg("git hooks:", esc(pgh.git_hooks_path))
     ctx.msg("pygithooks:", esc(pgh.pygithooks_path))
-    pass
 
 
 def main(ctx: CliCtx | None = None):
