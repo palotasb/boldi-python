@@ -12,7 +12,6 @@ from rich.markup import escape as rich_escape
 from rich.theme import Theme
 from rich.traceback import Traceback
 
-import boldi
 import boldi.plugins
 from boldi.ctx import Ctx
 
