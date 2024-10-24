@@ -300,6 +300,9 @@ def cli_githooks(ctx: CliCtx, subparser: argparse.ArgumentParser):
     parser_disable = subparsers.add_parser("disable", help="Disable installed pygithooks in Git project")
     parser_disable.set_defaults(action=partial(cli_githooks_disable, ctx))
 
+    parser_info = subparsers.add_parser("info", help="Info about pygithooks in Git project")
+    parser_info.set_defaults(action=partial(cli_githooks_info, ctx))
+
 
 def cli_githooks_run(ctx: CliCtx, git_repo: Path | None, git_dir: Path | None, hook: str, args: list[str]):
     PyGitHooks.create(ctx, git_repo, git_dir).run(hook=hook, args=args)
@@ -322,7 +325,12 @@ def cli_githooks_disable(ctx: CliCtx, git_repo: Path | None, git_dir: Path | Non
 
 
 def cli_githooks_info(ctx: CliCtx, git_repo: Path | None, git_dir: Path | None):
-    # TODO
+    pgh = PyGitHooks.create(ctx, git_repo, git_dir)
+    ctx.msg("cwd:", esc(ctx.cwd))
+    ctx.msg("repo:", esc(pgh.git_repo))
+    ctx.msg(".git:", esc(pgh.git_dir))
+    ctx.msg("git hooks:", esc(pgh.git_hooks_path))
+    ctx.msg("pygithooks:", esc(pgh.pygithooks_path))
     pass
 
 
