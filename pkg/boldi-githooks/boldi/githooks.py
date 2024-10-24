@@ -143,7 +143,7 @@ class PyGitHooks:
         try:
             python_bin_path = Path(sys.executable).parent.resolve().as_posix()
             cmd: list[str | Path] = []
-            if git_hook_script.path.stat().st_mode & stat.S_IEXEC == stat.S_IEXEC:
+            if git_hook_script.path.stat().st_mode & (stat.S_IXUSR | stat.S_IXGRP | stat.S_IXOTH) != 0:
                 cmd = [git_hook_script.path]
             elif git_hook_script.path.suffix == ".sh":
                 cmd = ["sh", git_hook_script.path]
