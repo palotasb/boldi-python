@@ -57,24 +57,26 @@ class Borg:
                 "source_dir" in raw_src_config
             ), f"backup.{raw_src_name} must contain 'source_dir', but got {raw_src_config.keys()}"
             source_dir = raw_src_config["source_dir"]
-            if isinstance(source_dir, str):
-                source_dirs = [Path(source_dir).expanduser()]
-            elif isinstance(source_dir, list):
-                source_dirs = [Path(item).expanduser() for item in source_dir]
-            else:
-                assert isinstance(
-                    source_dir, (str, list)
-                ), f"backup.{raw_src_name}.source_dir must be a string or list of strings"
+            assert isinstance(
+                source_dir, (str, list)
+            ), f"backup.{raw_src_name}.source_dir must be a string or list of strings"
+            source_dirs = (
+                [Path(source_dir).expanduser()]
+                if isinstance(source_dir, str)
+                else [Path(item).expanduser() for item in source_dir]
+            )
 
             excludes = raw_src_config.get("exclude", [])
+            assert isinstance(
+                excludes, (str, list)
+            ), f"backup.{raw_src_name}.excludes must be a string or list of strings"
             if isinstance(excludes, str):
-                excludes = [Path(excludes).expanduser() if excludes.startswith("~") else excludes]
+                excludes = [Path(excludes).expanduser()]
             if isinstance(excludes, list):
-                excludes = [str(Path(item).expanduser()) if item.startswith("~") else item for item in excludes]
-            else:
-                assert isinstance(
-                    excludes, (str, list)
+                assert all(
+                    isinstance(item, str) for item in excludes
                 ), f"backup.{raw_src_name}.excludes must be a string or list of strings"
+                excludes = [Path(item).expanduser() for item in excludes]
 
             backup_sources[archive_name] = BackupSource(archive_name, source_dirs, excludes)
 
