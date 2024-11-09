@@ -9,19 +9,8 @@ readme = "README.md"
 license = { file = "LICENSE" }
 dynamic = ["version"]
 
-[build-system]
-requires = ["hatchling", "hatch-vcs", "packaging"]
-build-backend = "hatchling.build"
-
-[tool.hatch.version]
-source = "vcs"
-
-[tool.hatch.build]
-packages = ["."]
-
-[tool.uv]
-dev-dependencies = [
-    # boldi dependencies
+[dependency-groups]
+dev = [    # boldi dependencies
     "boldi[dev]",
     "boldi-backup",
     "boldi-build",
@@ -42,6 +31,18 @@ dev-dependencies = [
     "setuptools_scm",
     "packaging",
 ]
+
+[build-system]
+requires = ["hatchling", "hatch-vcs", "packaging"]
+build-backend = "hatchling.build"
+
+[tool.hatch.version]
+source = "vcs"
+
+[tool.hatch.build]
+packages = ["."]
+
+[tool.uv]
 package = false
 
 [tool.uv.sources]
