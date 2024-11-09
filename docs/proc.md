@@ -1,21 +1,55 @@
 # Process module
 
-The Process module provides a friendlier interface to [`subprocess.run`][].
+The Process module provides a friendlier wrapper around [`subprocess.run`][].
+
+## String argument processing
 
 ```py
-from boldi.proc import run, run_py
-from pathlib import Path
+from boldi.proc import run
 
-run("sh -c", ["msg=$1; subj=$2; echo \"$msg, $subj!\""], "-s", ["Hello", "My Friend"])
-# Hello, My Friend!
-# CompletedProcess(args=['sh', '-euc', 'msg=$1; subj=$2; echo "$msg, $subj!"', '-s', 'Hello', 'My Friend'], returncode=0)
-
-run_py("-c", ["import sys; print(f'{sys.argv!r}')"], [Path(r"C:\Documents and Setting\Spacey Jane")])
-# ['-c', 'C:\\Documents and Setting\\Spacey Jane']
-# CompletedProcess(args=['/Users/example/boldi-python/.venv/bin/python', '-c', "import sys; print(f'{sys.argv!r}')", 'C:\\Documents and Setting\\Spacey Jane'], returncode=0)
+run("echo 'Hello, World!'")
+# Prints: Hello, World!
+# Returns: CompletedProcess(args=['echo', 'Hello, World!'], returncode=0)
 ```
 
-For more details see [`run()`](#run) and [`run_py()`](#run_py).
+As you can see from the return value, `echo` was invoked with one argument: `"Hello, World!"`.
+Simple string args passed to `run()` are processed via [`shlex.split`][].
+
+## Quoting arguments
+
+Another way to quote arguments is to pass them inside a list.
+
+```py
+from boldi.proc import run
+
+run("echo", ["Hello, World!"])
+# Prints: Hello, World!
+# Returns: CompletedProcess(args=['echo', 'Hello, World!'], returncode=0)
+```
+
+This example is equivalent to the previous one.
+
+Think of the `[` list `]` as a way of quoting arguments,
+telling the `run()` function not to further process those arguments.
+
+## Other positional arguments
+
+Other types of positional arguments are converted to [`str`][]
+and directly passed as arguments to the subprocess.
+
+This is useful for passing numbers or [`pathlib.Path`][] objects that may contain spaces.
+
+## Keyword arguments
+
+Keyword arguments are the same as in [`subprocess.run`][] except that a few default values are different.
+
+See the [`boldi.proc.run`][] API docs for details.
+
+## Running Python scripts
+
+The [`run_py()`][boldi.proc.run_py] function is a shortcut for running Python scripts.
+It correctly selects the current Python interpreter ([`sys.executable`][]) as the first argument.
+All other arguments are the same as in [`run()`][boldi.proc.run].
 
 ## Install
 
@@ -38,46 +72,6 @@ import boldi.proc
 # or:
 from boldi.proc import run, run_py
 ```
-
-## Usage
-
-### `run()`
-
-Use the [`run()`][boldi.proc.run] function to call a subprocess like a function.
-
-The program and the command line arguments can be passed as any number of positional arguments.
-
-```py
-from boldi.proc import run
-
-run("sh -c", ["msg=$1; subj=$2; echo \"$msg, $subj!\""], "-s", ["Hello", "My Friend"])
-# Hello, My Friend!
-# CompletedProcess(args=['sh', '-c', 'msg=$1; subj=$2; echo "$msg, $subj!"', '-s', 'Hello', 'My Friend'], returncode=0)
-```
-
-* String-type positional arguments are split using [`shlex.split`][] into further arguments.
-* Items inside [`list`][]-type positional arguments are converted to [`str`][], but not split into further arguments.
-  
-This allows conveniently passing multiple arguments as a single string.
-Enclosing values in `[` square brackets `]` can be thought of as a way of quoting arguments to prevent splitting.
-
-Any keyword argument is passed on to [`subprocess.run`][] after defaults are applied.
-
-### `run_py()`
-
-Use the [`run_py()`][boldi.proc.run_py] function to call a Python script or module subprocess like a function.
-
-```py
-from boldi.proc import run_py
-from pathlib import Path
-
-run_py("-c", ["import sys; print(f'{sys.argv!r}')"], [Path(r"C:\Documents and Setting\Spacey Jane")])
-# ['-c', 'C:\\Documents and Setting\\Spacey Jane']
-# CompletedProcess(args=['/Users/example/boldi-python/.venv/bin/python', '-c', "import sys; print(f'{sys.argv!r}')", 'C:\\Documents and Setting\\Spacey Jane'], returncode=0)
-```
-
-Positional and keyword arguments are the same as with [`run()`](#run),
-except [`sys.executable`][] is automatically added as the first argument.
 
 ## API
 

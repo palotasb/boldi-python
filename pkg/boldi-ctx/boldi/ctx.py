@@ -73,13 +73,13 @@ class Ctx(AbstractContextManager):
             kwargs.setdefault("stdout", self.stdout)
             kwargs.setdefault("stderr", self.stderr)
 
-    def run(self, *arg_groups: Union[str, List[Any]], **kwargs: Unpack[RunArgs]) -> subprocess.CompletedProcess:
+    def run(self, *args: Union[str, List[Any]], **kwargs: Unpack[RunArgs]) -> subprocess.CompletedProcess:
         """
         Run a subprocess using the provided command line arguments and updated defaults.
 
         Args:
-            arg_groups: Groups of command line arguments, provided as positional arguments.
-                As defined in [`boldi.proc.split_args`][].
+            args: Command line arguments, provided as positional arguments.
+                As defined in [`boldi.proc.args_iter`][].
             kwargs: Arguments to [`subprocess.run`][].
                 Defaults to `check=True`, `text=True`, and values set in `self.{stdin,stdout,stderr,env,cwd}`,
                 unless otherwise set by the caller.
@@ -88,19 +88,19 @@ class Ctx(AbstractContextManager):
             Completed process object.
         """
         self._set_run_kwargs(**kwargs)
-        return _run(*arg_groups, **kwargs)
+        return _run(*args, **kwargs)
 
-    def run_py(self, *arg_groups: Union[str, List[Any]], **kwargs: Unpack[RunArgs]) -> subprocess.CompletedProcess:
+    def run_py(self, *args: Union[str, List[Any]], **kwargs: Unpack[RunArgs]) -> subprocess.CompletedProcess:
         """
         Run a subprocess using the current Python interpreter, the provided command line arguments and updated defaults.
 
         Args:
-            arg_groups: Groups of command line arguments, provided as positional arguments.
-                As defined in [`boldi.proc.split_args`][].
+            args: Command line arguments, provided as positional arguments.
+                As defined in [`boldi.proc.args_iter`][].
             kwargs: Arguments to [`subprocess.run`][]. As defined in [`run`][boldi.ctx.Ctx.run].
 
         Returns:
             Completed process object.
         """
         self._set_run_kwargs(**kwargs)
-        return _run_py(*arg_groups, **kwargs)
+        return _run_py(*args, **kwargs)

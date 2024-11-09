@@ -38,15 +38,16 @@ class RunArgs(TypedDict, total=False):
     user: str | int
 
 
-def split_args(*arg_groups: Union[str, List[Any]]) -> List[str]:
+def args_iter(*args: Union[str, List[Any]]) -> Iterable[str]:
     """
-    Flatten groups of command line arguments into a simple list of arguments.
+    Split mixed and/or quoted command line arguments into a simple list of arguments.
 
     Args:
-        arg_groups: Groups of command line arguments, provided as positional arguments.
-            Each "arg group" is either a string or a sub-list of arbitrary objects.
+        args: Command line arguments, provided as positional arguments.
+            Each argument is processed differently depending on its type.
             Strings are split using [`shlex.split`][] into further arguments.
-            Sub-list items are converted to [`str`][], but not split further.
+            Lists are replaced by their contents (each item converted to a string).
+            Other types are converted to strings using [`str`][].
 
     Returns:
         A flat list of command line arguments.
@@ -56,8 +57,8 @@ def split_args(*arg_groups: Union[str, List[Any]]) -> List[str]:
 
         ```py
         result = ["prog", "-a=b", "d e", "f"]
-        assert split_args("prog -a=b 'd e' f") == result
-        assert split_args("prog -a=b", ["d e"], "f") == result
+        assert list(args_iter("prog -a=b 'd e' f")) == result
+        assert list(args_iter("prog -a=b", ["d e"], "f")) == result
         ```
 
         Any argument can be given either as a string or a list,
@@ -65,21 +66,27 @@ def split_args(*arg_groups: Union[str, List[Any]]) -> List[str]:
 
         ```py
         result = ["prog", "-a=b", "d e", "f"]
-        assert split_args("prog -a=b", "'d e' f") == result
-        assert split_args("prog", "-a=b", '"d e"', "f") == result
-        assert split_args(["prog", "-a=b", "d e", "f"]) == result
+        assert list(args_iter("prog -a=b", "'d e' f")) == result
+        assert list(args_iter("prog", "-a=b", '"d e"', "f")) == result
+        assert list(args_iter(["prog", "-a=b", "d e", "f"])) == result
         ```
     """
-    return [str(sub_arg) for args in arg_groups for sub_arg in (shlex.split(args) if isinstance(args, str) else args)]
+    for arg in args:
+        if isinstance(arg, str):
+            yield from shlex.split(arg)
+        elif isinstance(arg, list):
+            yield from (str(sub_arg) for sub_arg in arg)
+        else:
+            yield str(arg)
 
 
-def run(*arg_groups: Union[str, List[Any]], **kwargs: Unpack[RunArgs]) -> subprocess.CompletedProcess:
+def run(*args: Union[str, List[Any]], **kwargs: Unpack[RunArgs]) -> subprocess.CompletedProcess:
     """
     Run a subprocess using the provided command line arguments and updated defaults.
 
     Args:
-        arg_groups: Groups of command line arguments, provided as positional arguments.
-            As defined in [`split_args`][boldi.proc.split_args].
+        args: Command line arguments, provided as positional arguments.
+            As defined in [`args_iter`][boldi.proc.args_iter].
         kwargs: Arguments to [`subprocess.run`][].
             Defaults to `check=True`, `text=True`, and connecting to `sys.{stdin, stdout, stderr}`,
             unless otherwise set by the caller.
@@ -93,20 +100,20 @@ def run(*arg_groups: Union[str, List[Any]], **kwargs: Unpack[RunArgs]) -> subpro
         kwargs.setdefault("stdin", sys.stdin)
         kwargs.setdefault("stdout", sys.stdout)
         kwargs.setdefault("stderr", sys.stderr)
-    args_list = split_args(*arg_groups)
+    args_list = list(args_iter(*args))
     return subprocess.run(args_list, **kwargs)
 
 
-def run_py(*arg_groups: Union[str, List[Any]], **kwargs: Unpack[RunArgs]) -> subprocess.CompletedProcess:
+def run_py(*args: Union[str, List[Any]], **kwargs: Unpack[RunArgs]) -> subprocess.CompletedProcess:
     """
     Run a subprocess using the current Python interpreter, the provided command line arguments and updated defaults.
 
     Args:
-        arg_groups: Groups of command line arguments, provided as positional arguments.
-            As defined in [`split_args`][boldi.proc.split_args].
+        args: Command line arguments, provided as positional arguments.
+            As defined in [`args_iter`][boldi.proc.args_iter].
         kwargs: Arguments to [`subprocess.run`][]. As defined in [`run`][boldi.proc.run].
 
     Returns:
         Completed process object.
     """
-    return run([sys.executable], *arg_groups, **kwargs)
+    return run([sys.executable], *args, **kwargs)
