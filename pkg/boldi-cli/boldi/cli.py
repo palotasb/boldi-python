@@ -59,6 +59,7 @@ class CliCtx(Ctx):
             self.console = Console(file=self.stderr, theme=_THEME, highlight=False)
 
     def msg(self, *args, **kwargs):
+        """Prints a message to `self.console`."""
         self.console.print(*args, **kwargs)
 
     msg_info = partialmethod(msg, style="info")
