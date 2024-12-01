@@ -8,6 +8,7 @@ resolution-markers = [
 [manifest]
 members = [
     "boldi",
+    "boldi-aoc",
     "boldi-backup",
     "boldi-build",
     "boldi-cli",
@@ -63,7 +64,7 @@ wheels = [
 
 [[package]]
 name = "boldi"
-version = "0.7.2.dev2+g50dac8a.d20241109"
+version = "0.8.1.dev1+g7784ef2.d20241110"
 source = { editable = "pkg/boldi" }
 dependencies = [
     { name = "boldi-cli" },
@@ -85,8 +86,19 @@ requires-dist = [
 ]
 
 [[package]]
+name = "boldi-aoc"
+version = "0.8.1.dev1+g7784ef2.d20241201"
+source = { editable = "pkg/boldi-aoc" }
+dependencies = [
+    { name = "boldi-cli" },
+]
+
+[package.metadata]
+requires-dist = [{ name = "boldi-cli", editable = "pkg/boldi-cli" }]
+
+[[package]]
 name = "boldi-backup"
-version = "0.7.2.dev2+g50dac8a.d20241109"
+version = "0.8.1.dev1+g7784ef2.d20241110"
 source = { editable = "pkg/boldi-backup" }
 dependencies = [
     { name = "boldi-ctx" },
@@ -101,12 +113,12 @@ requires-dist = [
 
 [[package]]
 name = "boldi-build"
-version = "0.7.2.dev2+g50dac8a.d20241109"
+version = "0.8.1.dev1+g7784ef2.d20241110"
 source = { editable = "pkg/boldi-build" }
 
 [[package]]
 name = "boldi-cli"
-version = "0.7.2.dev2+g50dac8a.d20241109"
+version = "0.8.1.dev1+g7784ef2.d20241110"
 source = { editable = "pkg/boldi-cli" }
 dependencies = [
     { name = "boldi-ctx" },
@@ -121,7 +133,7 @@ requires-dist = [
 
 [[package]]
 name = "boldi-ctx"
-version = "0.7.2.dev2+g50dac8a.d20241109"
+version = "0.8.1.dev1+g7784ef2.d20241110"
 source = { editable = "pkg/boldi-ctx" }
 dependencies = [
     { name = "boldi-proc" },
@@ -140,7 +152,7 @@ requires-dist = [
 
 [[package]]
 name = "boldi-dev"
-version = "0.7.2.dev2+g50dac8a.d20241109"
+version = "0.8.1.dev1+g7784ef2.d20241110"
 source = { editable = "pkg/boldi-dev" }
 dependencies = [
     { name = "boldi-cli" },
@@ -167,12 +179,13 @@ requires-dist = [
 
 [[package]]
 name = "boldi-devmetapackage"
-version = "0.7.2.dev2+g50dac8a.d20241109"
+version = "0.8.1.dev1+g7784ef2.d20241201"
 source = { virtual = "." }
 
 [package.dev-dependencies]
 dev = [
     { name = "boldi", extra = ["dev"] },
+    { name = "boldi-aoc" },
     { name = "boldi-backup" },
     { name = "boldi-build" },
     { name = "boldi-cli" },
@@ -197,6 +210,7 @@ dev = [
 [package.metadata.requires-dev]
 dev = [
     { name = "boldi", extras = ["dev"], editable = "pkg/boldi" },
+    { name = "boldi-aoc", editable = "pkg/boldi-aoc" },
     { name = "boldi-backup", editable = "pkg/boldi-backup" },
     { name = "boldi-build", editable = "pkg/boldi-build" },
     { name = "boldi-cli", editable = "pkg/boldi-cli" },
@@ -218,7 +232,7 @@ dev = [
 
 [[package]]
 name = "boldi-githooks"
-version = "0.7.2.dev2+g50dac8a.d20241109"
+version = "0.8.1.dev1+g7784ef2.d20241110"
 source = { editable = "pkg/boldi-githooks" }
 dependencies = [
     { name = "boldi-cli" },
@@ -233,12 +247,12 @@ requires-dist = [
 
 [[package]]
 name = "boldi-plugins"
-version = "0.7.2.dev2+g50dac8a.d20241109"
+version = "0.8.1.dev1+g7784ef2.d20241110"
 source = { editable = "pkg/boldi-plugins" }
 
 [[package]]
 name = "boldi-proc"
-version = "0.7.2.dev2+g50dac8a.d20241109"
+version = "0.8.1.dev1+g7784ef2.d20241110"
 source = { editable = "pkg/boldi-proc" }
 dependencies = [
     { name = "typing-extensions" },
@@ -249,7 +263,7 @@ requires-dist = [{ name = "typing-extensions" }]
 
 [[package]]
 name = "boldi-webalbum"
-version = "0.7.2.dev2+g50dac8a.d20241109"
+version = "0.8.1.dev1+g7784ef2.d20241110"
 source = { editable = "pkg/boldi-webalbum" }
 dependencies = [
     { name = "jinja2" },
@@ -270,7 +284,7 @@ requires-dist = [
 
 [[package]]
 name = "boldi-webalbum-app"
-version = "0.7.2.dev2+g50dac8a.d20241109"
+version = "0.8.1.dev1+g7784ef2.d20241110"
 source = { editable = "pkg/boldi-webalbum-app" }
 dependencies = [
     { name = "django" },
