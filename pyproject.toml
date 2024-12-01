@@ -12,6 +12,7 @@ dynamic = ["version"]
 [dependency-groups]
 dev = [    # boldi dependencies
     "boldi[dev]",
+    "boldi-aoc",
     "boldi-backup",
     "boldi-build",
     "boldi-cli",
@@ -48,6 +49,7 @@ package = false
 
 [tool.uv.sources]
 boldi = { workspace = true }
+boldi-aoc = { workspace = true }
 boldi-backup = { workspace = true }
 boldi-build = { workspace = true }
 boldi-cli = { workspace = true }
@@ -78,6 +80,7 @@ known-first-party = ["boldi", "boldi.*"]
 [tool.mypy]
 packages = [
     "boldi",
+    # "boldi.aoc",
     "boldi.backup",
     "boldi.build",
     "boldi.cli",
