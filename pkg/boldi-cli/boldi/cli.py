@@ -83,7 +83,7 @@ def main(ctx: CliCtx | None = None):
         parser.add_argument("--chdir", "-C", type=Path, help="change working directory")
 
         subparsers = parser.add_subparsers(title="action", help="action to run")
-        for plugin in boldi.plugins.load("boldi.cli.action"):  # type: ignore[type-abstract]
+        for plugin in boldi.plugins.load("boldi.cli.action"):
             subparser = subparsers.add_parser(plugin.name)
             subparser.set_defaults(action=partial(subparser.print_help, ctx.stderr))
             _call_with(plugin.impl, ctx=ctx, subparser=subparser)

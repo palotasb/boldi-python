@@ -12,6 +12,7 @@ dynamic = ["version"]
 [dependency-groups]
 dev = [    # boldi dependencies
     "boldi[dev]",
+    "boldi-api",
     "boldi-backup",
     "boldi-build",
     "boldi-cli",
@@ -47,6 +48,7 @@ package = false
 
 [tool.uv.sources]
 boldi = { workspace = true }
+boldi-api = { workspace = true }
 boldi-backup = { workspace = true }
 boldi-build = { workspace = true }
 boldi-cli = { workspace = true }
@@ -76,6 +78,7 @@ known-first-party = ["boldi", "boldi.*"]
 [tool.mypy]
 packages = [
     "boldi",
+    "boldi.api",
     "boldi.backup",
     "boldi.build",
     "boldi.cli",
@@ -86,7 +89,7 @@ packages = [
     "boldi.webalbum",
     "boldi.webalbum.app",
 ]
-mypy_path = "pkg/boldi:pkg/boldi-backup:pkg/boldi-build:pkg/boldi-cli:pkg/boldi-ctx:pkg/boldi-githooks:pkg/boldi-plugins:pkg/boldi-proc:pkg/boldi-webalbum:pkg/boldi-webalbum-app"
+mypy_path = "pkg/boldi:pkg/boldi-api:pkg/boldi-backup:pkg/boldi-build:pkg/boldi-cli:pkg/boldi-ctx:pkg/boldi-githooks:pkg/boldi-plugins:pkg/boldi-proc:pkg/boldi-webalbum:pkg/boldi-webalbum-app"
 check_untyped_defs = true
 plugins = ["mypy_django_plugin.main"]
 

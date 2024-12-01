@@ -8,6 +8,7 @@ resolution-markers = [
 [manifest]
 members = [
     "boldi",
+    "boldi-api",
     "boldi-backup",
     "boldi-build",
     "boldi-cli",
@@ -63,7 +64,7 @@ wheels = [
 
 [[package]]
 name = "boldi"
-version = "0.7.2.dev2+g50dac8a.d20241109"
+version = "0.8.1.dev1+g7784ef2.d20241110"
 source = { editable = "pkg/boldi" }
 dependencies = [
     { name = "boldi-cli" },
@@ -85,8 +86,27 @@ requires-dist = [
 ]
 
 [[package]]
+name = "boldi-api"
+version = "0.8.1.dev1+g7784ef2.d20241110"
+source = { editable = "pkg/boldi-api" }
+dependencies = [
+    { name = "django" },
+]
+
+[package.optional-dependencies]
+dev = [
+    { name = "django-stubs" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "django", specifier = ">=5.1" },
+    { name = "django-stubs", marker = "extra == 'dev'" },
+]
+
+[[package]]
 name = "boldi-backup"
-version = "0.7.2.dev2+g50dac8a.d20241109"
+version = "0.8.1.dev1+g7784ef2.d20241110"
 source = { editable = "pkg/boldi-backup" }
 dependencies = [
     { name = "boldi-ctx" },
@@ -101,12 +121,12 @@ requires-dist = [
 
 [[package]]
 name = "boldi-build"
-version = "0.7.2.dev2+g50dac8a.d20241109"
+version = "0.8.1.dev1+g7784ef2.d20241110"
 source = { editable = "pkg/boldi-build" }
 
 [[package]]
 name = "boldi-cli"
-version = "0.7.2.dev2+g50dac8a.d20241109"
+version = "0.8.1.dev1+g7784ef2.d20241110"
 source = { editable = "pkg/boldi-cli" }
 dependencies = [
     { name = "boldi-ctx" },
@@ -121,7 +141,7 @@ requires-dist = [
 
 [[package]]
 name = "boldi-ctx"
-version = "0.7.2.dev2+g50dac8a.d20241109"
+version = "0.8.1.dev1+g7784ef2.d20241110"
 source = { editable = "pkg/boldi-ctx" }
 dependencies = [
     { name = "boldi-proc" },
@@ -140,7 +160,7 @@ requires-dist = [
 
 [[package]]
 name = "boldi-dev"
-version = "0.7.2.dev2+g50dac8a.d20241109"
+version = "0.8.1.dev1+g7784ef2.d20241110"
 source = { editable = "pkg/boldi-dev" }
 dependencies = [
     { name = "boldi-cli" },
@@ -167,12 +187,13 @@ requires-dist = [
 
 [[package]]
 name = "boldi-devmetapackage"
-version = "0.7.2.dev2+g50dac8a.d20241109"
+version = "0.8.1.dev1+g7784ef2.d20241110"
 source = { virtual = "." }
 
 [package.dev-dependencies]
 dev = [
     { name = "boldi", extra = ["dev"] },
+    { name = "boldi-api" },
     { name = "boldi-backup" },
     { name = "boldi-build" },
     { name = "boldi-cli" },
@@ -197,6 +218,7 @@ dev = [
 [package.metadata.requires-dev]
 dev = [
     { name = "boldi", extras = ["dev"], editable = "pkg/boldi" },
+    { name = "boldi-api", editable = "pkg/boldi-api" },
     { name = "boldi-backup", editable = "pkg/boldi-backup" },
     { name = "boldi-build", editable = "pkg/boldi-build" },
     { name = "boldi-cli", editable = "pkg/boldi-cli" },
@@ -218,7 +240,7 @@ dev = [
 
 [[package]]
 name = "boldi-githooks"
-version = "0.7.2.dev2+g50dac8a.d20241109"
+version = "0.8.1.dev1+g7784ef2.d20241110"
 source = { editable = "pkg/boldi-githooks" }
 dependencies = [
     { name = "boldi-cli" },
@@ -233,12 +255,12 @@ requires-dist = [
 
 [[package]]
 name = "boldi-plugins"
-version = "0.7.2.dev2+g50dac8a.d20241109"
+version = "0.8.1.dev1+g7784ef2.d20241110"
 source = { editable = "pkg/boldi-plugins" }
 
 [[package]]
 name = "boldi-proc"
-version = "0.7.2.dev2+g50dac8a.d20241109"
+version = "0.8.1.dev1+g7784ef2.d20241110"
 source = { editable = "pkg/boldi-proc" }
 dependencies = [
     { name = "typing-extensions" },
@@ -249,7 +271,7 @@ requires-dist = [{ name = "typing-extensions" }]
 
 [[package]]
 name = "boldi-webalbum"
-version = "0.7.2.dev2+g50dac8a.d20241109"
+version = "0.8.1.dev1+g7784ef2.d20241110"
 source = { editable = "pkg/boldi-webalbum" }
 dependencies = [
     { name = "jinja2" },
@@ -270,7 +292,7 @@ requires-dist = [
 
 [[package]]
 name = "boldi-webalbum-app"
-version = "0.7.2.dev2+g50dac8a.d20241109"
+version = "0.8.1.dev1+g7784ef2.d20241110"
 source = { editable = "pkg/boldi-webalbum-app" }
 dependencies = [
     { name = "django" },
@@ -562,7 +584,7 @@ wheels = [
 
 [[package]]
 name = "hatchling"
-version = "1.25.0"
+version = "1.26.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "packaging" },
@@ -570,9 +592,9 @@ dependencies = [
     { name = "pluggy" },
     { name = "trove-classifiers" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/a3/51/8a4a67a8174ce59cf49e816e38e9502900aea9b4af672d0127df8e10d3b0/hatchling-1.25.0.tar.gz", hash = "sha256:7064631a512610b52250a4d3ff1bd81551d6d1431c4eb7b72e734df6c74f4262", size = 64632 }
+sdist = { url = "https://files.pythonhosted.org/packages/d4/76/16b5dd2245a33fe32170c72300e4412b1238001ac73652ae3f03317a6752/hatchling-1.26.0.tar.gz", hash = "sha256:e572ab5bb4d9546893beab5cf1da06094e028c1784ca6315d293d7e4d9bb87d7", size = 54720 }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/0c/8b/90e80904fdc24ce33f6fc6f35ebd2232fe731a8528a22008458cf197bc4d/hatchling-1.25.0-py3-none-any.whl", hash = "sha256:b47948e45d4d973034584dd4cb39c14b6a70227cf287ab7ec0ad7983408a882c", size = 84077 },
+    { url = "https://files.pythonhosted.org/packages/08/cf/1137c486d2692fde4bd3278827f8d80ae20cd0044ce1b719792edf4fa197/hatchling-1.26.0-py3-none-any.whl", hash = "sha256:99f8f689d9cd9789f29b9b8860e8fb6e66625496dbaa75fa62482e9fdeab47a6", size = 74953 },
 ]
 
 [[package]]
