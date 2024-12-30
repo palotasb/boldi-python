@@ -63,7 +63,7 @@ wheels = [
 
 [[package]]
 name = "boldi"
-version = "0.7.2.dev2+g50dac8a.d20241109"
+version = "0.8.1.dev1+g7784ef2.d20241110"
 source = { editable = "pkg/boldi" }
 dependencies = [
     { name = "boldi-cli" },
@@ -86,7 +86,7 @@ requires-dist = [
 
 [[package]]
 name = "boldi-backup"
-version = "0.7.2.dev2+g50dac8a.d20241109"
+version = "0.8.1.dev1+g7784ef2.d20241110"
 source = { editable = "pkg/boldi-backup" }
 dependencies = [
     { name = "boldi-ctx" },
@@ -101,12 +101,12 @@ requires-dist = [
 
 [[package]]
 name = "boldi-build"
-version = "0.7.2.dev2+g50dac8a.d20241109"
+version = "0.8.1.dev1+g7784ef2.d20241110"
 source = { editable = "pkg/boldi-build" }
 
 [[package]]
 name = "boldi-cli"
-version = "0.7.2.dev2+g50dac8a.d20241109"
+version = "0.8.1.dev1+g7784ef2.d20241110"
 source = { editable = "pkg/boldi-cli" }
 dependencies = [
     { name = "boldi-ctx" },
@@ -121,7 +121,7 @@ requires-dist = [
 
 [[package]]
 name = "boldi-ctx"
-version = "0.7.2.dev2+g50dac8a.d20241109"
+version = "0.8.1.dev1+g7784ef2.d20241110"
 source = { editable = "pkg/boldi-ctx" }
 dependencies = [
     { name = "boldi-proc" },
@@ -140,7 +140,7 @@ requires-dist = [
 
 [[package]]
 name = "boldi-dev"
-version = "0.7.2.dev2+g50dac8a.d20241109"
+version = "0.8.1.dev1+g7784ef2.d20241110"
 source = { editable = "pkg/boldi-dev" }
 dependencies = [
     { name = "boldi-cli" },
@@ -167,7 +167,7 @@ requires-dist = [
 
 [[package]]
 name = "boldi-devmetapackage"
-version = "0.7.2.dev2+g50dac8a.d20241109"
+version = "0.8.1.dev2+g6a60b3e"
 source = { virtual = "." }
 
 [package.dev-dependencies]
@@ -218,7 +218,7 @@ dev = [
 
 [[package]]
 name = "boldi-githooks"
-version = "0.7.2.dev2+g50dac8a.d20241109"
+version = "0.8.1.dev1+g7784ef2.d20241110"
 source = { editable = "pkg/boldi-githooks" }
 dependencies = [
     { name = "boldi-cli" },
@@ -233,12 +233,12 @@ requires-dist = [
 
 [[package]]
 name = "boldi-plugins"
-version = "0.7.2.dev2+g50dac8a.d20241109"
+version = "0.8.1.dev1+g7784ef2.d20241110"
 source = { editable = "pkg/boldi-plugins" }
 
 [[package]]
 name = "boldi-proc"
-version = "0.7.2.dev2+g50dac8a.d20241109"
+version = "0.8.1.dev1+g7784ef2.d20241110"
 source = { editable = "pkg/boldi-proc" }
 dependencies = [
     { name = "typing-extensions" },
@@ -249,7 +249,7 @@ requires-dist = [{ name = "typing-extensions" }]
 
 [[package]]
 name = "boldi-webalbum"
-version = "0.7.2.dev2+g50dac8a.d20241109"
+version = "0.8.1.dev1+g7784ef2.d20241110"
 source = { editable = "pkg/boldi-webalbum" }
 dependencies = [
     { name = "jinja2" },
@@ -270,7 +270,7 @@ requires-dist = [
 
 [[package]]
 name = "boldi-webalbum-app"
-version = "0.7.2.dev2+g50dac8a.d20241109"
+version = "0.8.1.dev1+g7784ef2.d20241110"
 source = { editable = "pkg/boldi-webalbum-app" }
 dependencies = [
     { name = "django" },
@@ -387,7 +387,7 @@ name = "click"
 version = "8.1.7"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
-    { name = "colorama", marker = "platform_system == 'Windows'" },
+    { name = "colorama", marker = "sys_platform == 'win32'" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/96/d3/f04c7bfcf5c1862a2a5b845c6b2b360488cf47af55dfa79c98f6a6bf98b5/click-8.1.7.tar.gz", hash = "sha256:ca9853ad459e787e2192211578cc907e7594e294c7ccc834310722b41b9ca6de", size = 336121 }
 wheels = [
@@ -791,7 +791,7 @@ version = "1.6.1"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "click" },
-    { name = "colorama", marker = "platform_system == 'Windows'" },
+    { name = "colorama", marker = "sys_platform == 'win32'" },
     { name = "ghp-import" },
     { name = "jinja2" },
     { name = "markdown" },
