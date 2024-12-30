@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import argparse
+import asyncio
 import collections
 import contextlib
 import functools
@@ -25,7 +26,8 @@ from unidecode import unidecode
 
 from boldi.build import Builder, BuildSystem, FileHandler, Handler, Stamp, Target, stamp_file
 
-__path__ = pkgutil.extend_path(__path__, __name__)
+_pkg_path = Path(__file__).with_suffix("")
+__path__ = pkgutil.extend_path([str(_pkg_path)], __name__)
 
 # Asyncio improvements:
 # https://pythonspeed.com/articles/two-thread-pools/
@@ -49,7 +51,6 @@ logger.addHandler(logging.NullHandler())
 
 
 IMAGE_EXTENSIONS = (".JPG", ".JPEG", ".PNG", ".GIF")
-HERE = Path(__file__).parent.resolve()
 NON_URL_SAFE_RE = re.compile(r"[^\w\d\.\-\(\)_/]+", re.ASCII)
 RELEVANT_EXIF_TAGS = ["Composite:all", "EXIF:all", "File:all", "IPTC:all", "XMP:all"]
 
@@ -370,7 +371,7 @@ class TargetFolderHandler(FileHandler):
         stream = index_template.stream({"folder": target_folder})
         with open(index_html, "wt") as fp:
             stream.dump(fp)  # type: ignore[arg-type] # https://github.com/pallets/jinja/issues/1983
-        for template_file in (HERE / "templates").iterdir():
+        for template_file in (_pkg_path / "templates").iterdir():
             await builder.add_source(str(template_file))
 
         await builder.add_source(__file__)
@@ -434,7 +435,7 @@ class StaticHandler(Handler):
     def __post_init__(self):
         self.files = {
             f"static/{file.name}": self.album.target_static / file.name
-            for file in sorted((HERE / "templates" / "static").iterdir())
+            for file in sorted((_pkg_path / "templates" / "static").iterdir())
         }
 
     def can_handle(self, target: Target) -> bool:
@@ -447,7 +448,7 @@ class StaticHandler(Handler):
         assert target == "//static"
         self.album.target_static.mkdir(parents=True, exist_ok=True)
         for source, target_file in self.files.items():
-            await builder.add_source(str(HERE / "templates" / source))
+            await builder.add_source(str(_pkg_path / "templates" / source))
             template = self.album.env.get_template(source)
             stream = template.stream()
             with open(target_file, "w") as fp:
@@ -466,7 +467,7 @@ class Album(BuildSystem):
         self.target_static = self.target_root.path / "static"
 
         self.env = jinja2.Environment(
-            loader=jinja2.FileSystemLoader(HERE / "templates"),
+            loader=jinja2.FileSystemLoader(_pkg_path / "templates"),
             autoescape=True,
             keep_trailing_newline=True,
             line_statement_prefix="%%",
@@ -516,3 +517,7 @@ async def main():
     await album.render()
 
     exiftool.__exit__(None, None, None)
+
+
+if __name__ == "__main__":
+    asyncio.run(main())
