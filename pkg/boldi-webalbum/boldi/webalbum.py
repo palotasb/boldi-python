@@ -16,7 +16,7 @@ import tomllib
 from dataclasses import dataclass, field
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Optional
+from typing import Any, Iterator, Optional
 
 import jinja2
 import pydantic
@@ -67,7 +67,7 @@ class AlbumConfig(pydantic.BaseModel):
     target: Path
     folders: dict[Path, FolderConfig] = {}
 
-    def model_post_init(self, __context: Any):
+    def model_post_init(self, __context: Any) -> None:
         self.source = self.source.expanduser()
         self.target = self.target.expanduser()
 
@@ -324,6 +324,11 @@ class TargetFolder:
         )
         return max(candidate_album_images, key=lambda image: image.rating)
 
+    def all_images(self) -> Iterator[TargetImage]:
+        yield from self.images.values()
+        for subfolder in self.subfolders.values():
+            yield from subfolder.all_images()
+
     def path_to_folder(self, path: Path) -> Optional["TargetFolder"]:
         if path == self.path:
             return self
@@ -359,11 +364,11 @@ class TargetFolderHandler(FileHandler):
         target_folder.path.mkdir(parents=True, exist_ok=True)
         await builder.add_source(str(target_folder.source.path))
 
+        for image in target_folder.all_images():
+            await builder.build(str(image.path))
+
         for subfolder in target_folder.subfolders.values():
             await builder.build(str(subfolder.path))
-
-        for image in target_folder.images.values():
-            await builder.build(str(image.path))
 
         index_html = target_folder.path / "index.html"
 
@@ -402,6 +407,7 @@ class TargetImageHandler(FileHandler):
     async def rebuild_impl(self, target: Target, builder: Builder):
         image = self.target_image(target)
 
+        image.path.parent.mkdir(parents=True, exist_ok=True)
         shutil.copy(image.source.path, image.path)
 
         with Image.open(image.path) as pil_image:
