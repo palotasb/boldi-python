@@ -49,17 +49,17 @@ class Borg:
         for raw_src_name, raw_src_config in raw_config.get("backup", {}).items():
             raw_src_config.setdefault("archive_name", raw_src_name)
             archive_name = raw_src_config["archive_name"]
-            assert valid_archive_name_re.match(
-                archive_name
-            ), f"archive name must be alphanumeric and 1-100 chars, but got: {archive_name!r}"
+            assert valid_archive_name_re.match(archive_name), (
+                f"archive name must be alphanumeric and 1-100 chars, but got: {archive_name!r}"
+            )
 
-            assert (
-                "source_dir" in raw_src_config
-            ), f"backup.{raw_src_name} must contain 'source_dir', but got {raw_src_config.keys()}"
+            assert "source_dir" in raw_src_config, (
+                f"backup.{raw_src_name} must contain 'source_dir', but got {raw_src_config.keys()}"
+            )
             source_dir = raw_src_config["source_dir"]
-            assert isinstance(
-                source_dir, (str, list)
-            ), f"backup.{raw_src_name}.source_dir must be a string or list of strings"
+            assert isinstance(source_dir, (str, list)), (
+                f"backup.{raw_src_name}.source_dir must be a string or list of strings"
+            )
             source_dirs = (
                 [Path(source_dir).expanduser()]
                 if isinstance(source_dir, str)
@@ -67,15 +67,15 @@ class Borg:
             )
 
             excludes = raw_src_config.get("exclude", [])
-            assert isinstance(
-                excludes, (str, list)
-            ), f"backup.{raw_src_name}.excludes must be a string or list of strings"
+            assert isinstance(excludes, (str, list)), (
+                f"backup.{raw_src_name}.excludes must be a string or list of strings"
+            )
             if isinstance(excludes, str):
                 excludes = [Path(excludes).expanduser()]
             if isinstance(excludes, list):
-                assert all(
-                    isinstance(item, str) for item in excludes
-                ), f"backup.{raw_src_name}.excludes must be a string or list of strings"
+                assert all(isinstance(item, str) for item in excludes), (
+                    f"backup.{raw_src_name}.excludes must be a string or list of strings"
+                )
                 excludes = [Path(item).expanduser() for item in excludes]
 
             backup_sources[archive_name] = BackupSource(archive_name, source_dirs, excludes)
@@ -99,9 +99,9 @@ def cli_backup_borg(ctx: CliCtx, config: Path, command: list[str]):
 def cli_backup_backup(ctx: CliCtx, config: Path, only: list[str], borg_args: list[str]):
     borg = Borg.from_config_file(ctx, config)
     for item in only:
-        assert (
-            item in borg.backup_sources
-        ), f"{item} is not a valid backup source (those would be: {list(borg.backup_sources.keys())})"
+        assert item in borg.backup_sources, (
+            f"{item} is not a valid backup source (those would be: {list(borg.backup_sources.keys())})"
+        )
 
     for name, backup_source in borg.backup_sources.items():
         if only != [] and name not in only:

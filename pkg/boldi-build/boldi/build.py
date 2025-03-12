@@ -110,7 +110,7 @@ class BuildSystem:
 
     async def rebuild(self, target: Target, level: int = 0):
         target = str(target)
-        logger.info(f"{' '*2*level}rebuild({target=!r})")
+        logger.info(f"{' ' * 2 * level}rebuild({target=!r})")
         handler = self.get_handler(target)
         self.db.dependencies.pop(target, None)
         builder = Builder(
@@ -129,7 +129,7 @@ class BuildSystem:
 
     async def build(self, target: Target, level: int = 0):
         target = str(target)
-        logger.info(f"{' '*2*level}build({target=!r})")
+        logger.info(f"{' ' * 2 * level}build({target=!r})")
         handler = self.get_handler(target)
         old_stamp = self.db.targets.get(target)
         cur_stamp = handler.stamp(target)

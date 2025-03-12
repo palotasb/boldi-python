@@ -124,7 +124,7 @@ def human_round(f: float) -> str:
         i = round(f)
         return f"{i}" if i == f else f"{f}"
     elif 0 < f:
-        return f"1/{human_round(1/f)}"
+        return f"1/{human_round(1 / f)}"
     elif f == 0.0:
         return "0"
     else:
