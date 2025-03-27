@@ -179,25 +179,25 @@ class PyGitHooks:
         if not git_hook_scripts:
             return
 
-        self.ctx.msg_info(_PGH, f"[bold]{hook}[/bold] hooks running...")
+        self.ctx.msg_info(_PGH, f"[bold]{hook}[/] hooks running...")
 
         for git_hook_script in git_hook_scripts:
-            # self.ctx.msg(_PGH, f"running hook [bold]{git_hook_script.name}[/bold]:", style="info")
+            # self.ctx.msg(_PGH, f"running hook [bold]{git_hook_script.name}[/]:", style="info")
             result = self._run_git_hook_script(git_hook_script, args)
             results.append(result)
 
             if result.passed:
-                self.ctx.msg_pass(_PGH, f"[bold]{git_hook_script.name}[/bold]: [bold]PASSED[/bold]")
+                self.ctx.msg_pass(_PGH, f"[bold]{git_hook_script.name}[/]: [bold]PASSED[/]")
             elif result.skipped:
-                self.ctx.msg_warn(_PGH, f"[bold]{git_hook_script.name}[/bold]: [bold]SKIPPED[/bold]")
+                self.ctx.msg_warn(_PGH, f"[bold]{git_hook_script.name}[/]: [bold]SKIPPED[/]")
             else:
-                self.ctx.msg_fail(_PGH, f"[bold]{git_hook_script.name}[/bold]: [bold]FAILED[/bold]")
+                self.ctx.msg_fail(_PGH, f"[bold]{git_hook_script.name}[/]: [bold]FAILED[/]")
 
             if result.completed_process:
                 self.ctx.stderr.write(result.completed_process.stderr)
                 self.ctx.stdout.write(result.completed_process.stdout)
 
-        # self.ctx.msg_info(_PGH, f"finished running [bold]{hook}[/bold] hooks")
+        # self.ctx.msg_info(_PGH, f"finished running [bold]{hook}[/] hooks")
         all_passed = all(result.passed or result.skipped for result in results)
         any_passed = any(result.passed for result in results)
         if any_passed and all_passed:
