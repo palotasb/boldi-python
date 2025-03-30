@@ -1,0 +1,37 @@
+[project]
+name = "boldi-sitebuilder"
+description = "boldi.sitebuilder part of Boldi's Python libraries"
+authors = [
+    { name = "Boldizsár Palotás", email = "boldizsar.palotas@gmail.com" },
+]
+requires-python = ">=3.10"
+readme = "../../README.md"
+license = { text = "MIT" }
+dynamic = ["version"]
+
+dependencies = [
+    "boldi-cli",
+    "Jinja2",
+    "markdown_it_py[linkify,plugins]",
+    "mdformat",
+]
+
+[build-system]
+requires = ["hatchling", "hatch-vcs"]
+build-backend = "hatchling.build"
+
+[project.entry-points."boldi.cli.action"]
+sitebuilder = "boldi.sitebuilder:cli_sitebuilder"
+
+[tool.hatch.build]
+packages = ["boldi"]
+
+[tool.hatch.metadata.hooks.custom]
+path = "hatch_hooks.py"
+
+[tool.hatch.build.hooks.vcs]
+version-file = "boldi/_sitebuilder_version.py"
+
+[tool.hatch.version]
+source = "vcs"
+raw-options = { "root" = "../.." }

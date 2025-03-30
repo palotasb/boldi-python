@@ -137,7 +137,8 @@ def error_handler(ctx: CliCtx):
 
     except CliUsageException as exc:
         ctx.msg_FAIL("Error:", exc.args[0])
-        ctx.msg_warn("[bold]Note:[/]", exc.args[1])  # TODO use Exception notes for Python 3.11+
+        if 1 < len(exc.args):
+            ctx.msg_warn("[bold]Note:[/]", exc.args[1])  # TODO use Exception notes for Python 3.11+
         if ctx.verbose:
             ctx.console.print(_rich_traceback_from_exception(exc))
 
