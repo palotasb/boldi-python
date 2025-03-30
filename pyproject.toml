@@ -20,6 +20,7 @@ dev = [    # boldi dependencies
     "boldi-githooks",
     "boldi-plugins",
     "boldi-proc",
+    "boldi-sitebuilder",
     "boldi-webalbum",
     "boldi-webalbum-app[dev]",
     # build dependencies
@@ -55,6 +56,7 @@ boldi-dev = { workspace = true }
 boldi-githooks = { workspace = true }
 boldi-plugins = { workspace = true }
 boldi-proc = { workspace = true }
+boldi-sitebuilder = { workspace = true }
 boldi-webalbum = { workspace = true }
 boldi-webalbum-app = { workspace = true }
 
@@ -83,10 +85,11 @@ packages = [
     "boldi.githooks",
     "boldi.plugins",
     "boldi.proc",
+    "boldi.sitebuilder",
     "boldi.webalbum",
     "boldi.webalbum.app",
 ]
-mypy_path = "pkg/boldi:pkg/boldi-backup:pkg/boldi-build:pkg/boldi-cli:pkg/boldi-ctx:pkg/boldi-githooks:pkg/boldi-plugins:pkg/boldi-proc:pkg/boldi-webalbum:pkg/boldi-webalbum-app"
+mypy_path = "pkg/boldi:pkg/boldi-backup:pkg/boldi-build:pkg/boldi-cli:pkg/boldi-ctx:pkg/boldi-githooks:pkg/boldi-plugins:pkg/boldi-proc:pkg/boldi-sitebuilder:pkg/boldi-webalbum:pkg/boldi-webalbum-app"
 check_untyped_defs = true
 plugins = ["mypy_django_plugin.main"]
 
