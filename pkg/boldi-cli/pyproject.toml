@@ -9,7 +9,7 @@ readme = "../../README.md"
 license = { text = "MIT" }
 dynamic = ["version"]
 
-dependencies = ["boldi-ctx", "rich"]
+dependencies = ["boldi-ctx", "boldi-plugins", "rich"]
 optional-dependencies = {}
 
 [project.scripts]
