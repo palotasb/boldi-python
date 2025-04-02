@@ -71,12 +71,9 @@ class SiteBuilder:
                 else:
                     yield token
 
-        print(self.source_to_target)
-
         for token in walk(tokens):
             if token.type == "link_open" and (href := token.attrGet("href")):
                 assert isinstance(href, str)
-                print(token)
                 if external_link_re.match(str(token.attrGet("href"))):
                     token.attrSet("target", "_blank")
                 if Path(href) in self.source_to_target:
