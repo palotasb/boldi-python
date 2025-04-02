@@ -1,8 +1,10 @@
 import re
 from argparse import ArgumentParser
-from functools import partial
+from collections.abc import Iterator, Mapping
+from functools import cache, partial
 from pathlib import Path
 from shutil import copytree
+from types import MappingProxyType
 from typing import IO
 
 from jinja2 import Environment, FileSystemLoader
@@ -29,9 +31,29 @@ class SiteBuilder:
         self._md = MarkdownIt("gfm-like")
         self._jinja = Environment(loader=FileSystemLoader(source_dir / "template"))
 
-    def target_path(self, source_file: Path) -> Path:
-        assert not source_file.is_absolute(), f"must be relative: {source_file}"
-        return self.target_dir / source_file.with_suffix(".html")
+    def build_all(self) -> None:
+        for source_file in self.source_pages_list():
+            target_file = self.target_dir / self.source_to_target[source_file]
+            target_file.parent.mkdir(parents=True, exist_ok=True)
+            with target_file.open("w") as fp:
+                self.build_page(source_file, fp)
+
+        copytree(self.source_dir / "template" / "static", self.target_dir / "static", dirs_exist_ok=True)
+
+    def source_pages(self) -> Iterator[Path]:
+        for source_file in sorted(self.source_dir.iterdir()):
+            if source_file.is_file() and source_file.suffix == ".md":
+                yield Path(source_file.name)
+
+    @cache
+    def source_pages_list(self) -> list[Path]:
+        return list(self.source_pages())
+
+    @property
+    def source_to_target(self) -> Mapping[Path, Path]:
+        return MappingProxyType(
+            {source_page: source_page.with_suffix(".html") for source_page in self.source_pages_list()}
+        )
 
     def build_page(self, source_file: Path, fp: IO):
         assert not source_file.is_absolute(), f"must be relative: {source_file}"
@@ -49,9 +71,17 @@ class SiteBuilder:
                 else:
                     yield token
 
+        print(self.source_to_target)
+
         for token in walk(tokens):
-            if token.type == "link_open" and external_link_re.match(str(token.attrGet("href"))):
-                token.attrSet("target", "_blank")
+            if token.type == "link_open" and (href := token.attrGet("href")):
+                assert isinstance(href, str)
+                print(token)
+                if external_link_re.match(str(token.attrGet("href"))):
+                    token.attrSet("target", "_blank")
+                if Path(href) in self.source_to_target:
+                    # FIXME this works for pages in the root dir but not nested pages
+                    token.attrSet("href", self.source_to_target[Path(href)].as_posix())
 
         markdown = SyntaxTreeNode(tokens)
 
@@ -73,17 +103,6 @@ class SiteBuilder:
     def node_to_text(self, node: SyntaxTreeNode) -> str:
         md_renderer = MDRenderer()
         return " ".join(md_renderer.render(child.to_tokens(), self._md.options, {}).strip() for child in node.children)
-
-    def build_all(self) -> None:
-        for source_file in self.source_dir.iterdir():
-            relative_source_file = Path(source_file.name)
-            if source_file.is_file() and source_file.suffix == ".md":
-                target_file = self.target_path(relative_source_file)
-                target_file.parent.mkdir(parents=True, exist_ok=True)
-                with target_file.open("w") as fp:
-                    self.build_page(source_file, fp)
-
-        copytree(self.source_dir / "template" / "static", self.target_dir / "static", dirs_exist_ok=True)
 
 
 def cli_sitebuilder(ctx: CliCtx, subparser: ArgumentParser):
