@@ -1,3 +1,4 @@
+import re
 from argparse import ArgumentParser
 from functools import partial
 from pathlib import Path
@@ -6,10 +7,13 @@ from typing import IO
 
 from jinja2 import Environment, FileSystemLoader
 from markdown_it import MarkdownIt
+from markdown_it.token import Token
 from markdown_it.tree import SyntaxTreeNode
 from mdformat.renderer import MDRenderer
 
 from boldi.cli import CliCtx, CliUsageException, esc
+
+external_link_re = re.compile(r"^(?:[\w]+:)?//")
 
 
 class SiteBuilder:
@@ -36,6 +40,19 @@ class SiteBuilder:
 
         jinja_env: dict[str, object] = {}
         tokens = self._md.parse((self.source_dir / source_file).read_text(), jinja_env)
+
+        def walk(tokens: list[Token]):
+            for token in tokens:
+                if token.type == "inline":
+                    assert isinstance(token.children, list)
+                    yield from walk(token.children)
+                else:
+                    yield token
+
+        for token in walk(tokens):
+            if token.type == "link_open" and external_link_re.match(str(token.attrGet("href"))):
+                token.attrSet("target", "_blank")
+
         markdown = SyntaxTreeNode(tokens)
 
         headings = [
@@ -62,7 +79,6 @@ class SiteBuilder:
             relative_source_file = Path(source_file.name)
             if source_file.is_file() and source_file.suffix == ".md":
                 target_file = self.target_path(relative_source_file)
-                print(relative_source_file, "->", target_file)
                 target_file.parent.mkdir(parents=True, exist_ok=True)
                 with target_file.open("w") as fp:
                     self.build_page(source_file, fp)
