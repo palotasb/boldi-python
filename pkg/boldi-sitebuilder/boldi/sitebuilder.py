@@ -12,7 +12,6 @@ from jinja2 import Environment, FileSystemLoader
 from markdown_it import MarkdownIt
 from markdown_it.token import Token
 from markdown_it.tree import SyntaxTreeNode
-from mdformat.renderer import MDRenderer
 from mdit_py_plugins.anchors import anchors_plugin
 from mdit_py_plugins.front_matter import front_matter_plugin
 
@@ -92,24 +91,18 @@ class SiteBuilder:
 
         markdown = SyntaxTreeNode(tokens)
 
-        headings = [
-            (node.tag, self.node_to_text(node), self.node_to_html(node))
-            for node in markdown.walk()
-            if node.type == "heading"
-        ]
-        title = min(headings, key=lambda x: x[0], default=("h6", "", ""))
+        def heading_text(node: SyntaxTreeNode) -> str:
+            if node.type == "text":
+                return node.content
+            return "".join(heading_text(child) for child in node.children)
+
+        headings = [(node.tag, heading_text(node)) for node in markdown.walk() if node.type == "heading"]
+        title = min(headings, default=("h6", ""))
 
         html = self._md.renderer.render(tokens, self._md.options, jinja_env)
         template = self._jinja.get_template("index.html.j2")
         stream = template.stream(content=html, title=title[1], site_name=self.site_name)
         stream.dump(fp)
-
-    def node_to_html(self, node: SyntaxTreeNode) -> str:
-        return self._md.renderer.render(node.to_tokens(), self._md.options, {}).strip()
-
-    def node_to_text(self, node: SyntaxTreeNode) -> str:
-        md_renderer = MDRenderer()
-        return " ".join(md_renderer.render(child.to_tokens(), self._md.options, {}).strip() for child in node.children)
 
 
 def cli_sitebuilder(ctx: CliCtx, subparser: ArgumentParser):

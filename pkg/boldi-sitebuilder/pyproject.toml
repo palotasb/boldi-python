@@ -13,7 +13,6 @@ dependencies = [
     "boldi-cli",
     "Jinja2",
     "markdown_it_py[linkify,plugins]",
-    "mdformat",
 ]
 
 [build-system]
