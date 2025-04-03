@@ -12,6 +12,7 @@ from markdown_it import MarkdownIt
 from markdown_it.token import Token
 from markdown_it.tree import SyntaxTreeNode
 from mdformat.renderer import MDRenderer
+from mdit_py_plugins.anchors import anchors_plugin
 
 from boldi.cli import CliCtx, CliUsageException, esc
 
@@ -29,6 +30,7 @@ class SiteBuilder:
         self.target_dir = target_dir
         self.site_name = site_name
         self._md = MarkdownIt("gfm-like")
+        self._md = self._md.use(anchors_plugin, permalink=True, permalinkSymbol="#")
         self._jinja = Environment(loader=FileSystemLoader(source_dir / "template"))
 
     def build_all(self) -> None:
