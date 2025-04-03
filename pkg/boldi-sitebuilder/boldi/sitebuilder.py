@@ -1,4 +1,5 @@
 import re
+import tomllib
 from argparse import ArgumentParser
 from collections.abc import Iterator, Mapping
 from functools import cache, partial
@@ -13,6 +14,7 @@ from markdown_it.token import Token
 from markdown_it.tree import SyntaxTreeNode
 from mdformat.renderer import MDRenderer
 from mdit_py_plugins.anchors import anchors_plugin
+from mdit_py_plugins.front_matter import front_matter_plugin
 
 from boldi.cli import CliCtx, CliUsageException, esc
 
@@ -31,6 +33,7 @@ class SiteBuilder:
         self.site_name = site_name
         self._md = MarkdownIt("gfm-like")
         self._md = self._md.use(anchors_plugin, permalink=True, permalinkSymbol="#")
+        self._md = self._md.use(front_matter_plugin)
         self._jinja = Environment(loader=FileSystemLoader(source_dir / "template"))
 
     def build_all(self) -> None:
@@ -74,6 +77,11 @@ class SiteBuilder:
                     yield token
 
         for token in walk(tokens):
+            if token.type == "front_matter":
+                try:
+                    _front_matter: dict[str, object] | Exception = tomllib.loads(token.content)
+                except Exception as ex:
+                    _front_matter = ex
             if token.type == "link_open" and (href := token.attrGet("href")):
                 assert isinstance(href, str)
                 if external_link_re.match(str(token.attrGet("href"))):
