@@ -10,15 +10,13 @@ license = { text = "MIT" }
 dynamic = ["version"]
 
 dependencies = [
-    # boldi:
-    "Django>=5.1",
+    "boldi-cli",
+    "fastapi",
+    "uvicorn[standard]"
 ]
 
-[project.optional-dependencies]
-dev = ["django-stubs"]
-
 [project.entry-points."boldi.cli.action"]
-webalbum-app = "boldi.webalbum.app.cli:cli_webalbum_app"
+webalbum-app = "boldi.webalbum.app:cli_webalbum_app"
 
 [build-system]
 requires = ["hatchling", "hatch-vcs"]
