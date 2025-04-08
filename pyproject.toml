@@ -91,10 +91,6 @@ packages = [
 ]
 mypy_path = "pkg/boldi:pkg/boldi-backup:pkg/boldi-build:pkg/boldi-cli:pkg/boldi-ctx:pkg/boldi-githooks:pkg/boldi-plugins:pkg/boldi-proc:pkg/boldi-sitebuilder:pkg/boldi-webalbum:pkg/boldi-webalbum-app"
 check_untyped_defs = true
-plugins = ["mypy_django_plugin.main"]
-
-[tool.django-stubs]
-django_settings_module = "boldi.webalbum.app.settings"
 
 [tool.pyright]
 venvPath = "."
