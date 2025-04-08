@@ -154,8 +154,18 @@ def error_handler(ctx: CliCtx):
 
         exit(2)
 
+    except KeyboardInterrupt as exc:
+        ctx.msg_FAIL("KeyboardInterrupt")
 
-def _rich_traceback_from_exception(exc: Exception) -> Traceback:
+        if ctx.verbose:
+            ctx.console.print(_rich_traceback_from_exception(exc))
+        else:
+            ctx.msg_info("Use [bold]--verbose[/] or [bold]-v[/] for more info.")
+
+        exit(130)
+
+
+def _rich_traceback_from_exception(exc: BaseException) -> Traceback:
     """Get rich Traceback from an exception caught by `error_handler`."""
     tb = exc.__traceback__.tb_next if exc.__traceback__ else None
     return Traceback.from_exception(exc.__class__, exc, tb, extra_lines=2, width=None)
