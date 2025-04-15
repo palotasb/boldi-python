@@ -61,7 +61,20 @@ boldi-webalbum = { workspace = true }
 boldi-webalbum-app = { workspace = true }
 
 [tool.uv.workspace]
-members = ["pkg/*"]
+members = [
+    "pkg/boldi",
+    "pkg/boldi-backup",
+    "pkg/boldi-build",
+    "pkg/boldi-cli",
+    "pkg/boldi-ctx",
+    "pkg/boldi-dev",
+    "pkg/boldi-githooks",
+    "pkg/boldi-plugins",
+    "pkg/boldi-proc",
+    "pkg/boldi-sitebuilder",
+    "pkg/boldi-webalbum",
+    "pkg/boldi-webalbum-app",
+]
 
 [tool.ruff]
 line-length = 120
