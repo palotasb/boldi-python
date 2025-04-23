@@ -18,6 +18,7 @@ dev = [    # boldi dependencies
     "boldi-ctx[dev]",
     "boldi-dev",
     "boldi-githooks",
+    "boldi-githubwebhooks",
     "boldi-plugins",
     "boldi-proc",
     "boldi-sitebuilder",
@@ -54,6 +55,7 @@ boldi-cli = { workspace = true }
 boldi-ctx = { workspace = true }
 boldi-dev = { workspace = true }
 boldi-githooks = { workspace = true }
+boldi-githubwebhooks = { workspace = true }
 boldi-plugins = { workspace = true }
 boldi-proc = { workspace = true }
 boldi-sitebuilder = { workspace = true }
@@ -69,6 +71,7 @@ members = [
     "pkg/boldi-ctx",
     "pkg/boldi-dev",
     "pkg/boldi-githooks",
+    "pkg/boldi-githubwebhooks",
     "pkg/boldi-plugins",
     "pkg/boldi-proc",
     "pkg/boldi-sitebuilder",
@@ -96,13 +99,14 @@ packages = [
     "boldi.cli",
     "boldi.ctx",
     "boldi.githooks",
+    "boldi.githubwebhooks",
     "boldi.plugins",
     "boldi.proc",
     "boldi.sitebuilder",
     "boldi.webalbum",
     "boldi.webalbum.app",
 ]
-mypy_path = "pkg/boldi:pkg/boldi-backup:pkg/boldi-build:pkg/boldi-cli:pkg/boldi-ctx:pkg/boldi-githooks:pkg/boldi-plugins:pkg/boldi-proc:pkg/boldi-sitebuilder:pkg/boldi-webalbum:pkg/boldi-webalbum-app"
+mypy_path = "pkg/boldi:pkg/boldi-backup:pkg/boldi-build:pkg/boldi-cli:pkg/boldi-ctx:pkg/boldi-githooks:pkg/boldi-githubwebhooks:pkg/boldi-plugins:pkg/boldi-proc:pkg/boldi-sitebuilder:pkg/boldi-webalbum:pkg/boldi-webalbum-app"
 check_untyped_defs = true
 
 [tool.pyright]
