@@ -10,13 +10,11 @@ license = { text = "MIT" }
 dynamic = ["version"]
 
 dependencies = [
-    # boldi libs:
-    "boldi-cli",
     # public libs:
+    "fastapi",
     "loguru",
+    "pydantic",
     "starlette",
-    "uvicorn",
-    "gunicorn",
 ]
 
 [build-system]
