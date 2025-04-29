@@ -21,8 +21,12 @@ class GitHubWebhooksApp(FastAPI):
         super().__init__(root_path=root_path)
 
         @self.get("/")
-        async def post_github_webhook():
+        async def get_github_webhook():
             return PlainTextResponse(content="OK")
+
+        @self.post("/")
+        async def post_github_webhook():
+            return PlainTextResponse(content="OK, noted")
 
     async def __call__(self, scope, receive, send):
         logger.info(f"{scope=} {receive=} {send=}")
