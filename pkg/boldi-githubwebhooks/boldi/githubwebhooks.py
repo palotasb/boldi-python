@@ -80,7 +80,7 @@ class Commit(BaseModel):
     # An array of files modified by the commit. A maximum of 3000 changed files will be reported per commit.
     modified: list[str]
     # An array of files removed in the commit. A maximum of 3000 changed files will be reported per commit.
-    removed: str
+    removed: list[str]
     # The ISO 8601 timestamp of the commit.
     timestamp: str  # TODO type as datetime
     # Tree ID
@@ -122,7 +122,7 @@ class GitHubWebhooksApp(FastAPI):
         async def handle_post_hook(headers: GitHubWebhookHeaders, push: PushGitHubWebhook) -> dict:
             return {
                 "headers": headers,
-                "push": push,
+                "push": push.model_dump(mode="json"),
             }
 
     async def __call__(self, scope, receive, send):
