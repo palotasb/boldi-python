@@ -117,6 +117,7 @@ def cli_backup_backup(ctx: CliCtx, config: Path, only: list[str], borg_args: lis
                 "--exclude-caches",
                 ["--exclude", "*/.Spotlight-*"],
                 ["--exclude", "*/.Trashes"],
+                ["--exclude", "*/.TemporaryItems"],
                 *[["--exclude", item] for item in backup_source.excludes],
                 "--stats --verbose --progress",
                 *borg_args,
