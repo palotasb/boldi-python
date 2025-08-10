@@ -23,7 +23,7 @@ dev = [    # boldi dependencies
     "boldi-proc",
     "boldi-sitebuilder",
     "boldi-webalbum",
-    "boldi-webalbum-app[dev]",
+    "boldi-webalbum-app",
     # build dependencies
     "uv",
     "hatch",
