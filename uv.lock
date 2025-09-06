@@ -11,6 +11,7 @@ members = [
     "boldi-ctx",
     "boldi-dev",
     "boldi-devmetapackage",
+    "boldi-dotmodpath",
     "boldi-githooks",
     "boldi-plugins",
     "boldi-proc",
@@ -179,6 +180,7 @@ dev = [
     { name = "boldi-cli" },
     { name = "boldi-ctx", extra = ["dev"] },
     { name = "boldi-dev" },
+    { name = "boldi-dotmodpath" },
     { name = "boldi-githooks" },
     { name = "boldi-plugins" },
     { name = "boldi-proc" },
@@ -204,6 +206,7 @@ dev = [
     { name = "boldi-cli", editable = "pkg/boldi-cli" },
     { name = "boldi-ctx", extras = ["dev"], editable = "pkg/boldi-ctx" },
     { name = "boldi-dev", editable = "pkg/boldi-dev" },
+    { name = "boldi-dotmodpath", editable = "pkg/boldi-dotmodpath" },
     { name = "boldi-githooks", editable = "pkg/boldi-githooks" },
     { name = "boldi-plugins", editable = "pkg/boldi-plugins" },
     { name = "boldi-proc", editable = "pkg/boldi-proc" },
@@ -218,6 +221,10 @@ dev = [
     { name = "setuptools-scm" },
     { name = "uv" },
 ]
+
+[[package]]
+name = "boldi-dotmodpath"
+source = { editable = "pkg/boldi-dotmodpath" }
 
 [[package]]
 name = "boldi-githooks"
