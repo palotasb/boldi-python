@@ -19,11 +19,11 @@ build-backend = "hatchling.build"
 [tool.hatch.build]
 packages = ["boldi"]
 
-[tool.hatch.build.targets.sdist]
-include = ["boldi", "boldi-*.pth"]
+[tool.hatch.build.targets.sdist.force-include]
+"boldi-dotmodpath.pth" = "boldi-dotmodpath.pth"
 
-[tool.hatch.build.targets.wheel]
-include = ["boldi", "boldi-*.pth"]
+[tool.hatch.build.targets.wheel.force-include]
+"boldi-dotmodpath.pth" = "boldi-dotmodpath.pth"
 
 [tool.hatch.build.hooks.vcs]
 version-file = "boldi/_dotmodpath_version.py"

@@ -1,1 +1,1 @@
-import sys; print("Hello from .pth")
+import boldi.dotmodpath; boldi.dotmodpath.enable_shim("boldi")
