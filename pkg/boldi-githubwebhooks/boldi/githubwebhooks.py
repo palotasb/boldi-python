@@ -113,17 +113,17 @@ class GitHubWebhooksApp(FastAPI):
         ) -> dict:
             match hook:
                 case push if isinstance(push, PushGitHubWebhook):
-                    return await handle_post_hook(headers, push)
+                    return await self.handle_post_hook(headers, push)
                 case hook if isinstance(hook, dict):
                     return {"headers": headers, "hook": hook}
                 case _:
                     assert False, "unreachable, otherwise internal error"
 
-        async def handle_post_hook(headers: GitHubWebhookHeaders, push: PushGitHubWebhook) -> dict:
-            return {
-                "headers": headers,
-                "push": push.model_dump(mode="json"),
-            }
+    async def handle_post_hook(self, headers: GitHubWebhookHeaders, push: PushGitHubWebhook) -> dict:
+        return {
+            "headers": headers,
+            "push": push.model_dump(mode="json"),
+        }
 
     async def __call__(self, scope, receive, send):
         logger.info(f"{scope=} {receive=} {send=}")
