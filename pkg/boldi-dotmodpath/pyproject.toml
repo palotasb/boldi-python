@@ -5,7 +5,7 @@ authors = [
     { name = "Boldizsár Palotás", email = "boldizsar.palotas@gmail.com" },
 ]
 requires-python = ">=3.12"
-readme = "../../README.md"
+readme = "README.md"
 license = { text = "MIT" }
 dynamic = ["version"]
 
@@ -21,6 +21,7 @@ packages = ["boldi"]
 
 [tool.hatch.build.targets.sdist.force-include]
 "boldi-dotmodpath.pth" = "boldi-dotmodpath.pth"
+"hatch_hooks.py" = "hatch_hooks.py"
 
 [tool.hatch.build.targets.wheel.force-include]
 "boldi-dotmodpath.pth" = "boldi-dotmodpath.pth"

@@ -1,40 +1,76 @@
-# import importlib.machinery
-import importlib
+import importlib.machinery
+import importlib.metadata
 import importlib.util
 import os
 import sys
 from collections.abc import Sequence
 from importlib.abc import MetaPathFinder
-from itertools import product, starmap
 from pathlib import Path
 
+ENTRY_POINT_GROUP = "boldi.dotmodpath"
+_FINDER: "DottedModuleNameImporter | None" = None
 
-def init():
-    sys.meta_path.insert(0, DottedModuleNameImporter())
+
+def install() -> "DottedModuleNameImporter":
+    """Install the importer and register prefixes advertised by entry points."""
+    global _FINDER
+
+    if _FINDER is None:
+        _FINDER = DottedModuleNameImporter()
+        path_finder_index = sys.meta_path.index(importlib.machinery.PathFinder)
+        sys.meta_path.insert(path_finder_index + 1, _FINDER)
+
+    # Entry point names are the import prefixes that may use dotted filenames.
+    for entry_point in importlib.metadata.entry_points(group=ENTRY_POINT_GROUP):
+        _FINDER.register_prefix(entry_point.name)
+
+    return _FINDER
 
 
-def enable_shim(module_name):
-    print(f"Enabling shim for {module_name}", file=sys.stderr)
+def mark_as_package(module_name: str) -> None:
+    """Mark a dotted-file module as package-like so it can have submodules."""
+    module = sys.modules[module_name]
+    module_file = getattr(module, "__file__", None)
+    if module_file is None:
+        raise ValueError(f"{module_name!r} has no __file__")
+
+    # A dotted-file module can opt into having submodules by setting __path__.
+    module.__path__ = [str(Path(module_file).parent)]
+    if module.__spec__:
+        module.__spec__.submodule_search_locations = module.__path__
 
 
 class DottedModuleNameImporter(MetaPathFinder):
-    def find_spec(self, fullname: str, path: Sequence[str] | None, target=None):
-        # Implements PathEntryFinder.find_spec
-        # https://docs.python.org/3/library/importlib.html#importlib.abc.PathEntryFinder.find_spec
-        names = fullname.split(".")
-        seps = tuple(product("/.", repeat=len(names)))
-        seps = tuple(filter(lambda sep: "." in sep, seps))
-        paths = [tuple(zip(names, sep)) for sep in seps]
-        paths = [tuple(starmap(lambda x, y: x + y, p)) for p in paths]
-        paths = tuple(map("".join, paths))
+    def __init__(self) -> None:
+        self.prefixes: set[str] = set()
 
-        for maybe_lib_folder in path or sys.path:
-            maybe_lib_folder = maybe_lib_folder or os.getcwd()
-            if Path(maybe_lib_folder).is_dir():
-                for path in paths:
-                    ext = "__init__.py" if path.endswith("/") else ".py"
-                    full_path = Path(maybe_lib_folder) / f"{path}{ext}"
-                    if full_path.exists() and full_path.is_file():
-                        return importlib.util.spec_from_file_location(fullname, full_path)
+    def register_prefix(self, prefix: str) -> None:
+        self.prefixes.add(prefix)
+
+    def find_spec(self, fullname: str, path: Sequence[str] | None = None, target=None):
+        for prefix in sorted(self.prefixes, key=len, reverse=True):
+            if fullname != prefix and not fullname.startswith(f"{prefix}."):
+                continue
+
+            # For prefix "boldi.dotmodpath", search under the "boldi" package
+            # for files named like "dotmodpath.foo.py".
+            anchor = prefix.rpartition(".")[0]
+            names = fullname[len(anchor) + 1 :].split(".") if anchor else fullname.split(".")
+            module_file = f"{'.'.join(names)}.py"
+
+            for root in self._roots(path, anchor):
+                file = root / module_file
+                if file.is_file():
+                    return importlib.util.spec_from_file_location(fullname, file)
 
         return None
+
+    @staticmethod
+    def _roots(path: Sequence[str] | None, anchor: str) -> tuple[Path, ...]:
+        if path is not None:
+            # Submodule imports search inside the parent package's __path__.
+            return tuple(root for entry in path if (root := Path(entry or os.getcwd())).is_dir())
+
+        # Prefix imports search for the prefix anchor on sys.path.
+        anchor_path = Path(*anchor.split(".")) if anchor else Path()
+        return tuple(root for entry in sys.path if (root := Path(entry or os.getcwd()) / anchor_path).is_dir())

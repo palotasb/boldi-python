@@ -1,1 +1,1 @@
-import boldi.dotmodpath; boldi.dotmodpath.enable_shim("boldi")
+import boldi.dotmodpath; boldi.dotmodpath.install()
