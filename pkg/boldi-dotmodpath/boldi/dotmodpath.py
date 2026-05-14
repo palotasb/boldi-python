@@ -8,23 +8,26 @@ from importlib.abc import MetaPathFinder
 from pathlib import Path
 
 ENTRY_POINT_GROUP = "boldi.dotmodpath"
-_FINDER: "DottedModuleNameImporter | None" = None
+FINDER: "DottedModuleNameFinder | None" = None
 
 
-def install() -> "DottedModuleNameImporter":
+def install() -> "DottedModuleNameFinder":
     """Install the importer and register prefixes advertised by entry points."""
-    global _FINDER
+    global FINDER
 
-    if _FINDER is None:
-        _FINDER = DottedModuleNameImporter()
-        path_finder_index = sys.meta_path.index(importlib.machinery.PathFinder)
-        sys.meta_path.insert(path_finder_index + 1, _FINDER)
+    if FINDER is None:
+        FINDER = DottedModuleNameFinder()
+        try:
+            path_finder_index = sys.meta_path.index(importlib.machinery.PathFinder)
+            sys.meta_path.insert(path_finder_index + 1, FINDER)
+        except ValueError:
+            sys.meta_path.append(FINDER)
 
     # Entry point names are the import prefixes that may use dotted filenames.
     for entry_point in importlib.metadata.entry_points(group=ENTRY_POINT_GROUP):
-        _FINDER.register_prefix(entry_point.name)
+        FINDER.register_prefix(entry_point.name)
 
-    return _FINDER
+    return FINDER
 
 
 def mark_as_package(module_name: str) -> None:
@@ -40,7 +43,7 @@ def mark_as_package(module_name: str) -> None:
         module.__spec__.submodule_search_locations = module.__path__
 
 
-class DottedModuleNameImporter(MetaPathFinder):
+class DottedModuleNameFinder(MetaPathFinder):
     def __init__(self) -> None:
         self.prefixes: set[str] = set()
 
@@ -55,8 +58,8 @@ class DottedModuleNameImporter(MetaPathFinder):
             # For prefix "boldi.dotmodpath", search under the "boldi" package
             # for files named like "dotmodpath.foo.py".
             anchor = prefix.rpartition(".")[0]
-            names = fullname[len(anchor) + 1 :].split(".") if anchor else fullname.split(".")
-            module_file = f"{'.'.join(names)}.py"
+            tail = fullname[len(anchor) + 1 :] if anchor else fullname
+            module_file = f"{tail}.py"
 
             for root in self._roots(path, anchor):
                 file = root / module_file

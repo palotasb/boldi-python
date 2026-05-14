@@ -18,6 +18,6 @@ class CustomMetadataHook(MetadataHookInterface):
         super().__init__(root, config)
 
     def update(self, metadata: dict) -> None:
-        version_source = VCSVersionSource(root=Path(self.root).parent.parent.resolve().__str__(), config={})
+        version_source = VCSVersionSource(root=str(Path(self.root).parent.parent.resolve()), config={})
         version = version_source.get_version_data()["version"]
         update_internal_dependencies(metadata.get("dependencies", []), version)
