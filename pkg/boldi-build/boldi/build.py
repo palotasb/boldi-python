@@ -1,3 +1,4 @@
+import asyncio
 import contextlib
 import json
 import logging
@@ -29,8 +30,7 @@ class BuildDB:
 
     async def load(self, path: Path):
         try:
-            with open(path, "r") as fp:
-                build_db_json = json.load(fp)
+            build_db_json = json.loads(await asyncio.to_thread(path.read_text))
         except (json.JSONDecodeError, OSError):
             build_db_json = {}
         build_db_json = build_db_json if isinstance(build_db_json, dict) else {}
@@ -41,12 +41,11 @@ class BuildDB:
         self.dependencies.update(build_db_json.get("dependencies", {}))
 
     async def save(self, path: Path):
-        with open(path, "w") as fp:
-            build_db_json = {
-                "targets": self.targets,
-                "dependencies": dict(self.dependencies),
-            }
-            json.dump(build_db_json, fp, indent=2)
+        build_db_json = {
+            "targets": self.targets,
+            "dependencies": dict(self.dependencies),
+        }
+        await asyncio.to_thread(path.write_text, json.dumps(build_db_json, indent=2))
 
 
 @dataclass

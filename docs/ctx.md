@@ -21,6 +21,7 @@ Import the module like so:
 
 ```py
 import boldi.ctx
+
 # or:
 from boldi.ctx import Ctx
 ```
@@ -50,18 +51,15 @@ import subprocess
 
 from boldi.ctx import Ctx
 
+
 def printing_example(ctx):
     print(..., file=ctx.stderr)
+
 
 def subprocess_example(ctx, args):
     # these two are equivalent:
     subprocess.run(
-        args,
-        check=True,
-        text=True,
-        stdin=ctx.stdin, stdout=ctx.stdout, stderr=ctx.stderr,
-        cwd=ctx.cwd,
-        env=ctx.env
+        args, check=True, text=True, stdin=ctx.stdin, stdout=ctx.stdout, stderr=ctx.stderr, cwd=ctx.cwd, env=ctx.env
     )
     ctx.run(args)
 ```
@@ -72,6 +70,7 @@ or when no explicit `ctx` parameter has been provided to a function.
 
 ```py
 from boldi.ctx import Ctx
+
 
 # for convenience, allows omitting the ctx parameter
 def example(ctx: Ctx | None = None):

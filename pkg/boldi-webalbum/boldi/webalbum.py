@@ -13,10 +13,11 @@ import pkgutil
 import re
 import shutil
 import tomllib
+from collections.abc import Iterator
 from dataclasses import dataclass, field
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Iterator, Optional
+from typing import Any
 
 import jinja2
 import pydantic
@@ -56,7 +57,7 @@ RELEVANT_EXIF_TAGS = ["Composite:all", "EXIF:all", "File:all", "IPTC:all", "XMP:
 
 
 class FolderConfig(pydantic.BaseModel):
-    title: Optional[str] = None
+    title: str | None = None
     reversed: bool = False
 
 
@@ -67,7 +68,7 @@ class AlbumConfig(pydantic.BaseModel):
     target: Path
     folders: dict[Path, FolderConfig] = {}
 
-    def model_post_init(self, __context: Any) -> None:
+    def model_post_init(self, __context: Any, /) -> None:
         self.source = self.source.expanduser()
         self.target = self.target.expanduser()
 
@@ -101,8 +102,7 @@ def relative_to(path: Path, other: Path) -> Path:
     for i, relative_to_parents in enumerate([other] + list(other.parents)):
         if path.is_relative_to(relative_to_parents):
             return Path(*([Path("..")] * i)) / path.relative_to(relative_to_parents)
-    else:
-        raise ValueError
+    raise ValueError
 
 
 def to_safe_ascii(s: str) -> str:
@@ -183,14 +183,15 @@ class TargetImage:
         return self.exif["IPTC"].get("Caption-Abstract") or ""
 
     @property
-    def created_datetime(self) -> Optional[datetime]:
+    def created_datetime(self) -> datetime | None:
         created_str = self.exif["Composite"].get("DateTimeCreated") or self.exif["Composite"].get("DateTimeOriginal")
         if not created_str:
             return None
         with contextlib.suppress(ValueError):
             return datetime.strptime(created_str, "%Y:%m:%d %H:%M:%S%z")
         with contextlib.suppress(ValueError):
-            return datetime.strptime(created_str, "%Y:%m:%d %H:%M:%S")
+            # EXIF timestamps frequently omit a timezone, so preserving a naive datetime is intentional.
+            return datetime.strptime(created_str, "%Y:%m:%d %H:%M:%S")  # noqa: DTZ007
         return None
 
     @property
@@ -210,31 +211,31 @@ class TargetImage:
         return self.exif["XMP"].get("Rating", 0)
 
     @property
-    def focal_length(self) -> Optional[float]:
+    def focal_length(self) -> float | None:
         return self.exif["EXIF"].get("FocalLength")
 
     @property
-    def focal_length_35mm(self) -> Optional[float]:
+    def focal_length_35mm(self) -> float | None:
         return self.exif["Composite"].get("FocalLength35efl")
 
     @property
-    def aperture(self) -> Optional[float]:
+    def aperture(self) -> float | None:
         return self.exif["Composite"].get("Aperture")
 
     @property
-    def shutter_speed(self) -> Optional[float]:
+    def shutter_speed(self) -> float | None:
         return self.exif["Composite"].get("ShutterSpeed")
 
     @property
-    def iso(self) -> Optional[int]:
+    def iso(self) -> int | None:
         return self.exif["EXIF"].get("ISO")
 
     @property
-    def light_value(self) -> Optional[int]:
+    def light_value(self) -> int | None:
         return self.exif["Composite"].get("LightValue")
 
     @property
-    def exposure_compensation(self) -> Optional[int]:
+    def exposure_compensation(self) -> int | None:
         return self.exif["EXIF"].get("ExposureCompensation")
 
     @property
@@ -278,7 +279,7 @@ class TargetFolder:
         self.path = self.path or self.parent.path / to_safe_ascii(self.source.path.name)  # type: ignore[union-attr]
 
         self.config = FolderConfig()
-        for folder_config in self.album_config.folders.keys():
+        for folder_config in self.album_config.folders:
             if self.source.path == self.album_config.source / folder_config:
                 self.config = self.album_config.folders[folder_config]
 
@@ -329,7 +330,7 @@ class TargetFolder:
         for subfolder in self.subfolders.values():
             yield from subfolder.all_images()
 
-    def path_to_folder(self, path: Path) -> Optional["TargetFolder"]:
+    def path_to_folder(self, path: Path) -> TargetFolder | None:
         if path == self.path:
             return self
         elif path.is_relative_to(self.path):
@@ -338,7 +339,7 @@ class TargetFolder:
                     return maybe_subfolder
         return None
 
-    def path_to_image(self, path: Path) -> Optional[TargetImage]:
+    def path_to_image(self, path: Path) -> TargetImage | None:
         folder = self.path_to_folder(Path(*path.parts[:-1]))
         return folder.images.get(path.name) if folder else None
 
@@ -347,7 +348,7 @@ class TargetFolder:
 class TargetFolderHandler(FileHandler):
     album: Album
 
-    def maybe_target_folder(self, target: Target) -> Optional[TargetFolder]:
+    def maybe_target_folder(self, target: Target) -> TargetFolder | None:
         return self.album.target_root.path_to_folder(Path(target))
 
     def target_folder(self, target: Target) -> TargetFolder:
@@ -374,8 +375,7 @@ class TargetFolderHandler(FileHandler):
 
         index_template = self.album.env.get_template("index.html.j2")
         stream = index_template.stream({"folder": target_folder})
-        with open(index_html, "wt") as fp:
-            stream.dump(fp)  # type: ignore[arg-type] # https://github.com/pallets/jinja/issues/1983
+        await asyncio.to_thread(stream.dump, index_html)
         for template_file in (_pkg_path / "templates").iterdir():
             await builder.add_source(str(template_file))
 
@@ -386,7 +386,7 @@ class TargetFolderHandler(FileHandler):
 class TargetImageHandler(FileHandler):
     album: Album
 
-    def maybe_target_image(self, target: Target) -> Optional[TargetImage]:
+    def maybe_target_image(self, target: Target) -> TargetImage | None:
         return self.album.target_root.path_to_image(Path(target))
 
     def target_image(self, target: Target) -> TargetImage:
@@ -423,8 +423,8 @@ class TargetImageHandler(FileHandler):
             with pil_image.resize((w, h)) as resized_image:
                 resized_image.save(image.path_800w, quality=95, dpi=(240, 240))
 
-        with open(image.exif_path, "w") as fp:
-            json.dump(get_exif_tags(image.source.path), fp, indent=2)
+        exif_json = json.dumps(get_exif_tags(image.source.path), indent=2)
+        await asyncio.to_thread(image.exif_path.write_text, exif_json)
 
         await builder.add_source(str(image.source.path))
         await builder.add_source(str(image.path_3000w))
@@ -457,8 +457,7 @@ class StaticHandler(Handler):
             await builder.add_source(str(_pkg_path / "templates" / source))
             template = self.album.env.get_template(source)
             stream = template.stream()
-            with open(target_file, "w") as fp:
-                stream.dump(fp)  # type: ignore[arg-type] # https://github.com/pallets/jinja/issues/1983
+            await asyncio.to_thread(stream.dump, target_file)
 
 
 @dataclass
@@ -513,8 +512,8 @@ async def main():
     parser.add_argument("album_config_path", type=Path)
     args = parser.parse_args()
     album_config_path: Path = args.album_config_path
-    with open(album_config_path, "rb") as album_config_file:
-        album_config_dict = tomllib.load(album_config_file)
+    album_config_text = await asyncio.to_thread(album_config_path.read_text, encoding="utf-8")
+    album_config_dict = tomllib.loads(album_config_text)
 
     album_config = AlbumConfig(**album_config_dict)
 

@@ -21,6 +21,7 @@ Import the module like so:
 
 ```py
 import boldi.plugins
+
 # or:
 from boldi.plugins import load
 ```
