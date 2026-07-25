@@ -3,12 +3,11 @@ from __future__ import annotations
 import os
 import subprocess
 import sys
+from collections.abc import MutableMapping
 from contextlib import AbstractContextManager, ExitStack, chdir
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Any, List, MutableMapping, TextIO, Union
-
-from typing_extensions import Self, Unpack
+from typing import Any, Self, TextIO, Unpack
 
 from boldi.proc import RunArgs, run as _run, run_py as _run_py
 
@@ -73,7 +72,7 @@ class Ctx(AbstractContextManager):
             kwargs.setdefault("stdout", self.stdout)
             kwargs.setdefault("stderr", self.stderr)
 
-    def run(self, *args: Union[str, List[Any]], **kwargs: Unpack[RunArgs]) -> subprocess.CompletedProcess:
+    def run(self, *args: str | list[Any], **kwargs: Unpack[RunArgs]) -> subprocess.CompletedProcess:
         """
         Run a subprocess using the provided command line arguments and updated defaults.
 
@@ -90,7 +89,7 @@ class Ctx(AbstractContextManager):
         self._set_run_kwargs(**kwargs)
         return _run(*args, **kwargs)
 
-    def run_py(self, *args: Union[str, List[Any]], **kwargs: Unpack[RunArgs]) -> subprocess.CompletedProcess:
+    def run_py(self, *args: str | list[Any], **kwargs: Unpack[RunArgs]) -> subprocess.CompletedProcess:
         """
         Run a subprocess using the current Python interpreter, the provided command line arguments and updated defaults.
 

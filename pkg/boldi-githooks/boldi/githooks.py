@@ -5,12 +5,12 @@ import os
 import shlex
 import stat
 import sys
+from collections.abc import Iterable
 from dataclasses import dataclass
 from functools import cached_property, partial
 from itertools import chain
 from pathlib import Path
 from subprocess import CompletedProcess
-from typing import Iterable
 
 from boldi.cli import CliCtx, CliUsageException, esc, main as cli_main
 

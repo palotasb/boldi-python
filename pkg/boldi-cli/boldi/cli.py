@@ -32,13 +32,9 @@ _THEME = Theme(
 class _CliCtxDefaultConsole(Console):
     """Implementation detail used to set a default value for [boldi.cli.CliCtx.console][]."""
 
-    pass
-
 
 class CliUsageException(Exception):
     """Raised when a CLI usage error is encountered."""
-
-    pass
 
 
 @dataclass
@@ -144,7 +140,7 @@ def error_handler(ctx: CliCtx):
 
         exit(1)
 
-    except Exception as exc:
+    except Exception as exc:  # noqa: BLE001 - CLI boundary reports unexpected failures consistently.
         ctx.msg_FAIL(f"INTERNAL ERROR: {type(exc).__name__}:", *exc.args)
         ctx.msg_fail("This is a bug, please report it.")
         if ctx.verbose:

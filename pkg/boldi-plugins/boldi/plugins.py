@@ -1,6 +1,6 @@
 import importlib.metadata
-from collections.abc import Callable
-from typing import Iterable, NamedTuple
+from collections.abc import Callable, Iterable
+from typing import NamedTuple
 
 
 class Plugin(NamedTuple):

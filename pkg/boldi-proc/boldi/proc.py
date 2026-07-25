@@ -1,10 +1,9 @@
 import shlex
 import subprocess
 import sys
+from collections.abc import Callable, Iterable, Mapping
 from pathlib import Path
-from typing import IO, Any, Callable, Iterable, List, Mapping, TypedDict, Union
-
-from typing_extensions import Unpack
+from typing import IO, Any, TypedDict, Unpack
 
 
 class RunArgs(TypedDict, total=False):
@@ -38,7 +37,7 @@ class RunArgs(TypedDict, total=False):
     user: str | int
 
 
-def args_iter(*args: Union[str, List[Any]]) -> Iterable[str]:
+def args_iter(*args: str | list[Any]) -> Iterable[str]:
     """
     Split mixed and/or quoted command line arguments into a simple list of arguments.
 
@@ -80,7 +79,7 @@ def args_iter(*args: Union[str, List[Any]]) -> Iterable[str]:
             yield str(arg)
 
 
-def run(*args: Union[str, List[Any]], **kwargs: Unpack[RunArgs]) -> subprocess.CompletedProcess:
+def run(*args: str | list[Any], **kwargs: Unpack[RunArgs]) -> subprocess.CompletedProcess:
     """
     Run a subprocess using the provided command line arguments and updated defaults.
 
@@ -101,10 +100,10 @@ def run(*args: Union[str, List[Any]], **kwargs: Unpack[RunArgs]) -> subprocess.C
         kwargs.setdefault("stdout", sys.stdout)
         kwargs.setdefault("stderr", sys.stderr)
     args_list = list(args_iter(*args))
-    return subprocess.run(args_list, **kwargs)
+    return subprocess.run(args_list, **kwargs)  # noqa: PLW1510 - check defaults to true above.
 
 
-def run_py(*args: Union[str, List[Any]], **kwargs: Unpack[RunArgs]) -> subprocess.CompletedProcess:
+def run_py(*args: str | list[Any], **kwargs: Unpack[RunArgs]) -> subprocess.CompletedProcess:
     """
     Run a subprocess using the current Python interpreter, the provided command line arguments and updated defaults.
 

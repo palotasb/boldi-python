@@ -2,7 +2,7 @@ import re
 import tomllib
 from argparse import ArgumentParser
 from collections.abc import Iterator, Mapping
-from functools import cache, partial
+from functools import partial
 from pathlib import Path
 from shutil import copytree
 from types import MappingProxyType
@@ -34,6 +34,7 @@ class SiteBuilder:
         self._md = self._md.use(anchors_plugin, permalink=True, permalinkSymbol="#")
         self._md = self._md.use(front_matter_plugin)
         self._jinja = Environment(loader=FileSystemLoader(source_dir / "template"))
+        self._source_pages_list: list[Path] | None = None
 
     def build_all(self) -> None:
         for source_file in self.source_pages_list():
@@ -49,9 +50,10 @@ class SiteBuilder:
             if source_file.is_file() and source_file.suffix == ".md":
                 yield Path(source_file.name)
 
-    @cache
     def source_pages_list(self) -> list[Path]:
-        return list(self.source_pages())
+        if self._source_pages_list is None:
+            self._source_pages_list = list(self.source_pages())
+        return self._source_pages_list
 
     @property
     def source_to_target(self) -> Mapping[Path, Path]:
@@ -79,7 +81,7 @@ class SiteBuilder:
             if token.type == "front_matter":
                 try:
                     _front_matter: dict[str, object] | Exception = tomllib.loads(token.content)
-                except Exception as ex:
+                except tomllib.TOMLDecodeError as ex:
                     _front_matter = ex
             if token.type == "link_open" and (href := token.attrGet("href")):
                 assert isinstance(href, str)
